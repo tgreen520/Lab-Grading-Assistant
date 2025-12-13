@@ -2,19 +2,11 @@ import streamlit as st
 import anthropic
 import base64
 import pandas as pd
-import time
+import os
+import json
+import zipfile
+from docx import Document
 from io import BytesIO
-
-# --- 1. CONFIGURATION ---
-# This script relies on Streamlit secrets for security.
-# Ensure your .streamlit/secrets.toml file contains: ANTHROPIC_API_KEY = "sk-..."
-import streamlit as st
-import anthropic
-import base64
-import pandas as pd
-import time
-from io import BytesIO
-import os  # <--- New import needed to read system variables
 
 # --- 1. CONFIGURATION ---
 
@@ -31,66 +23,119 @@ else:
 # Model Selection
 MODEL_NAME = "claude-sonnet-4-20250514"
 
-# Model Selection: Claude Sonnet 4.5 (as requested)
-MODEL_NAME = "claude-sonnet-4-20250514"
+# --- 2. HARDCODED RUBRIC (PRE-IB CHEMISTRY) ---
+PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
-# --- SYSTEM PROMPT: THE BRAIN OF THE ASSISTANT ---
-SYSTEM_PROMPT = """You are an expert Scientific Lab Grading Assistant. 
-Your goal is to grade student lab reports (images or PDFs) with a focus on data integrity, graphical representation, and scientific reasoning.
+1. FORMATTING (10 pts):
+- Exemplary (9-10): All sections present. Third-person passive voice used consistently. Professional tone. Clear headings.
+- Needs Improvement: Missing sections. Use of "I/We". Informal tone.
+
+2. INTRODUCTION (10 pts):
+- Exemplary (9-10): Clear objective ("to determine..."). Relevant chemical theories explained in detail. Balanced equations with state symbols included.
+- Needs Improvement: Vague objective. Missing background theory or equations.
+
+3. HYPOTHESIS (10 pts):
+- Exemplary (9-10): Specific, testable prediction with direction (e.g., "rate will double"). Scientific justification based on theory.
+- Needs Improvement: Vague "something will happen". No reasoning provided.
+
+4. VARIABLES (10 pts):
+- Exemplary (9-10): Independent Variable (IV) with range/units. Dependent Variable (DV) with measurement method. 3+ Control Variables explained (how & why).
+- Needs Improvement: Missing units. Controls listed but not explained. Confusion between IV/DV.
+
+5. PROCEDURES (10 pts):
+- Exemplary (9-10): Materials list includes concentrations/sizes. Numbered steps allowing replication. Safety concerns (PPE/Disposal) addressed. Setup diagram included.
+- Needs Improvement: Recipe style. Missing safety. Missing quantities.
+
+6. RAW DATA (10 pts):
+- Exemplary (9-10): Qualitative observations included (colors, smells). Tables have borders, titles, units, and consistent significant figures.
+- Needs Improvement: No qualitative data. Missing units. Inconsistent decimals.
+
+7. DATA ANALYSIS (10 pts):
+- Exemplary (9-10): One sample calculation shown fully. Graphs have titles, labeled axes (with units), Trendline/Curve, and R² value.
+- Needs Improvement: Missing calculations. Poor graph choice. Missing axis labels.
+
+8. CONCLUSION (10 pts):
+- Exemplary (9-10): States if hypothesis is supported/refuted. Cites specific data as evidence. Compares to literature values (% error).
+- Needs Improvement: Vague conclusion without data. No comparison to theory.
+
+9. EVALUATION (10 pts):
+- Exemplary (9-10): Identifies specific strengths/weaknesses. Distinguishes Random vs. Systematic error. Suggests realistic improvements.
+- Needs Improvement: Vague "human error". No distinction of error types. Unrealistic improvements.
+
+10. REFERENCES (10 pts):
+- Exemplary (9-10): APA 7th edition format. In-text citations match reference list. Reliable sources (.edu/.gov).
+- Needs Improvement: No citations. URL only. Wikipedia used.
+"""
+
+# --- 3. SYSTEM PROMPT ---
+SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader. 
+Your goal is to grade student lab reports strictly according to the provided IB-style rubric.
 
 When analyzing a file, you must perform a "Scientific Deep Dive" before assigning a score.
 
 ### Your Analysis Protocols:
 1. **Graph & Figure Auditing:**
-   - Check if axes are labeled with correct units.
-   - Verify if the scale is appropriate (not squashed or misleading).
-   - Check if trendlines/curves of best fit are applied correctly.
-   - Identify if error bars are present (if applicable).
+   - Check if axes are labeled with units and uncertainties (if applicable).
+   - Check if trendlines and R² values are present.
    - **Crucial:** Look at the data points. Do they actually support the student's conclusion?
 
 2. **Data & Calculation Check:**
-   - Check for significant figure usage in tables and calculations.
-   - Verify 1-2 visible calculations (e.g., slope of a line, molarity) to ensure accuracy.
-   - Identify any outliers the student may have ignored without explanation.
+   - Verify significant figures are consistent with equipment precision.
+   - Verify 1-2 visible calculations (e.g., slope, percent error).
+   - Check for distinction between random and systematic errors.
 
 3. **Grading:**
-   - Apply the user-provided rubric strictly.
-   - If the student's conclusion contradicts their own data, deduct points heavily.
+   - Apply the rubric strictly. Deduct points for missing elements like safety concerns, qualitative observations, or APA citations.
 
 ### Output Format:
 Please strictly use the following format for your response:
 
-SCORE: [Points Earned]/[Total Points]
+SCORE: [Points Earned]/100
 STUDENT: [Name or Filename]
 ---
 **📊 DATA & VISUAL ANALYSIS:**
 * [Specific critique of graphs: Title, Axes, Units, Linearity]
 * [Verification of calculations: Correct/Incorrect]
-* [Comment on data trends: Did the student interpret them correctly?]
+* [Comment on data trends]
 
-**📝 RUBRIC FEEDBACK:**
-* [Bullet points explaining the score based on the specific rubric criteria]
+**📝 RUBRIC BREAKDOWN:**
+* **Formatting:** [Score]/10 - [Brief feedback]
+* **Introduction:** [Score]/10 - [Brief feedback]
+* **Hypothesis:** [Score]/10 - [Brief feedback]
+* **Variables:** [Score]/10 - [Brief feedback]
+* **Procedures:** [Score]/10 - [Brief feedback]
+* **Raw Data:** [Score]/10 - [Brief feedback]
+* **Analysis:** [Score]/10 - [Brief feedback]
+* **Conclusion:** [Score]/10 - [Brief feedback]
+* **Evaluation:** [Score]/10 - [Brief feedback]
+* **References:** [Score]/10 - [Brief feedback]
 
-**💡 AREAS FOR IMPROVEMENT:**
-* [1-2 actionable tips for the next lab (e.g., "Always include units on the x-axis", "Your R² value suggests a non-linear relationship")]
+**💡 TOP 3 AREAS FOR IMPROVEMENT:**
+1. [Actionable tip]
+2. [Actionable tip]
+3. [Actionable tip]
 """
 
-# --- 2. PAGE SETUP ---
+# --- 4. PAGE SETUP & STATE ---
 st.set_page_config(
-    page_title="Lab Assistant", 
+    page_title="Pre-IB Lab Grader", 
     page_icon="🧪", 
     layout="wide"
 )
 
-# Initialize Anthropic Client
+# Initialize Session State
+if 'saved_sessions' not in st.session_state:
+    st.session_state.saved_sessions = {}
+if 'current_results' not in st.session_state:
+    st.session_state.current_results = []
+if 'current_session_name' not in st.session_state:
+    st.session_state.current_session_name = "New Grading Session"
+
 client = anthropic.Anthropic(api_key=API_KEY)
 
-# --- 3. HELPER FUNCTIONS ---
-
+# --- 5. HELPER FUNCTIONS ---
 def encode_file(uploaded_file):
-    """Convert uploaded file (Image/PDF) to base64 string for the API."""
     try:
-        # Reset file pointer to the beginning
         uploaded_file.seek(0)
         return base64.b64encode(uploaded_file.read()).decode('utf-8')
     except Exception as e:
@@ -98,192 +143,253 @@ def encode_file(uploaded_file):
         return None
 
 def get_media_type(filename):
-    """Determine the correct media type based on file extension."""
     ext = filename.lower().split('.')[-1]
     media_types = {
-        'png': 'image/png',
-        'jpg': 'image/jpeg',
-        'jpeg': 'image/jpeg',
-        'gif': 'image/gif',
-        'webp': 'image/webp',
-        'pdf': 'application/pdf'
+        'png': 'image/png', 'jpg': 'image/jpeg', 'jpeg': 'image/jpeg',
+        'gif': 'image/gif', 'webp': 'image/webp', 'pdf': 'application/pdf'
     }
-    # Default to jpeg if unknown
     return media_types.get(ext, 'image/jpeg')
 
-def grade_submission(file, rubric_text):
-    """Sends the file and rubric to Claude Sonnet 4.5 for analysis."""
-    
+def process_uploaded_files(uploaded_files):
+    """Handles ZIPs and raw files."""
+    final_files = []
+    for file in uploaded_files:
+        if file.name.lower().endswith('.zip'):
+            try:
+                with zipfile.ZipFile(file) as z:
+                    for filename in z.namelist():
+                        if filename.startswith('__MACOSX') or filename.startswith('.'): continue
+                        ext = filename.split('.')[-1].lower()
+                        if ext in ['pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp']:
+                            file_bytes = z.read(filename)
+                            virtual_file = BytesIO(file_bytes)
+                            virtual_file.name = os.path.basename(filename)
+                            final_files.append(virtual_file)
+            except Exception as e:
+                st.error(f"Error unzipping {file.name}: {e}")
+        else:
+            final_files.append(file)
+    return final_files
+
+def grade_submission(file):
     base64_data = encode_file(file)
-    if not base64_data:
-        return "Error: Could not process file."
-        
+    if not base64_data: return "Error processing file."
     media_type = get_media_type(file.name)
     
-    # Construct the message payload
-    user_message_content = [
+    user_message = [
         {
             "type": "text",
             "text": (
-                f"Please grade this lab report based on the rubric provided below.\n\n"
-                f"--- RUBRIC START ---\n{rubric_text}\n--- RUBRIC END ---\n\n"
+                f"Please grade this lab report based on the Pre-IB rubric below.\n\n"
+                f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
                 f"INSTRUCTIONS:\n"
-                f"1. Analyze the graphs and figures visually. Are they scientifically standard?\n"
-                f"2. Check the data values against the conclusion.\n"
-                f"3. Provide the output in the strict format requested in the system prompt."
+                f"1. Provide a specific score out of 10 for each of the 10 sections.\n"
+                f"2. Sum them for a total out of 100.\n"
+                f"3. Be strict about significant figures, error analysis, and citations."
             )
         },
         {
             "type": "document" if media_type == 'application/pdf' else "image",
-            "source": {
-                "type": "base64",
-                "media_type": media_type,
-                "data": base64_data
-            }
+            "source": {"type": "base64", "media_type": media_type, "data": base64_data}
         }
     ]
 
     try:
         response = client.messages.create(
             model=MODEL_NAME,
-            max_tokens=3000,  # Generous token limit for detailed scientific analysis
+            max_tokens=3500,
             system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": user_message_content}]
+            messages=[{"role": "user", "content": user_message}]
         )
         return response.content[0].text
-    except anthropic.APIError as e:
-        return f"⚠️ API Error: {str(e)}"
     except Exception as e:
-        return f"⚠️ Unexpected Error: {str(e)}"
+        return f"⚠️ Error: {str(e)}"
 
 def parse_score(text):
-    """Helper to extract the score for the summary table."""
     try:
         lines = text.split('\n')
         for line in lines:
             if "SCORE:" in line:
-                # Returns everything after "SCORE:"
                 return line.split("SCORE:")[1].strip()
     except:
         pass
     return "N/A"
 
-# --- 4. SIDEBAR (CONTROLS) ---
+def create_master_doc(results, session_name):
+    """Generates ONE .docx file with ALL reports."""
+    doc = Document()
+    doc.add_heading(f"Lab Report Grades: {session_name}", 0)
+    for item in results:
+        doc.add_heading(item['Filename'], level=1)
+        doc.add_heading(f"Score: {item['Score']}", level=2)
+        doc.add_paragraph(item['Feedback'])
+        doc.add_page_break()
+    bio = BytesIO()
+    doc.save(bio)
+    return bio.getvalue()
+
+def create_zip_bundle(results):
+    """Generates a ZIP file containing INDIVIDUAL .docx files for each student."""
+    zip_buffer = BytesIO()
+    
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as z:
+        for item in results:
+            # Create individual doc
+            doc = Document()
+            doc.add_heading(f"Feedback: {item['Filename']}", 0)
+            doc.add_heading(f"Score: {item['Score']}", level=1)
+            doc.add_paragraph(item['Feedback'])
+            
+            # Save doc to bytes
+            doc_buffer = BytesIO()
+            doc.save(doc_buffer)
+            
+            # Write bytes to zip
+            # Clean filename to avoid issues
+            safe_name = os.path.splitext(item['Filename'])[0] + "_Feedback.docx"
+            z.writestr(safe_name, doc_buffer.getvalue())
+            
+    return zip_buffer.getvalue()
+
+# --- 6. SIDEBAR (HISTORY & SETTINGS) ---
 with st.sidebar:
-    st.header("⚙️ Lab Assistant Controls")
+    st.header("💾 History Manager")
     
-    st.info("Define your grading criteria below. Be specific about points for graphs, sig figs, and accuracy.")
+    # Save Current Session
+    st.caption("Save your current grading batch:")
+    save_name = st.text_input("Session Name", placeholder="e.g. Period 3 - Kinetics")
     
-    # Default placeholder rubric
-    default_rubric = """1. Data Presentation (10 pts):
-- Graphs have titles, labeled axes, and units
-- Data points are clearly visible
-- Significant figures are consistent
-
-2. Scientific Analysis (10 pts):
-- Trendline/Slope calculation is correct
-- Error analysis identifies primary sources of error
-
-3. Conclusion (5 pts):
-- Claim is supported by evidence in the graphs"""
-
-    rubric_input = st.text_area("📋 Grading Rubric", value=default_rubric, height=400)
-    
+    if st.button("💾 Save Session"):
+        if st.session_state.current_results:
+            st.session_state.saved_sessions[save_name] = st.session_state.current_results
+            st.success(f"Saved '{save_name}'!")
+        else:
+            st.warning("No results to save yet.")
+            
     st.divider()
+    
+    # Load Previous Session
+    if st.session_state.saved_sessions:
+        st.subheader("📂 Load Session")
+        selected_session = st.selectbox("Select Batch", list(st.session_state.saved_sessions.keys()))
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Load"):
+                st.session_state.current_results = st.session_state.saved_sessions[selected_session]
+                st.session_state.current_session_name = selected_session
+                st.rerun()
+        with col2:
+            if st.button("🗑️ Delete"):
+                del st.session_state.saved_sessions[selected_session]
+                st.rerun()
+    else:
+        st.caption("No saved sessions found.")
+
+    st.divider()
+    
+    with st.expander("View Grading Criteria"):
+        st.text(PRE_IB_RUBRIC)
     st.caption(f"🤖 Model: {MODEL_NAME}")
-    st.caption("Capabilities: Graph Analysis, Handwriting Recognition, PDF Reading")
 
-# --- 5. MAIN INTERFACE ---
-st.title("🧪 Lab Assistant")
-st.markdown("### Batch Grading & Scientific Data Analysis")
-st.markdown("""
-Upload student lab reports (Images or PDFs). This assistant will:
-1. **Audit Graphs:** Check axes, units, and scales.
-2. **Verify Math:** Check visible calculations (slope, molarity, etc.).
-3. **Grade:** Apply your rubric and generate feedback.
-""")
-
-st.divider()
+# --- 7. MAIN INTERFACE ---
+st.title("🧪 Pre-IB Lab Grader")
+st.caption(f"Current Session: **{st.session_state.current_session_name}**")
 
 # File Uploader
-uploaded_files = st.file_uploader(
-    "📂 Upload Student Reports", 
-    type=['png', 'jpg', 'jpeg', 'pdf'], 
+raw_files = st.file_uploader(
+    "📂 Upload Reports (PDF, Images, or ZIP)", 
+    type=['pdf', 'png', 'jpg', 'jpeg', 'zip'], 
     accept_multiple_files=True
 )
 
-# Action Area
-col1, col2 = st.columns([1, 4])
-with col1:
-    start_btn = st.button("🚀 Start Grading", type="primary", use_container_width=True, disabled=not (uploaded_files and rubric_input))
+processed_files = []
+if raw_files:
+    processed_files = process_uploaded_files(raw_files)
+    if len(processed_files) > 0:
+        st.info(f"Ready to grade **{len(processed_files)}** report(s).")
 
-# --- 6. EXECUTION LOGIC ---
-if start_btn and uploaded_files and rubric_input:
+# Grading Action
+if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files):
     
     st.write("---")
-    progress_bar = st.progress(0)
-    status_text = st.empty()
+    progress = st.progress(0)
+    status = st.empty()
     
-    results_data = []
+    new_results = []
     
-    # Create Tabs for Output
-    tab_summary, tab_details = st.tabs(["📊 Gradebook Summary", "📝 Detailed Feedback"])
-
-    # Processing Loop
-    for i, file in enumerate(uploaded_files):
-        status_text.markdown(f"**Analyzing report {i + 1}/{len(uploaded_files)}:** `{file.name}`...")
+    for i, file in enumerate(processed_files):
+        status.markdown(f"**Grading:** `{file.name}`...")
         
-        # 1. Grade the file
-        feedback = grade_submission(file, rubric_input)
-        
-        # 2. Extract score
+        feedback = grade_submission(file)
         score = parse_score(feedback)
         
-        # 3. Save result
-        results_data.append({
+        new_results.append({
             "Filename": file.name,
             "Score": score,
-            "Full Feedback": feedback
+            "Feedback": feedback
         })
-        
-        # 4. Update Progress
-        progress_bar.progress((i + 1) / len(uploaded_files))
-        
-        # Optional: slight delay to be kind to rate limits if grading many files
-        # time.sleep(0.5)
+        progress.progress((i + 1) / len(processed_files))
 
-    status_text.success("✅ Batch Analysis Complete!")
-    progress_bar.empty()
+    st.session_state.current_results = new_results
+    status.success("✅ Grading Complete! Don't forget to save this session in the sidebar.")
+    progress.empty()
 
-    # --- 7. DISPLAY RESULTS ---
+# --- 8. RESULTS DISPLAY ---
+if st.session_state.current_results:
+    st.divider()
     
-    # Tab 1: Summary Dataframe
-    with tab_summary:
-        st.subheader("Class Overview")
-        df = pd.DataFrame(results_data)
-        
-        # Display interactive table
-        st.dataframe(
-            df[["Filename", "Score"]], 
-            use_container_width=True,
-            hide_index=True
-        )
-        
-        # CSV Download Button
-        csv = df.to_csv(index=False).encode('utf-8')
+    # Prepare exports
+    df = pd.DataFrame(st.session_state.current_results)
+    csv_data = df.to_csv(index=False).encode('utf-8')
+    master_doc_data = create_master_doc(st.session_state.current_results, st.session_state.current_session_name)
+    zip_data = create_zip_bundle(st.session_state.current_results)
+    
+    st.subheader("📤 Batch Export")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
         st.download_button(
-            label="📥 Download Gradebook (CSV)",
-            data=csv,
-            file_name='lab_assistant_grades.csv',
-            mime='text/csv',
+            label="📄 Master Doc (All-in-One)",
+            data=master_doc_data,
+            file_name=f'{st.session_state.current_session_name}_Master.docx',
+            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            use_container_width=True
         )
+        st.caption("One file containing all reports.")
 
-    # Tab 2: Detailed Views
-    with tab_details:
-        st.subheader("Individual Report Analysis")
-        for item in results_data:
+    with col2:
+        st.download_button(
+            label="📦 Student Bundle (.zip)",
+            data=zip_data,
+            file_name=f'{st.session_state.current_session_name}_Students.zip',
+            mime="application/zip",
+            use_container_width=True
+        )
+        st.caption("Separate files for each student.")
+
+    with col3:
+        st.download_button(
+            label="📊 Gradebook (.csv)", 
+            data=csv_data, 
+            file_name=f'{st.session_state.current_session_name}_Grades.csv', 
+            mime='text/csv',
+            use_container_width=True
+        )
+        st.caption("Spreadsheet of scores.")
+
+    st.divider()
+    
+    # Display Tabs
+    tab1, tab2 = st.tabs(["📊 Gradebook View", "📝 Detailed Feedback"])
+
+    with tab1:
+        st.dataframe(df[["Filename", "Score"]], use_container_width=True)
+
+    with tab2:
+        for item in st.session_state.current_results:
             with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
-                st.markdown(item['Full Feedback'])
-
-elif start_btn and not rubric_input:
-    st.error("⚠️ Please provide a grading rubric in the sidebar before starting.")
+                st.markdown(item['Feedback'])
+else:
+    st.info("Upload files to begin.")
