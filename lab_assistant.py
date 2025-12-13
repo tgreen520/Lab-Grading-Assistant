@@ -57,7 +57,11 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 7. DATA ANALYSIS (10 pts) [SIG FIGS CRITICAL]:
 - Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
-- CRITICAL: Check the significant figures in the PRODUCT of calculations. The final answer must match the precision of the data used.
+- INTERMEDIATE STEPS: Students may keep extra significant figures in intermediate steps to avoid rounding errors.
+- FINAL ANSWER: The final result MUST be rounded to the correct significant figures based on the data.
+- DEDUCTIONS: 
+  * Lose 0.5 pts if some correct sig figs were used (partial effort).
+  * Lose 1.0 pt if NO attention was paid to sig figs (e.g., writing 12.333333).
 
 8. CONCLUSION (10 pts):
 - Criteria: Supported/Refuted statement, data evidence, literature comparison.
@@ -86,9 +90,10 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Rule:** If the ONLY thing missing is the diagram, the score should be **9.5/10**.
 
 3.  **DATA ANALYSIS (Section 7) - CALCULATION CHECK:**
-    * **Check the Math:** Verify the sample calculation.
-    * **Check Sig Figs:** The student MUST use the correct significant figures in the final result of their calculations (based on their raw data inputs).
-    * **Feedback:** Provide specific details on their calculation process. Did they round too early? Did they keep too many decimals?
+    * **Intermediate vs. Final:** Students are allowed (and encouraged) to keep extra digits in intermediate steps. ONLY grade the sig figs of the **final answer**.
+    * **Deduction Logic:**
+        * If they mostly got it right but missed one or two: **Deduct 0.5 points**.
+        * If they completely ignored sig figs (e.g., writing 8.33333333): **Deduct 1.0 point**.
 
 4.  **EVALUATION (Section 9) - USE THIS MATH:**
     * Start with **0**.
@@ -101,8 +106,7 @@ Your goal is to grade student lab reports according to the specific rules below.
 
 ### 📝 FEEDBACK INSTRUCTIONS (SUMMARY STYLE):
 1.  **Summarize Evidence:** Do NOT quote the student directly. Instead, summarize what they did in your own words.
-    * *Bad:* "You wrote 'the density is 1.05432'."
-    * *Good:* "You provided a sample calculation for density, but you reported the final answer to 6 significant figures when your volume measurement only allowed for 3."
+    * *Good:* "You provided a sample calculation for density. While you kept extra digits in the intermediate steps (which is correct), your final answer had 5 sig figs instead of the required 3."
 2.  **Structure:** "✅ Strengths" and "⚠️ Improvements" for every section.
 
 ### OUTPUT FORMAT:
@@ -264,6 +268,22 @@ def process_uploaded_files(uploaded_files):
             
     return final_files, file_counts
 
+# --- MATH CHECKER FUNCTION ---
+def recalculate_total_score(text):
+    try:
+        pattern = r"\d+\.\s+[A-Z\s]+:\s+([\d\.]+)/10"
+        matches = re.findall(pattern, text)
+        if matches:
+            total_score = sum(float(m) for m in matches)
+            if total_score.is_integer():
+                total_score = int(total_score)
+            else:
+                total_score = round(total_score, 1)
+            text = re.sub(r"SCORE:\s*[\d\.]+/100", f"SCORE: {total_score}/100", text, count=1)
+    except Exception as e:
+        print(f"Error recalculating score: {e}")
+    return text
+
 def grade_submission(file):
     ext = file.name.split('.')[-1].lower()
     
@@ -317,7 +337,10 @@ def grade_submission(file):
                 system=SYSTEM_PROMPT,
                 messages=[{"role": "user", "content": user_message}]
             )
-            return response.content[0].text
+            raw_text = response.content[0].text
+            corrected_text = recalculate_total_score(raw_text)
+            return corrected_text
+            
         except anthropic.RateLimitError:
             if attempt < max_retries - 1:
                 time.sleep(retry_delay * (attempt + 1))
@@ -361,7 +384,6 @@ def write_markdown_to_docx(doc, text):
             p = doc.add_paragraph()
             content = line
 
-        # Handle Inline Bold (**text**)
         parts = re.split(r'(\*\*.*?\*\*)', content)
         for part in parts:
             if part.startswith('**') and part.endswith('**'):
