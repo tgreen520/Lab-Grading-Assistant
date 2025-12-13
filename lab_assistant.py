@@ -35,9 +35,9 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 1. FORMATTING (10 pts):
 - Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly.
 - DEDUCTIONS: 
-  * Minor layout inconsistencies: -0.5 pts.
   * Missing superscripts/subscripts (e.g., H2O vs H₂O): -1.0 pt.
   * Consistent use of "I/We": Deduct heavily.
+  * NOTE: Do NOT deduct for minor layout inconsistencies (margins, fonts, spacing).
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
@@ -64,7 +64,8 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - DEDUCTIONS: -0.5 for partial effort, -1.0 for zero attention to sig figs.
 
 8. CONCLUSION (10 pts):
-- Criteria: Supported/Refuted statement, data evidence, literature comparison.
+- Criteria: Statement of support/refutation, specific data evidence.
+- CRITICAL REQUIREMENT: Must include specific comparisons to PUBLISHED LITERATURE (theoretical values or accepted standards) to support or contradict the results.
 
 9. EVALUATION (10 pts) [FORMULAIC SCORING]:
 - 6 POINTS: Describes at least 4 TOTAL errors (must include both Systematic and Random types).
@@ -87,7 +88,7 @@ Your goal is to grade student lab reports according to the specific rules below.
 ### 🧠 SCORING ALGORITHMS:
 
 1.  **FORMATTING (Section 1):**
-    * **Minor Errors:** Deduct exactly **0.5** for small layout/font issues.
+    * **Layout:** Do NOT deduct points for minor layout/formatting inconsistencies.
     * **Subscripts/Superscripts:** Deduct exactly **1.0** point if they fail to use them (e.g., writing cm3 instead of cm³).
 
 2.  **VARIABLES (Section 4):**
@@ -102,18 +103,21 @@ Your goal is to grade student lab reports according to the specific rules below.
         * Mostly right but missed one/two: **-0.5 points**.
         * Completely ignored sig figs: **-1.0 point**.
 
-5.  **EVALUATION (Section 9) - NEW FORMULA:**
+5.  **CONCLUSION (Section 8) - LITERATURE CHECK:**
+    * **Requirement:** The student MUST compare their result to a published literature value or theory.
+    * **Evaluation:** If they simply say "My results matched theory" without citing a specific value or source, this is insufficient.
+
+6.  **EVALUATION (Section 9) - NEW FORMULA:**
     * Start with **0**.
     * Add **6 points** if they describe at least **4 TOTAL errors**. (Condition: The 4 errors must include at least one random and one systematic).
     * Add **2 points** if they explain the *impact* of these errors.
     * Add **2 points** if they explain *improvements*.
 
-6.  **REFERENCES (Section 10):**
+7.  **REFERENCES (Section 10):**
     * **Minor APA Errors:** Deduct exactly **0.5** points for small punctuation/formatting mistakes.
 
 ### 📝 FEEDBACK INSTRUCTIONS (SUMMARY STYLE):
 1.  **Summarize Evidence:** Do NOT quote the student directly. Instead, summarize what they did in your own words.
-    * *Example:* "You effectively summarized the data trend..." instead of "You wrote 'the rate went up'..."
 2.  **Structure:** "✅ Strengths" and "⚠️ Improvements" for every section.
 
 ### OUTPUT FORMAT:
@@ -158,7 +162,7 @@ STUDENT: [Filename]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Summary of good work]
-* **⚠️ Improvements:** [Summary of errors]
+* **⚠️ Improvements:** [Summary of errors. Did they compare to specific literature?]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [Summary of good work]
@@ -291,16 +295,9 @@ def recalculate_total_score(text):
         print(f"Error recalculating score: {e}")
     return text
 
-# --- NEW: CSV CLEANER FOR SHEETS ---
+# --- CSV CLEANER FOR SHEETS ---
 def clean_for_sheets(text):
-    """
-    Removes Markdown symbols so Google Sheets looks clean.
-    **Bold** -> Bold
-    ### Header -> Header
-    * Bullet -> • Bullet
-    """
     if not isinstance(text, str): return text
-    
     # Remove headers
     text = re.sub(r'###\s*', '', text)
     # Remove bold markers
@@ -308,7 +305,6 @@ def clean_for_sheets(text):
     # Convert bullets
     text = re.sub(r'^\*\s', '• ', text, flags=re.MULTILINE)
     text = re.sub(r'^-\s', '• ', text, flags=re.MULTILINE)
-    
     return text.strip()
 
 def grade_submission(file):
@@ -496,8 +492,9 @@ with st.sidebar:
         else:
             st.warning("No results to save yet.")
             
-    st.divider()
+    # FIXED LOGIC: Only show divider if there is something below it
     if st.session_state.saved_sessions:
+        st.divider()
         st.subheader("📂 Load Session")
         selected_session = st.selectbox("Select Batch", list(st.session_state.saved_sessions.keys()))
         col1, col2 = st.columns(2)
@@ -510,7 +507,9 @@ with st.sidebar:
             if st.button("🗑️ Delete"):
                 del st.session_state.saved_sessions[selected_session]
                 st.rerun()
-    st.divider()
+
+    st.divider() # Always separate history from criteria
+    
     with st.expander("View Grading Criteria"):
         st.text(PRE_IB_RUBRIC)
     st.caption(f"🤖 Model: {MODEL_NAME}")
