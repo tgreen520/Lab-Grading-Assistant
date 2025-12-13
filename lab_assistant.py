@@ -35,9 +35,12 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to follow the rubric, even if execution is imperfect. Recognize effort and partial understanding.
 
 1. FORMATTING (10 pts):
-- Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly.
+- Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly IN THE BODY TEXT.
 - DEDUCTIONS: 
-  * Superscripts/Subscripts: Do NOT deduct for 1 or 2 isolated errors. If there are MORE than 2 errors (e.g., frequent H2O), deduct -1.0 pt.
+  * Superscripts/Subscripts IN BODY TEXT ONLY: Count the errors in paragraphs and written explanations. 
+    * If 0-2 errors: **-0 pts** (Ignore).
+    * If >2 errors: **-1.0 pt**.
+  * **IMPORTANT:** Do NOT deduct points for superscript/subscript errors in graph titles, axis labels, or data tables. These are technical elements where formatting limitations are common.
   * Consistent use of "I/We": Deduct heavily.
   * NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing, indentation).
 - PARTIAL CREDIT: Award partial points if student shows awareness of professional tone but has some lapses.
@@ -57,6 +60,8 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 4. VARIABLES (10 pts):
 - Criteria: IV (units/range), DV (method), 3+ Controlled Variables.
+- **ACCEPTABLE FORMATS:** Students may present variables in paragraph form OR in a data table format. BOTH formats are equally acceptable.
+- **TABLE FORMAT GUIDANCE:** If variables are presented in a table with columns like "Variable Type," "Description," "Units," etc., this is FULLY acceptable and should be graded the same as paragraph format.
 - SCORING RULE: If control variables are listed but not explained/justified properly, score exactly 8/10.
 - LENIENT GRADING APPROACH:
   * **Focus on identification over perfection**: Students who identify variables correctly should receive most points even if descriptions are brief.
@@ -65,6 +70,7 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
   * 3+ Control variables listed (even without detailed explanations): minimum 8/10
   * 2 Control variables listed: 7/10
   * Only IV and DV properly identified: 6/10
+  * **Table format with all three variable types clearly identified**: minimum 8-10/10
 - PARTIAL CREDIT: Award generously for demonstrating understanding of variable types, even if details are incomplete.
 
 5. PROCEDURES (10 pts):
@@ -141,9 +147,11 @@ Your goal is to grade student lab reports according to the specific rules below.
 
 1.  **FORMATTING (Section 1):**
     * **Layout:** Do NOT deduct points for minor layout/formatting inconsistencies. Ignore spacing/margin issues.
-    * **Subscripts/Superscripts:** * Count the errors. 
-        * If 0-2 errors: **-0 pts** (Ignore).
-        * If >2 errors: **-1.0 pt**.
+    * **Subscripts/Superscripts - BODY TEXT ONLY:** Count errors ONLY in paragraphs and written explanations (Introduction, Conclusion, Evaluation, etc.).
+        * **IGNORE errors in:** Graph titles, axis labels, data tables, figure captions.
+        * If 0-2 errors in body text: **-0 pts** (Ignore).
+        * If >2 errors in body text: **-1.0 pt**.
+    * **Rationale:** Graphs and tables often have technical limitations for formatting chemical formulas. Only assess professional writing in body text.
     * **Partial Credit:** If student shows awareness of professional tone but has occasional lapses, award 7-9 points depending on severity.
 
 2.  **INTRODUCTION (Section 2):**
@@ -158,14 +166,17 @@ Your goal is to grade student lab reports according to the specific rules below.
 
 4.  **VARIABLES (Section 4):**
     * **LENIENT APPROACH:** Focus on whether students understand the three variable types, not perfection in descriptions.
+    * **ACCEPTABLE FORMATS:** Variables may be presented in paragraph form OR in a table format. Both are equally valid.
+        * **Table format example:** A table with columns like "Variable Type," "Variable," "Description," "Units/How Controlled" is FULLY acceptable.
+        * Grade table format the same as paragraph format - look for clear identification of IV, DV, and 3+ control variables.
     * **Scoring Guide:**
-        * IV + DV + 3 Control Variables identified = minimum 8/10 (even without detailed explanations)
+        * IV + DV + 3 Control Variables identified (paragraph OR table) = minimum 8/10 (even without detailed explanations)
         * IV with units OR range (not both required) = strong work
         * DV with basic measurement method = strong work
         * Control variables listed but not explained = 8/10 (FIXED RULE)
         * 2 Control variables = 7/10
         * Only IV and DV = 6/10
-    * **Partial Credit:** Be generous. If a student shows they understand what variables are, they should score 7-10 points.
+    * **Partial Credit:** Be generous. If a student shows they understand what variables are (in any format), they should score 7-10 points.
 
 5.  **PROCEDURES (Section 5):**
     * **Rule:** If the ONLY thing missing is the diagram, the score should be **9.5/10**.
