@@ -37,7 +37,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - DEDUCTIONS: 
   * Missing superscripts/subscripts (e.g., H2O vs H₂O): -1.0 pt.
   * Consistent use of "I/We": Deduct heavily.
-  * NOTE: Do NOT deduct for minor layout inconsistencies (margins, fonts, spacing).
+  * NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing, indentation).
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
@@ -74,7 +74,9 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
-- DEDUCTIONS: Minor APA formatting errors (punctuation/italics) are -0.5 pts.
+- DEDUCTIONS: 
+  * Minor APA formatting errors (punctuation/italics): -0.5 pts.
+  * Significant APA formatting errors: MAXIMUM deduction of -1.0 pt.
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -88,7 +90,7 @@ Your goal is to grade student lab reports according to the specific rules below.
 ### 🧠 SCORING ALGORITHMS:
 
 1.  **FORMATTING (Section 1):**
-    * **Layout:** Do NOT deduct points for minor layout/formatting inconsistencies.
+    * **Layout:** Do NOT deduct points for minor layout/formatting inconsistencies. Ignore spacing/margin issues.
     * **Subscripts/Superscripts:** Deduct exactly **1.0** point if they fail to use them (e.g., writing cm3 instead of cm³).
 
 2.  **VARIABLES (Section 4):**
@@ -114,7 +116,8 @@ Your goal is to grade student lab reports according to the specific rules below.
     * Add **2 points** if they explain *improvements*.
 
 7.  **REFERENCES (Section 10):**
-    * **Minor APA Errors:** Deduct exactly **0.5** points for small punctuation/formatting mistakes.
+    * **Minor APA Errors:** Deduct **0.5** points.
+    * **Major APA Errors:** Deduct a **MAXIMUM of 1.0 point**. Do NOT deduct more than 1 point for bad APA formatting as long as sources are present.
 
 ### 📝 FEEDBACK INSTRUCTIONS (SUMMARY STYLE):
 1.  **Summarize Evidence:** Do NOT quote the student directly. Instead, summarize what they did in your own words.
