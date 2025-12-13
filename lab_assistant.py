@@ -17,8 +17,6 @@ st.set_page_config(
 )
 
 # --- 2. CONFIGURATION & SECRETS ---
-
-# Check for Key in Secrets (Streamlit Cloud) OR Environment (Local PC)
 if "ANTHROPIC_API_KEY" in st.secrets:
     API_KEY = st.secrets["ANTHROPIC_API_KEY"]
 elif "ANTHROPIC_API_KEY" in os.environ:
@@ -28,100 +26,121 @@ else:
     st.info("On Streamlit Cloud, add your key to the 'Secrets' settings.")
     st.stop()
 
-# Model Selection
 MODEL_NAME = "claude-sonnet-4-20250514"
 
-# --- 3. HARDCODED RUBRIC (PRE-IB CHEMISTRY) ---
+# --- 3. HARDCODED RUBRIC ---
 PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 1. FORMATTING (10 pts):
-- Exemplary (9-10): All sections present. Third-person passive voice used consistently. Professional tone. Clear headings.
-- Needs Improvement: Missing sections. Use of "I/We". Informal tone.
+- Criteria: Third-person passive voice (no "I/we"), clear headings, professional tone.
+- Deductions: Use of first person, missing sections, messy layout.
 
 2. INTRODUCTION (10 pts):
-- Exemplary (9-10): Clear objective ("to determine..."). Relevant chemical theories explained in detail. Balanced equations with state symbols included.
-- Needs Improvement: Vague objective. Missing background theory or equations.
+- Criteria: Clear objective ("To determine..."), relevant background theory explained, balanced chemical equations with states.
+- Deductions: Vague objective, missing theory, unbalanced equations.
 
 3. HYPOTHESIS (10 pts):
-- Exemplary (9-10): Specific, testable prediction with direction (e.g., "rate will double"). Scientific justification based on theory.
-- Needs Improvement: Vague "something will happen". No reasoning provided.
+- Criteria: Specific prediction (e.g., "doubling concentration will double rate"), scientific justification linked to theory.
+- Deductions: Vague guess ("it will change"), missing reasoning.
 
 4. VARIABLES (10 pts):
-- Exemplary (9-10): Independent Variable (IV) with range/units. Dependent Variable (DV) with measurement method. 3+ Control Variables explained (how & why).
-- Needs Improvement: Missing units. Controls listed but not explained. Confusion between IV/DV.
+- Criteria: Independent (IV) with units/range, Dependent (DV) with measurement method, 3+ Controlled variables (how & why).
+- Deductions: Missing units, controls listed without explanation, confusion of variables.
 
 5. PROCEDURES (10 pts):
-- Exemplary (9-10): Materials list includes concentrations/sizes. Numbered steps allowing replication. Safety concerns (PPE/Disposal) addressed. Setup diagram included.
-- Needs Improvement: Recipe style. Missing safety. Missing quantities.
+- Criteria: Numbered steps, logical flow, specific quantities/concentrations, safety (PPE/Disposal), setup diagram.
+- Deductions: Paragraph format ("recipe style"), missing safety, vague steps ("add some acid").
 
 6. RAW DATA (10 pts):
-- Exemplary (9-10): Qualitative observations included (colors, smells). Tables have borders, titles, units, and consistent significant figures.
-- Needs Improvement: No qualitative data. Missing units. Inconsistent decimals.
+- Criteria: Qualitative observations (color/smell/heat), clear tables with borders/titles/units, consistent sig figs, uncertainties.
+- Deductions: No qualitative data, messy tables, missing units, inconsistent decimals.
 
 7. DATA ANALYSIS (10 pts):
-- Exemplary (9-10): One sample calculation shown fully. Graphs have titles, labeled axes (with units), Trendline/Curve, and R² value.
-- Needs Improvement: Missing calculations. Poor graph choice. Missing axis labels.
+- Criteria: Sample calculation shown, graphs with titles/axes/units, trendline/curve, R² value, correct formula usage.
+- Deductions: Missing sample calc, poor graph scaling, missing axis labels.
 
 8. CONCLUSION (10 pts):
-- Exemplary (9-10): States if hypothesis is supported/refuted. Cites specific data as evidence. Compares to literature values (% error).
-- Needs Improvement: Vague conclusion without data. No comparison to theory.
+- Criteria: Explicit statement (Supported/Refuted), specific data cited as evidence, comparison to literature value (% error).
+- Deductions: Conclusion contradicts data, no data cited, no theoretical comparison.
 
 9. EVALUATION (10 pts):
-- Exemplary (9-10): Identifies specific strengths/weaknesses. Distinguishes Random vs. Systematic error. Suggests realistic improvements.
-- Needs Improvement: Vague "human error". No distinction of error types. Unrealistic improvements.
+- Criteria: Distinction between Random vs. Systematic error, specific sources of error identified, realistic improvements suggested.
+- Deductions: Vague "human error", unrealistic improvements ("buy a robot").
 
 10. REFERENCES (10 pts):
-- Exemplary (9-10): APA 7th edition format. In-text citations match reference list. Reliable sources (.edu/.gov).
-- Needs Improvement: No citations. URL only. Wikipedia used.
+- Criteria: APA 7th edition, in-text citations match list, reliable sources (.edu/.gov).
+- Deductions: URL only, Wikipedia, missing in-text citations.
 """
 
-# --- 4. SYSTEM PROMPT ---
+# --- 4. UPDATED SYSTEM PROMPT (SPECIFIC FEEDBACK) ---
 SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader. 
 Your goal is to grade student lab reports strictly according to the provided IB-style rubric.
 
-When analyzing a file, you must perform a "Scientific Deep Dive" before assigning a score.
+### INSTRUCTIONS:
+1.  **Be Specific:** Do not just say "Good job." Quote the student's work to prove you read it (e.g., "Your hypothesis correctly predicted a linear relationship, but...").
+2.  **Strengths & Weaknesses:** For **EVERY** section of the rubric, you must explicitly list:
+    * **✅ Strengths:** What they did well.
+    * **⚠️ Improvements:** Exactly what was missing or wrong.
+3.  **Graph Checks:** If a graph is present, analyze the axes, units, and data points. Does the trendline make sense?
+4.  **Tone:** Be encouraging but rigorous. This is Pre-IB; standards are high.
 
-### Your Analysis Protocols:
-1. **Graph & Figure Auditing:**
-   - Check if axes are labeled with units and uncertainties (if applicable).
-   - Check if trendlines and R² values are present.
-   - **Crucial:** Look at the data points. Do they actually support the student's conclusion?
+### OUTPUT FORMAT:
+Please strictly use the following format. Do not deviate.
 
-2. **Data & Calculation Check:**
-   - Verify significant figures are consistent with equipment precision.
-   - Verify 1-2 visible calculations (e.g., slope, percent error).
-   - Check for distinction between random and systematic errors.
-
-3. **Grading:**
-   - Apply the rubric strictly. Deduct points for missing elements like safety concerns, qualitative observations, or APA citations.
-
-### Output Format:
-Please strictly use the following format for your response:
-
-SCORE: [Points Earned]/100
-STUDENT: [Name or Filename]
+SCORE: [Total Points]/100
+STUDENT: [Filename]
 ---
-**📊 DATA & VISUAL ANALYSIS:**
-* [Specific critique of graphs: Title, Axes, Units, Linearity]
-* [Verification of calculations: Correct/Incorrect]
-* [Comment on data trends]
+**📊 OVERALL SUMMARY & VISUAL ANALYSIS:**
+* [1-2 sentences on the overall quality of the report]
+* [Specific critique of any graphs/images found: Are axes labeled? Is there a trendline?]
 
-**📝 RUBRIC BREAKDOWN:**
-* **Formatting:** [Score]/10 - [Brief feedback]
-* **Introduction:** [Score]/10 - [Brief feedback]
-* **Hypothesis:** [Score]/10 - [Brief feedback]
-* **Variables:** [Score]/10 - [Brief feedback]
-* **Procedures:** [Score]/10 - [Brief feedback]
-* **Raw Data:** [Score]/10 - [Brief feedback]
-* **Analysis:** [Score]/10 - [Brief feedback]
-* **Conclusion:** [Score]/10 - [Brief feedback]
-* **Evaluation:** [Score]/10 - [Brief feedback]
-* **References:** [Score]/10 - [Brief feedback]
+**📝 DETAILED RUBRIC BREAKDOWN:**
 
-**💡 TOP 3 AREAS FOR IMPROVEMENT:**
-1. [Actionable tip]
-2. [Actionable tip]
-3. [Actionable tip]
+**1. FORMATTING: [Score]/10**
+* **✅ Strengths:** [Specific detail]
+* **⚠️ Improvements:** [Specific detail]
+
+**2. INTRODUCTION: [Score]/10**
+* **✅ Strengths:** [Specific detail]
+* **⚠️ Improvements:** [Specific detail]
+
+**3. HYPOTHESIS: [Score]/10**
+* **✅ Strengths:** [Specific detail]
+* **⚠️ Improvements:** [Specific detail]
+
+**4. VARIABLES: [Score]/10**
+* **✅ Strengths:** [Specific detail]
+* **⚠️ Improvements:** [Specific detail]
+
+**5. PROCEDURES: [Score]/10**
+* **✅ Strengths:** [Specific detail]
+* **⚠️ Improvements:** [Specific detail]
+
+**6. RAW DATA: [Score]/10**
+* **✅ Strengths:** [Specific detail]
+* **⚠️ Improvements:** [Specific detail]
+
+**7. DATA ANALYSIS: [Score]/10**
+* **✅ Strengths:** [Specific detail]
+* **⚠️ Improvements:** [Specific detail]
+
+**8. CONCLUSION: [Score]/10**
+* **✅ Strengths:** [Specific detail]
+* **⚠️ Improvements:** [Specific detail]
+
+**9. EVALUATION: [Score]/10**
+* **✅ Strengths:** [Specific detail]
+* **⚠️ Improvements:** [Specific detail]
+
+**10. REFERENCES: [Score]/10**
+* **✅ Strengths:** [Specific detail]
+* **⚠️ Improvements:** [Specific detail]
+
+---
+**💡 TOP 3 ACTIONABLE STEPS FOR NEXT TIME:**
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
 """
 
 # Initialize Session State
@@ -152,7 +171,6 @@ def get_media_type(filename):
     return media_types.get(ext, 'image/jpeg')
 
 def extract_text_from_docx(file):
-    """Reads text from a Word Document."""
     try:
         doc = Document(file)
         full_text = []
@@ -163,24 +181,15 @@ def extract_text_from_docx(file):
         return f"Error reading .docx file: {e}"
 
 def extract_images_from_docx(file):
-    """
-    Cracks open a .docx file (which is a ZIP) and finds all images.
-    Returns a list of base64 encoded image objects.
-    """
     images = []
     try:
-        # Reset file pointer to beginning before unzipping
         file.seek(0)
         with zipfile.ZipFile(file) as z:
             for filename in z.namelist():
-                # Word stores images in 'word/media/'
                 if filename.startswith('word/media/') and filename.split('.')[-1].lower() in ['png', 'jpg', 'jpeg', 'gif']:
-                    # Extract image data
                     img_data = z.read(filename)
                     b64_img = base64.b64encode(img_data).decode('utf-8')
                     ext = filename.split('.')[-1].lower()
-                    
-                    # Store in format API expects
                     images.append({
                         "type": "image",
                         "source": {
@@ -190,13 +199,10 @@ def extract_images_from_docx(file):
                         }
                     })
     except Exception as e:
-        # If image extraction fails, we just continue with text
         print(f"Image extraction failed: {e}")
-        
     return images
 
 def process_uploaded_files(uploaded_files):
-    """Smart Processor with format counting."""
     final_files = []
     IGNORED_FILES = {'.ds_store', 'desktop.ini', 'thumbs.db', '__macosx'}
     VALID_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'docx'}
@@ -240,29 +246,22 @@ def process_uploaded_files(uploaded_files):
 def grade_submission(file):
     ext = file.name.split('.')[-1].lower()
     
-    # CASE 1: Word Document (Extract Text + Images)
     if ext == 'docx':
         text_content = extract_text_from_docx(file)
-        
-        # 1. Add Text
         user_message = [
             {
                 "type": "text",
                 "text": (
                     f"Please grade this lab report based on the Pre-IB rubric below.\n"
-                    f"Note: This is a converted Word Document. I have attached the text followed by the images found in the file.\n\n"
+                    f"Note: This is a converted Word Document. Attached is the text followed by images.\n\n"
                     f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
                     f"STUDENT TEXT:\n{text_content}"
                 )
             }
         ]
-        
-        # 2. Add Images (Graphs/Diagrams)
         images = extract_images_from_docx(file)
         if images:
             user_message.extend(images)
-    
-    # CASE 2: PDF or Image (Native Support)
     else:
         base64_data = encode_file(file)
         if not base64_data: return "Error processing file."
@@ -286,7 +285,6 @@ def grade_submission(file):
             }
         ]
 
-    # --- RATE LIMIT HANDLING ---
     max_retries = 3
     retry_delay = 5 
     
@@ -299,19 +297,13 @@ def grade_submission(file):
                 messages=[{"role": "user", "content": user_message}]
             )
             return response.content[0].text
-            
         except anthropic.RateLimitError:
             if attempt < max_retries - 1:
-                sleep_time = retry_delay * (attempt + 1)
-                time.sleep(sleep_time)
+                time.sleep(retry_delay * (attempt + 1))
                 continue
-            else:
-                return "⚠️ Error: Rate limit exceeded. Try grading fewer files at once."
-                
-        except anthropic.APIError as e:
-             return f"⚠️ API Error: {str(e)}"
+            return "⚠️ Error: Rate limit exceeded."
         except Exception as e:
-            return f"⚠️ Unexpected Error: {str(e)}"
+            return f"⚠️ Error: {str(e)}"
 
 def parse_score(text):
     try:
@@ -349,13 +341,42 @@ def create_zip_bundle(results):
             z.writestr(safe_name, doc_buffer.getvalue())
     return zip_buffer.getvalue()
 
-# --- 6. SIDEBAR (HISTORY & SETTINGS) ---
+def display_results_ui():
+    if not st.session_state.current_results:
+        return
+
+    st.divider()
+    st.subheader(f"📊 Results: {st.session_state.current_session_name}")
+    
+    df = pd.DataFrame(st.session_state.current_results)
+    
+    # Ensure feedback is in the CSV export
+    csv_df = df[["Filename", "Score", "Feedback"]]
+    csv_data = csv_df.to_csv(index=False).encode('utf-8')
+    
+    master_doc_data = create_master_doc(st.session_state.current_results, st.session_state.current_session_name)
+    zip_data = create_zip_bundle(st.session_state.current_results)
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.download_button("📄 Master Doc (All-in-One)", master_doc_data, f'{st.session_state.current_session_name}_Master.docx', "application/vnd.openxmlformats-officedocument.wordprocessingml.document", use_container_width=True)
+    with col2:
+        st.download_button("📦 Student Bundle (.zip)", zip_data, f'{st.session_state.current_session_name}_Students.zip', "application/zip", use_container_width=True)
+    with col3:
+        st.download_button("📊 Gradebook (.csv)", csv_data, f'{st.session_state.current_session_name}_Grades.csv', "text/csv", use_container_width=True)
+
+    tab1, tab2 = st.tabs(["📊 Gradebook View", "📝 Detailed Feedback"])
+    with tab1:
+        st.dataframe(df[["Filename", "Score"]], use_container_width=True)
+    with tab2:
+        for item in st.session_state.current_results:
+            with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
+                st.markdown(item['Feedback'])
+
+# --- 6. SIDEBAR ---
 with st.sidebar:
     st.header("💾 History Manager")
-    
-    st.caption("Save your current grading batch:")
     save_name = st.text_input("Session Name", placeholder="e.g. Period 3 - Kinetics")
-    
     if st.button("💾 Save Session"):
         if st.session_state.current_results:
             st.session_state.saved_sessions[save_name] = st.session_state.current_results
@@ -364,11 +385,9 @@ with st.sidebar:
             st.warning("No results to save yet.")
             
     st.divider()
-    
     if st.session_state.saved_sessions:
         st.subheader("📂 Load Session")
         selected_session = st.selectbox("Select Batch", list(st.session_state.saved_sessions.keys()))
-        
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Load"):
@@ -379,9 +398,6 @@ with st.sidebar:
             if st.button("🗑️ Delete"):
                 del st.session_state.saved_sessions[selected_session]
                 st.rerun()
-    else:
-        st.caption("No saved sessions found.")
-
     st.divider()
     with st.expander("View Grading Criteria"):
         st.text(PRE_IB_RUBRIC)
@@ -391,7 +407,6 @@ with st.sidebar:
 st.title("🧪 Pre-IB Lab Grader")
 st.caption(f"Current Session: **{st.session_state.current_session_name}**")
 
-# File Uploader
 st.info("💡 **Tip:** To upload a folder, open it, press `Ctrl+A` (Select All), and drag everything here.")
 
 raw_files = st.file_uploader(
@@ -412,7 +427,6 @@ if raw_files:
         if raw_files:
             st.warning("No valid PDF, Word, or Image files found.")
 
-# Grading Action
 if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files):
     
     st.write("---")
@@ -434,65 +448,13 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
         })
         progress.progress((i + 1) / len(processed_files))
         
-        time.sleep(1) # Rate limit safety
+        time.sleep(1) 
 
     st.session_state.current_results = new_results
-    status.success("✅ Grading Complete! Don't forget to save this session in the sidebar.")
+    status.success("✅ Grading Complete! Scrolling down...")
     progress.empty()
-
-# --- 8. RESULTS DISPLAY ---
-if st.session_state.current_results:
-    st.divider()
     
-    df = pd.DataFrame(st.session_state.current_results)
-    csv_data = df.to_csv(index=False).encode('utf-8')
-    master_doc_data = create_master_doc(st.session_state.current_results, st.session_state.current_session_name)
-    zip_data = create_zip_bundle(st.session_state.current_results)
-    
-    st.subheader("📤 Batch Export")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.download_button(
-            label="📄 Master Doc (All-in-One)",
-            data=master_doc_data,
-            file_name=f'{st.session_state.current_session_name}_Master.docx',
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            use_container_width=True
-        )
-        st.caption("One file containing all reports.")
+    display_results_ui()
 
-    with col2:
-        st.download_button(
-            label="📦 Student Bundle (.zip)",
-            data=zip_data,
-            file_name=f'{st.session_state.current_session_name}_Students.zip',
-            mime="application/zip",
-            use_container_width=True
-        )
-        st.caption("Separate files for each student.")
-
-    with col3:
-        st.download_button(
-            label="📊 Gradebook (.csv)", 
-            data=csv_data, 
-            file_name=f'{st.session_state.current_session_name}_Grades.csv', 
-            mime='text/csv',
-            use_container_width=True
-        )
-        st.caption("Spreadsheet of scores.")
-
-    st.divider()
-    
-    tab1, tab2 = st.tabs(["📊 Gradebook View", "📝 Detailed Feedback"])
-
-    with tab1:
-        st.dataframe(df[["Filename", "Score"]], use_container_width=True)
-
-    with tab2:
-        for item in st.session_state.current_results:
-            with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
-                st.markdown(item['Feedback'])
-else:
-    st.info("Upload files to begin.")
+if st.session_state.current_results and not processed_files:
+     display_results_ui()
