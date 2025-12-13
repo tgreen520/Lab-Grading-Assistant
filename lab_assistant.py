@@ -18,17 +18,14 @@ import os  # <--- New import needed to read system variables
 
 # --- 1. CONFIGURATION ---
 
-# Try to get the key from the computer's environment variables
-API_KEY = os.environ.get("ANTHROPIC_API_KEY")
-
-# Check if the key was found. If not, stop the app and warn the user.
-if not API_KEY:
+# Check for Key in Secrets (Streamlit Cloud) OR Environment (Local PC)
+if "ANTHROPIC_API_KEY" in st.secrets:
+    API_KEY = st.secrets["ANTHROPIC_API_KEY"]
+elif "ANTHROPIC_API_KEY" in os.environ:
+    API_KEY = os.environ.get("ANTHROPIC_API_KEY")
+else:
     st.error("🚨 API Key not found!")
-    st.markdown("""
-    To fix this:
-    1. Set an Environment Variable named `ANTHROPIC_API_KEY` on your computer.
-    2. Restart your terminal/editor.
-    """)
+    st.info("On Streamlit Cloud, add your key to the 'Secrets' settings.")
     st.stop()
 
 # Model Selection
