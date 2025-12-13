@@ -6,6 +6,7 @@ import os
 import json
 import zipfile
 import time
+import re
 from docx import Document
 from io import BytesIO
 
@@ -29,112 +30,112 @@ else:
 MODEL_NAME = "claude-sonnet-4-20250514"
 
 # --- 3. HARDCODED RUBRIC ---
+# (Slightly adjusted to reflect "Lenient" instructions in the prompt below)
 PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
-1. FORMATTING (10 pts):
-- Criteria: Third-person passive voice (no "I/we"), clear headings, professional tone.
-- Deductions: Use of first person, missing sections, messy layout.
+1. FORMATTING (10 pts) [LENIENT]:
+- Criteria: Third-person passive voice, professional tone.
+- Note: Do not deduct for minor spacing/layout issues. Deduct only for consistent use of "I/We".
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective ("To determine..."), relevant background theory explained, balanced chemical equations with states.
-- Deductions: Vague objective, missing theory, unbalanced equations.
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction (e.g., "doubling concentration will double rate"), scientific justification linked to theory.
-- Deductions: Vague guess ("it will change"), missing reasoning.
 
 4. VARIABLES (10 pts):
 - Criteria: Independent (IV) with units/range, Dependent (DV) with measurement method, 3+ Controlled variables (how & why).
-- Deductions: Missing units, controls listed without explanation, confusion of variables.
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, logical flow, specific quantities/concentrations, safety (PPE/Disposal), setup diagram.
-- Deductions: Paragraph format ("recipe style"), missing safety, vague steps ("add some acid").
 
 6. RAW DATA (10 pts):
 - Criteria: Qualitative observations (color/smell/heat), clear tables with borders/titles/units, consistent sig figs, uncertainties.
-- Deductions: No qualitative data, messy tables, missing units, inconsistent decimals.
 
 7. DATA ANALYSIS (10 pts):
 - Criteria: Sample calculation shown, graphs with titles/axes/units, trendline/curve, R² value, correct formula usage.
-- Deductions: Missing sample calc, poor graph scaling, missing axis labels.
 
 8. CONCLUSION (10 pts):
 - Criteria: Explicit statement (Supported/Refuted), specific data cited as evidence, comparison to literature value (% error).
-- Deductions: Conclusion contradicts data, no data cited, no theoretical comparison.
 
 9. EVALUATION (10 pts):
 - Criteria: Distinction between Random vs. Systematic error, specific sources of error identified, realistic improvements suggested.
-- Deductions: Vague "human error", unrealistic improvements ("buy a robot").
 
-10. REFERENCES (10 pts):
-- Criteria: APA 7th edition, in-text citations match list, reliable sources (.edu/.gov).
-- Deductions: URL only, Wikipedia, missing in-text citations.
+10. REFERENCES (10 pts) [LENIENT]:
+- Criteria: Sources listed.
+- Note: Do not deduct for minor APA punctuation errors. Give full credit if reliable sources are present and cited.
 """
 
-# --- 4. UPDATED SYSTEM PROMPT (SPECIFIC FEEDBACK) ---
+# --- 4. SYSTEM PROMPT (UPDATED FOR SPECIFICITY & LENIENCY) ---
 SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader. 
-Your goal is to grade student lab reports strictly according to the provided IB-style rubric.
+Your goal is to grade student lab reports according to the provided rubric.
 
-### INSTRUCTIONS:
-1.  **Be Specific:** Do not just say "Good job." Quote the student's work to prove you read it (e.g., "Your hypothesis correctly predicted a linear relationship, but...").
-2.  **Strengths & Weaknesses:** For **EVERY** section of the rubric, you must explicitly list:
-    * **✅ Strengths:** What they did well.
-    * **⚠️ Improvements:** Exactly what was missing or wrong.
-3.  **Graph Checks:** If a graph is present, analyze the axes, units, and data points. Does the trendline make sense?
-4.  **Tone:** Be encouraging but rigorous. This is Pre-IB; standards are high.
+### 🧠 GRADING CALIBRATION (CRITICAL):
+1.  **Formatting & References (Sections 1 & 10):** Be **LENIENT**.
+    * **Formatting:** A score of 9 or 10 is appropriate even with small layout errors. Only deduct significantly if the student consistently uses "I/We" (First Person).
+    * **References:** Do NOT deduct for small APA punctuation errors. If they listed sources and cited them, give them a high score (9-10). Only deduct if sources are missing or clearly unreliable (like Wikipedia).
+2.  **Scientific Sections (Sections 2-9):** Be **STRICT**.
+    * Look closely at their data, significant figures, and scientific reasoning.
+
+### 📝 FEEDBACK INSTRUCTIONS:
+1.  **Quote the Student:** You MUST include specific quotes or data points from their report to back up your feedback.
+    * *Bad:* "Your hypothesis was good."
+    * *Good:* "Your hypothesis correctly predicted that 'rate will double,' which aligns with Collision Theory, but you failed to explain *why* frequency increases."
+    * *Bad:* "Your data table was messy."
+    * *Good:* "In Table 1, your 'Mass' column is missing units (g), and your trial 3 value (10.5g) has inconsistent significant figures compared to trial 1 (10.50g)."
+2.  **Structure:** For EVERY section, provide "✅ Strengths" and "⚠️ Improvements".
 
 ### OUTPUT FORMAT:
-Please strictly use the following format. Do not deviate.
+Please strictly use the following format.
 
 SCORE: [Total Points]/100
 STUDENT: [Filename]
 ---
 **📊 OVERALL SUMMARY & VISUAL ANALYSIS:**
-* [1-2 sentences on the overall quality of the report]
-* [Specific critique of any graphs/images found: Are axes labeled? Is there a trendline?]
+* [1-2 sentences on the overall quality]
+* [Specific critique of graphs/images: Are axes labeled? Is the trendline correct?]
 
 **📝 DETAILED RUBRIC BREAKDOWN:**
 
 **1. FORMATTING: [Score]/10**
-* **✅ Strengths:** [Specific detail]
-* **⚠️ Improvements:** [Specific detail]
+* **✅ Strengths:** [Quote specific good parts]
+* **⚠️ Improvements:** [Quote specific errors]
 
 **2. INTRODUCTION: [Score]/10**
-* **✅ Strengths:** [Specific detail]
-* **⚠️ Improvements:** [Specific detail]
+* **✅ Strengths:** [Quote specific good parts]
+* **⚠️ Improvements:** [Quote specific errors]
 
 **3. HYPOTHESIS: [Score]/10**
-* **✅ Strengths:** [Specific detail]
-* **⚠️ Improvements:** [Specific detail]
+* **✅ Strengths:** [Quote specific good parts]
+* **⚠️ Improvements:** [Quote specific errors]
 
 **4. VARIABLES: [Score]/10**
-* **✅ Strengths:** [Specific detail]
-* **⚠️ Improvements:** [Specific detail]
+* **✅ Strengths:** [Quote specific good parts]
+* **⚠️ Improvements:** [Quote specific errors]
 
 **5. PROCEDURES: [Score]/10**
-* **✅ Strengths:** [Specific detail]
-* **⚠️ Improvements:** [Specific detail]
+* **✅ Strengths:** [Quote specific good parts]
+* **⚠️ Improvements:** [Quote specific errors]
 
 **6. RAW DATA: [Score]/10**
-* **✅ Strengths:** [Specific detail]
-* **⚠️ Improvements:** [Specific detail]
+* **✅ Strengths:** [Quote specific good parts]
+* **⚠️ Improvements:** [Quote specific errors]
 
 **7. DATA ANALYSIS: [Score]/10**
-* **✅ Strengths:** [Specific detail]
-* **⚠️ Improvements:** [Specific detail]
+* **✅ Strengths:** [Quote specific good parts]
+* **⚠️ Improvements:** [Quote specific errors]
 
 **8. CONCLUSION: [Score]/10**
-* **✅ Strengths:** [Specific detail]
-* **⚠️ Improvements:** [Specific detail]
+* **✅ Strengths:** [Quote specific good parts]
+* **⚠️ Improvements:** [Quote specific errors]
 
 **9. EVALUATION: [Score]/10**
-* **✅ Strengths:** [Specific detail]
-* **⚠️ Improvements:** [Specific detail]
+* **✅ Strengths:** [Quote specific good parts]
+* **⚠️ Improvements:** [Quote specific errors]
 
 **10. REFERENCES: [Score]/10**
-* **✅ Strengths:** [Specific detail]
-* **⚠️ Improvements:** [Specific detail]
+* **✅ Strengths:** [Quote specific good parts]
+* **⚠️ Improvements:** [Quote specific errors]
 
 ---
 **💡 TOP 3 ACTIONABLE STEPS FOR NEXT TIME:**
@@ -315,13 +316,48 @@ def parse_score(text):
         pass
     return "N/A"
 
+# --- SMART FORMATTER FOR WORD ---
+def write_markdown_to_docx(doc, text):
+    lines = text.split('\n')
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        
+        if line.startswith('### '):
+            doc.add_heading(line.replace('### ', '').strip(), level=3)
+            continue
+        
+        if line.startswith('**') and line.endswith('**') and len(line) < 60:
+            p = doc.add_paragraph()
+            run = p.add_run(line.replace('**', ''))
+            run.bold = True
+            continue
+
+        if line.startswith('* ') or line.startswith('- '):
+            p = doc.add_paragraph(style='List Bullet')
+            content = line[2:] 
+        else:
+            p = doc.add_paragraph()
+            content = line
+
+        # Handle Inline Bold (**text**)
+        parts = re.split(r'(\*\*.*?\*\*)', content)
+        for part in parts:
+            if part.startswith('**') and part.endswith('**'):
+                clean_text = part[2:-2]
+                run = p.add_run(clean_text)
+                run.bold = True
+            else:
+                p.add_run(part)
+
 def create_master_doc(results, session_name):
     doc = Document()
     doc.add_heading(f"Lab Report Grades: {session_name}", 0)
     for item in results:
         doc.add_heading(item['Filename'], level=1)
         doc.add_heading(f"Score: {item['Score']}", level=2)
-        doc.add_paragraph(item['Feedback'])
+        write_markdown_to_docx(doc, item['Feedback'])
         doc.add_page_break()
     bio = BytesIO()
     doc.save(bio)
@@ -334,7 +370,7 @@ def create_zip_bundle(results):
             doc = Document()
             doc.add_heading(f"Feedback: {item['Filename']}", 0)
             doc.add_heading(f"Score: {item['Score']}", level=1)
-            doc.add_paragraph(item['Feedback'])
+            write_markdown_to_docx(doc, item['Feedback'])
             doc_buffer = BytesIO()
             doc.save(doc_buffer)
             safe_name = os.path.splitext(item['Filename'])[0] + "_Feedback.docx"
@@ -350,7 +386,6 @@ def display_results_ui():
     
     df = pd.DataFrame(st.session_state.current_results)
     
-    # Ensure feedback is in the CSV export
     csv_df = df[["Filename", "Score", "Feedback"]]
     csv_data = csv_df.to_csv(index=False).encode('utf-8')
     
