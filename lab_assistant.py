@@ -151,76 +151,140 @@ def get_media_type(filename):
     }
     return media_types.get(ext, 'image/jpeg')
 
+def extract_text_from_docx(file):
+    """Reads text from a Word Document."""
+    try:
+        doc = Document(file)
+        full_text = []
+        for para in doc.paragraphs:
+            full_text.append(para.text)
+        return "\n".join(full_text)
+    except Exception as e:
+        return f"Error reading .docx file: {e}"
+
+def extract_images_from_docx(file):
+    """
+    Cracks open a .docx file (which is a ZIP) and finds all images.
+    Returns a list of base64 encoded image objects.
+    """
+    images = []
+    try:
+        # Reset file pointer to beginning before unzipping
+        file.seek(0)
+        with zipfile.ZipFile(file) as z:
+            for filename in z.namelist():
+                # Word stores images in 'word/media/'
+                if filename.startswith('word/media/') and filename.split('.')[-1].lower() in ['png', 'jpg', 'jpeg', 'gif']:
+                    # Extract image data
+                    img_data = z.read(filename)
+                    b64_img = base64.b64encode(img_data).decode('utf-8')
+                    ext = filename.split('.')[-1].lower()
+                    
+                    # Store in format API expects
+                    images.append({
+                        "type": "image",
+                        "source": {
+                            "type": "base64", 
+                            "media_type": f"image/{'jpeg' if ext=='jpg' else ext}", 
+                            "data": b64_img
+                        }
+                    })
+    except Exception as e:
+        # If image extraction fails, we just continue with text
+        print(f"Image extraction failed: {e}")
+        
+    return images
+
 def process_uploaded_files(uploaded_files):
-    """
-    Smart Processor:
-    1. Handles ZIP files (unzips them).
-    2. Handles standard files.
-    3. FILTERS OUT junk system files (.DS_Store, desktop.ini) from 'Select All' uploads.
-    """
+    """Smart Processor with format counting."""
     final_files = []
-    
-    # Files to ignore
     IGNORED_FILES = {'.ds_store', 'desktop.ini', 'thumbs.db', '__macosx'}
-    VALID_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp'}
+    VALID_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'docx'}
     
+    file_counts = {"pdf": 0, "docx": 0, "image": 0, "ignored": 0}
+
     for file in uploaded_files:
         file_name_lower = file.name.lower()
-        
-        # Skip junk files immediately
         if file_name_lower in IGNORED_FILES or file_name_lower.startswith('._'):
             continue
 
-        # Check if it is a ZIP file
         if file_name_lower.endswith('.zip'):
             try:
                 with zipfile.ZipFile(file) as z:
                     for filename in z.namelist():
-                        # Filter junk inside ZIP
                         clean_name = filename.lower()
-                        if any(x in clean_name for x in IGNORED_FILES) or filename.startswith('.'):
-                            continue
-                            
-                        # Check extension
+                        if any(x in clean_name for x in IGNORED_FILES) or filename.startswith('.'): continue
                         ext = clean_name.split('.')[-1]
                         if ext in VALID_EXTENSIONS:
                             file_bytes = z.read(filename)
                             virtual_file = BytesIO(file_bytes)
                             virtual_file.name = os.path.basename(filename)
                             final_files.append(virtual_file)
+                            if ext == 'docx': file_counts['docx'] += 1
+                            elif ext == 'pdf': file_counts['pdf'] += 1
+                            else: file_counts['image'] += 1
             except Exception as e:
                 st.error(f"Error unzipping {file.name}: {e}")
-                
         else:
-            # It's a regular file - check extension
             ext = file_name_lower.split('.')[-1]
             if ext in VALID_EXTENSIONS:
                 final_files.append(file)
+                if ext == 'docx': file_counts['docx'] += 1
+                elif ext == 'pdf': file_counts['pdf'] += 1
+                else: file_counts['image'] += 1
+            else:
+                file_counts['ignored'] += 1
             
-    return final_files
+    return final_files, file_counts
 
 def grade_submission(file):
-    base64_data = encode_file(file)
-    if not base64_data: return "Error processing file."
-    media_type = get_media_type(file.name)
+    ext = file.name.split('.')[-1].lower()
     
-    user_message = [
-        {
-            "type": "text",
-            "text": (
-                f"Please grade this lab report based on the Pre-IB rubric below.\n\n"
-                f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
-                f"INSTRUCTIONS:\n"
-                f"1. Provide a specific score out of 10 for each of the 10 sections.\n"
-                f"2. Sum them for a total out of 100.\n"
-                f"3. Be strict about significant figures, error analysis, and citations."
-            )
-        },
-        {
-            "type": "document" if media_type == 'application/pdf' else "image",
-            "source": {"type": "base64", "media_type": media_type, "data": base64_data}
-        }
-    ]
+    # CASE 1: Word Document (Extract Text + Images)
+    if ext == 'docx':
+        text_content = extract_text_from_docx(file)
+        
+        # 1. Add Text
+        user_message = [
+            {
+                "type": "text",
+                "text": (
+                    f"Please grade this lab report based on the Pre-IB rubric below.\n"
+                    f"Note: This is a converted Word Document. I have attached the text followed by the images found in the file.\n\n"
+                    f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
+                    f"STUDENT TEXT:\n{text_content}"
+                )
+            }
+        ]
+        
+        # 2. Add Images (Graphs/Diagrams)
+        images = extract_images_from_docx(file)
+        if images:
+            user_message.extend(images)
+    
+    # CASE 2: PDF or Image (Native Support)
+    else:
+        base64_data = encode_file(file)
+        if not base64_data: return "Error processing file."
+        media_type = get_media_type(file.name)
+        
+        user_message = [
+            {
+                "type": "text",
+                "text": (
+                    f"Please grade this lab report based on the Pre-IB rubric below.\n\n"
+                    f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
+                    f"INSTRUCTIONS:\n"
+                    f"1. Provide a specific score out of 10 for each of the 10 sections.\n"
+                    f"2. Sum them for a total out of 100.\n"
+                    f"3. Be strict about significant figures, error analysis, and citations."
+                )
+            },
+            {
+                "type": "document" if media_type == 'application/pdf' else "image",
+                "source": {"type": "base64", "media_type": media_type, "data": base64_data}
+            }
+        ]
 
     # --- RATE LIMIT HANDLING ---
     max_retries = 3
@@ -331,19 +395,22 @@ st.caption(f"Current Session: **{st.session_state.current_session_name}**")
 st.info("💡 **Tip:** To upload a folder, open it, press `Ctrl+A` (Select All), and drag everything here.")
 
 raw_files = st.file_uploader(
-    "📂 Upload Reports (PDF, Images, ZIP, or Multiple Files)", 
-    type=['pdf', 'png', 'jpg', 'jpeg', 'zip'], 
+    "📂 Upload Reports (PDF, Word, Images, ZIP)", 
+    type=['pdf', 'docx', 'png', 'jpg', 'jpeg', 'zip'], 
     accept_multiple_files=True
 )
 
 processed_files = []
 if raw_files:
-    processed_files = process_uploaded_files(raw_files)
+    processed_files, counts = process_uploaded_files(raw_files)
     if len(processed_files) > 0:
-        st.success(f"Ready to grade **{len(processed_files)}** valid report(s).")
+        st.success(f"✅ Found **{len(processed_files)}** valid reports.")
+        st.caption(f"📄 PDFs: {counts['pdf']} | 📝 Word Docs: {counts['docx']} | 🖼️ Images: {counts['image']}")
+        if counts['ignored'] > 0:
+            st.warning(f"⚠️ {counts['ignored']} files were ignored (unsupported format).")
     else:
         if raw_files:
-            st.warning("No valid PDF or Image files found in upload.")
+            st.warning("No valid PDF, Word, or Image files found.")
 
 # Grading Action
 if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files):
