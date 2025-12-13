@@ -58,10 +58,14 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 4. VARIABLES (10 pts):
 - Criteria: IV (units/range), DV (method), 3+ Controlled Variables.
 - SCORING RULE: If control variables are listed but not explained/justified properly, score exactly 8/10.
-- PARTIAL CREDIT: 
-  * IV identified but missing units/range: award partial points
-  * DV identified but method unclear: award partial points
-  * Fewer than 3 control variables: deduct proportionally
+- LENIENT GRADING APPROACH:
+  * **Focus on identification over perfection**: Students who identify variables correctly should receive most points even if descriptions are brief.
+  * IV identified with units OR range (not both required): 9-10 pts possible
+  * DV identified with basic measurement method: 9-10 pts possible
+  * 3+ Control variables listed (even without detailed explanations): minimum 8/10
+  * 2 Control variables listed: 7/10
+  * Only IV and DV properly identified: 6/10
+- PARTIAL CREDIT: Award generously for demonstrating understanding of variable types, even if details are incomplete.
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, specific quantities, safety.
@@ -96,10 +100,18 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
-- DEDUCTIONS: 
-  * Minor APA formatting errors (punctuation/italics): -0.5 pts.
-  * Major APA formatting errors: MAXIMUM deduction of -1.0 pt. Do not deduct more than 1 point total for APA formatting.
-- PARTIAL CREDIT: Award points if sources are present and cited, even if formatting is imperfect. Missing citations is more serious than formatting errors.
+- LENIENT GRADING APPROACH:
+  * **Primary focus: Are sources present and cited in the text?** This is 90% of the score.
+  * **Secondary consideration: Formatting quality** This is only 10% of the score.
+  * If sources are present and cited in text, START at 9/10 minimum.
+  * Perfect or near-perfect APA formatting: 10/10
+  * Minor APA formatting errors (punctuation, italics, capitalization): 9.5/10 (-0.5 pts)
+  * Multiple minor errors or 1-2 major errors: 9/10 (-1.0 pt MAX)
+  * Sources present but no in-text citations: 7-8/10
+  * Only 1-2 sources present: 7-8/10
+  * No references section at all: 0-3/10
+- CRITICAL: Do NOT deduct more than 1.0 point total for formatting issues as long as sources are present and cited.
+- PARTIAL CREDIT: Prioritize the presence of sources over perfect formatting. Students who made an effort to cite sources should receive 9-10 points in most cases.
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -145,8 +157,15 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Partial Credit:** A hypothesis that lacks specificity or weak justification can still earn 5-7 points if the basic structure is present.
 
 4.  **VARIABLES (Section 4):**
-    * **Rule:** If they listed the Control Variables but didn't explain WHY or HOW they were controlled, give them **8/10**.
-    * **Partial Credit:** Award partial points for incomplete variable identification (e.g., IV present but no units = 6-7 pts).
+    * **LENIENT APPROACH:** Focus on whether students understand the three variable types, not perfection in descriptions.
+    * **Scoring Guide:**
+        * IV + DV + 3 Control Variables identified = minimum 8/10 (even without detailed explanations)
+        * IV with units OR range (not both required) = strong work
+        * DV with basic measurement method = strong work
+        * Control variables listed but not explained = 8/10 (FIXED RULE)
+        * 2 Control variables = 7/10
+        * Only IV and DV = 6/10
+    * **Partial Credit:** Be generous. If a student shows they understand what variables are, they should score 7-10 points.
 
 5.  **PROCEDURES (Section 5):**
     * **Rule:** If the ONLY thing missing is the diagram, the score should be **9.5/10**.
@@ -176,9 +195,16 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Partial Credit for Fewer Errors:** If student lists 2-3 errors, award 3-4 points proportionally.
 
 10.  **REFERENCES (Section 10):**
-    * **Minor APA Errors:** Deduct **0.5** points.
-    * **Major APA Errors:** Deduct a **MAXIMUM of 1.0 point**. Do NOT deduct more than 1 point for bad APA formatting as long as sources are present.
-    * **Partial Credit:** Focus on whether sources are present and cited. Formatting errors are secondary.
+    * **LENIENT APPROACH:** If sources are present and cited, students should receive 9-10 points in almost all cases.
+    * **Scoring Guide:**
+        * Sources present + cited in text + good formatting = 10/10
+        * Sources present + cited in text + minor APA errors = 9.5/10
+        * Sources present + cited in text + multiple minor/major APA errors = 9/10 (MAX -1.0 pt for formatting)
+        * Sources present but missing in-text citations = 7-8/10
+        * Only 1-2 sources = 7-8/10
+        * No references section = 0-3/10
+    * **Critical Rule:** Do NOT deduct more than 1 point for APA formatting issues. The presence of sources is what matters most.
+    * **Focus:** 90% of the score should be based on whether sources exist and are cited, only 10% on formatting perfection.
 
 ### 📝 FEEDBACK INSTRUCTIONS (SUMMARY STYLE):
 1.  **Summarize Evidence:** Do NOT quote the student directly. Instead, summarize what they did in your own words.
