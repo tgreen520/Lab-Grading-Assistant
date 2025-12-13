@@ -268,4 +268,4 @@ def create_master_doc(results, session_name):
         doc.add_paragraph(item['Feedback'])
         doc.add_page_break()
     bio = BytesIO()
-    doc.save(bio
+    doc.save(bio)
