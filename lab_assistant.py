@@ -29,61 +29,73 @@ else:
 
 MODEL_NAME = "claude-sonnet-4-20250514"
 
-# --- 3. HARDCODED RUBRIC ---
-# (Slightly adjusted to reflect "Lenient" instructions in the prompt below)
+# --- 3. HARDCODED RUBRIC (UPDATED WITH SPECIFIC RULES) ---
 PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 1. FORMATTING (10 pts) [LENIENT]:
 - Criteria: Third-person passive voice, professional tone.
-- Note: Do not deduct for minor spacing/layout issues. Deduct only for consistent use of "I/We".
+- Note: Score high (9-10) unless "I/We" is used consistently.
 
 2. INTRODUCTION (10 pts):
-- Criteria: Clear objective ("To determine..."), relevant background theory explained, balanced chemical equations with states.
+- Criteria: Clear objective, background theory, balanced equations.
 
 3. HYPOTHESIS (10 pts):
-- Criteria: Specific prediction (e.g., "doubling concentration will double rate"), scientific justification linked to theory.
+- Criteria: Specific prediction with scientific justification.
 
-4. VARIABLES (10 pts):
-- Criteria: Independent (IV) with units/range, Dependent (DV) with measurement method, 3+ Controlled variables (how & why).
+4. VARIABLES (10 pts) [SPECIFIC RULE]:
+- Criteria: IV (units/range), DV (method), 3+ Controlled Variables.
+- SCORING RULE: If control variables are listed but not explained/justified properly, score exactly 8/10.
 
-5. PROCEDURES (10 pts):
-- Criteria: Numbered steps, logical flow, specific quantities/concentrations, safety (PPE/Disposal), setup diagram.
+5. PROCEDURES (10 pts) [SPECIFIC RULE]:
+- Criteria: Numbered steps, specific quantities, safety.
+- SCORING RULE: A missing diagram is a MINOR deduction (-0.5 points). Do not penalize heavily for this.
 
 6. RAW DATA (10 pts):
-- Criteria: Qualitative observations (color/smell/heat), clear tables with borders/titles/units, consistent sig figs, uncertainties.
+- Criteria: Qualitative observations, clear tables, units, sig figs, uncertainties.
 
 7. DATA ANALYSIS (10 pts):
-- Criteria: Sample calculation shown, graphs with titles/axes/units, trendline/curve, R² value, correct formula usage.
+- Criteria: Calculations shown, graphs (axes/trendlines), R² value.
 
 8. CONCLUSION (10 pts):
-- Criteria: Explicit statement (Supported/Refuted), specific data cited as evidence, comparison to literature value (% error).
+- Criteria: Supported/Refuted statement, data evidence, literature comparison.
 
-9. EVALUATION (10 pts):
-- Criteria: Distinction between Random vs. Systematic error, specific sources of error identified, realistic improvements suggested.
+9. EVALUATION (10 pts) [FORMULAIC SCORING]:
+- 6 POINTS: Describes 3 Systematic AND 3 Random errors.
+- +2 POINTS: Explains the impact of these errors on data.
+- +2 POINTS: Suggests realistic improvements.
+- Note: If they have fewer than 3 of each error type, deduct from the base 6 points accordingly.
 
 10. REFERENCES (10 pts) [LENIENT]:
-- Criteria: Sources listed.
-- Note: Do not deduct for minor APA punctuation errors. Give full credit if reliable sources are present and cited.
+- Criteria: Sources listed and cited.
+- Note: Ignore minor punctuation errors. Score 9-10 if sources are present and reliable.
 """
 
-# --- 4. SYSTEM PROMPT (UPDATED FOR SPECIFICITY & LENIENCY) ---
+# --- 4. SYSTEM PROMPT (ENFORCING THE LOGIC) ---
 SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader. 
-Your goal is to grade student lab reports according to the provided rubric.
+Your goal is to grade student lab reports according to the specific rules below.
 
-### 🧠 GRADING CALIBRATION (CRITICAL):
-1.  **Formatting & References (Sections 1 & 10):** Be **LENIENT**.
-    * **Formatting:** A score of 9 or 10 is appropriate even with small layout errors. Only deduct significantly if the student consistently uses "I/We" (First Person).
-    * **References:** Do NOT deduct for small APA punctuation errors. If they listed sources and cited them, give them a high score (9-10). Only deduct if sources are missing or clearly unreliable (like Wikipedia).
-2.  **Scientific Sections (Sections 2-9):** Be **STRICT**.
-    * Look closely at their data, significant figures, and scientific reasoning.
+### 🧠 SCORING ALGORITHMS (CRITICAL):
+
+1.  **VARIABLES (Section 4):**
+    * Check for Independent, Dependent, and Controlled variables.
+    * **Rule:** If they listed the Control Variables but didn't explain WHY they must be controlled or HOW they were controlled, give them **8/10**. Do not go lower than 8 for this specific error.
+
+2.  **PROCEDURES (Section 5):**
+    * **Rule:** If the ONLY thing missing is the diagram, the score should be **9.5/10**.
+
+3.  **EVALUATION (Section 9) - USE THIS MATH:**
+    * Start with **0**.
+    * Add **up to 6 points** for identifying errors (1 point per error: need 3 systematic + 3 random).
+    * Add **2 points** if they explain the *impact* of these errors.
+    * Add **2 points** if they explain *improvements*.
+    * *Example:* A student lists 3 random and 3 systematic errors (6 pts) and suggests improvements (2 pts) but forgets impact. Score = 8/10.
+
+4.  **LENIENCY (Sections 1 & 10):**
+    * Be generous on Formatting and References. High scores default unless major errors exist.
 
 ### 📝 FEEDBACK INSTRUCTIONS:
-1.  **Quote the Student:** You MUST include specific quotes or data points from their report to back up your feedback.
-    * *Bad:* "Your hypothesis was good."
-    * *Good:* "Your hypothesis correctly predicted that 'rate will double,' which aligns with Collision Theory, but you failed to explain *why* frequency increases."
-    * *Bad:* "Your data table was messy."
-    * *Good:* "In Table 1, your 'Mass' column is missing units (g), and your trial 3 value (10.5g) has inconsistent significant figures compared to trial 1 (10.50g)."
-2.  **Structure:** For EVERY section, provide "✅ Strengths" and "⚠️ Improvements".
+1.  **Quote the Student:** Back up every claim with evidence.
+2.  **Structure:** "✅ Strengths" and "⚠️ Improvements" for every section.
 
 ### OUTPUT FORMAT:
 Please strictly use the following format.
@@ -92,50 +104,50 @@ SCORE: [Total Points]/100
 STUDENT: [Filename]
 ---
 **📊 OVERALL SUMMARY & VISUAL ANALYSIS:**
-* [1-2 sentences on the overall quality]
-* [Specific critique of graphs/images: Are axes labeled? Is the trendline correct?]
+* [1-2 sentences on quality]
+* [Critique of graphs/images]
 
 **📝 DETAILED RUBRIC BREAKDOWN:**
 
 **1. FORMATTING: [Score]/10**
-* **✅ Strengths:** [Quote specific good parts]
-* **⚠️ Improvements:** [Quote specific errors]
+* **✅ Strengths:** [Quote]
+* **⚠️ Improvements:** [Quote]
 
 **2. INTRODUCTION: [Score]/10**
-* **✅ Strengths:** [Quote specific good parts]
-* **⚠️ Improvements:** [Quote specific errors]
+* **✅ Strengths:** [Quote]
+* **⚠️ Improvements:** [Quote]
 
 **3. HYPOTHESIS: [Score]/10**
-* **✅ Strengths:** [Quote specific good parts]
-* **⚠️ Improvements:** [Quote specific errors]
+* **✅ Strengths:** [Quote]
+* **⚠️ Improvements:** [Quote]
 
 **4. VARIABLES: [Score]/10**
-* **✅ Strengths:** [Quote specific good parts]
-* **⚠️ Improvements:** [Quote specific errors]
+* **✅ Strengths:** [Quote]
+* **⚠️ Improvements:** [Quote]
 
 **5. PROCEDURES: [Score]/10**
-* **✅ Strengths:** [Quote specific good parts]
-* **⚠️ Improvements:** [Quote specific errors]
+* **✅ Strengths:** [Quote]
+* **⚠️ Improvements:** [Quote]
 
 **6. RAW DATA: [Score]/10**
-* **✅ Strengths:** [Quote specific good parts]
-* **⚠️ Improvements:** [Quote specific errors]
+* **✅ Strengths:** [Quote]
+* **⚠️ Improvements:** [Quote]
 
 **7. DATA ANALYSIS: [Score]/10**
-* **✅ Strengths:** [Quote specific good parts]
-* **⚠️ Improvements:** [Quote specific errors]
+* **✅ Strengths:** [Quote]
+* **⚠️ Improvements:** [Quote]
 
 **8. CONCLUSION: [Score]/10**
-* **✅ Strengths:** [Quote specific good parts]
-* **⚠️ Improvements:** [Quote specific errors]
+* **✅ Strengths:** [Quote]
+* **⚠️ Improvements:** [Quote]
 
 **9. EVALUATION: [Score]/10**
-* **✅ Strengths:** [Quote specific good parts]
-* **⚠️ Improvements:** [Quote specific errors]
+* **✅ Strengths:** [Quote]
+* **⚠️ Improvements:** [Quote]
 
 **10. REFERENCES: [Score]/10**
-* **✅ Strengths:** [Quote specific good parts]
-* **⚠️ Improvements:** [Quote specific errors]
+* **✅ Strengths:** [Quote]
+* **⚠️ Improvements:** [Quote]
 
 ---
 **💡 TOP 3 ACTIONABLE STEPS FOR NEXT TIME:**
@@ -488,8 +500,7 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     st.session_state.current_results = new_results
     status.success("✅ Grading Complete! Scrolling down...")
     progress.empty()
-    
-    display_results_ui()
 
-if st.session_state.current_results and not processed_files:
+# --- 8. PERSISTENT DISPLAY ---
+if st.session_state.current_results:
      display_results_ui()
