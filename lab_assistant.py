@@ -9,7 +9,14 @@ import time
 from docx import Document
 from io import BytesIO
 
-# --- 1. CONFIGURATION ---
+# --- 1. PAGE SETUP (MUST BE FIRST) ---
+st.set_page_config(
+    page_title="Pre-IB Lab Grader", 
+    page_icon="🧪", 
+    layout="wide"
+)
+
+# --- 2. CONFIGURATION & SECRETS ---
 
 # Check for Key in Secrets (Streamlit Cloud) OR Environment (Local PC)
 if "ANTHROPIC_API_KEY" in st.secrets:
@@ -24,7 +31,7 @@ else:
 # Model Selection
 MODEL_NAME = "claude-sonnet-4-20250514"
 
-# --- 2. HARDCODED RUBRIC (PRE-IB CHEMISTRY) ---
+# --- 3. HARDCODED RUBRIC (PRE-IB CHEMISTRY) ---
 PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 1. FORMATTING (10 pts):
@@ -68,7 +75,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - Needs Improvement: No citations. URL only. Wikipedia used.
 """
 
-# --- 3. SYSTEM PROMPT ---
+# --- 4. SYSTEM PROMPT ---
 SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader. 
 Your goal is to grade student lab reports strictly according to the provided IB-style rubric.
 
@@ -116,13 +123,6 @@ STUDENT: [Name or Filename]
 2. [Actionable tip]
 3. [Actionable tip]
 """
-
-# --- 4. PAGE SETUP & STATE ---
-st.set_page_config(
-    page_title="Pre-IB Lab Grader", 
-    page_icon="🧪", 
-    layout="wide"
-)
 
 # Initialize Session State
 if 'saved_sessions' not in st.session_state:
@@ -269,3 +269,163 @@ def create_master_doc(results, session_name):
         doc.add_page_break()
     bio = BytesIO()
     doc.save(bio)
+    return bio.getvalue()
+
+def create_zip_bundle(results):
+    zip_buffer = BytesIO()
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as z:
+        for item in results:
+            doc = Document()
+            doc.add_heading(f"Feedback: {item['Filename']}", 0)
+            doc.add_heading(f"Score: {item['Score']}", level=1)
+            doc.add_paragraph(item['Feedback'])
+            doc_buffer = BytesIO()
+            doc.save(doc_buffer)
+            safe_name = os.path.splitext(item['Filename'])[0] + "_Feedback.docx"
+            z.writestr(safe_name, doc_buffer.getvalue())
+    return zip_buffer.getvalue()
+
+# --- 6. SIDEBAR (HISTORY & SETTINGS) ---
+with st.sidebar:
+    st.header("💾 History Manager")
+    
+    st.caption("Save your current grading batch:")
+    save_name = st.text_input("Session Name", placeholder="e.g. Period 3 - Kinetics")
+    
+    if st.button("💾 Save Session"):
+        if st.session_state.current_results:
+            st.session_state.saved_sessions[save_name] = st.session_state.current_results
+            st.success(f"Saved '{save_name}'!")
+        else:
+            st.warning("No results to save yet.")
+            
+    st.divider()
+    
+    if st.session_state.saved_sessions:
+        st.subheader("📂 Load Session")
+        selected_session = st.selectbox("Select Batch", list(st.session_state.saved_sessions.keys()))
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Load"):
+                st.session_state.current_results = st.session_state.saved_sessions[selected_session]
+                st.session_state.current_session_name = selected_session
+                st.rerun()
+        with col2:
+            if st.button("🗑️ Delete"):
+                del st.session_state.saved_sessions[selected_session]
+                st.rerun()
+    else:
+        st.caption("No saved sessions found.")
+
+    st.divider()
+    with st.expander("View Grading Criteria"):
+        st.text(PRE_IB_RUBRIC)
+    st.caption(f"🤖 Model: {MODEL_NAME}")
+
+# --- 7. MAIN INTERFACE ---
+st.title("🧪 Pre-IB Lab Grader")
+st.caption(f"Current Session: **{st.session_state.current_session_name}**")
+
+# File Uploader
+st.info("💡 **Tip:** To upload a folder, open it, press `Ctrl+A` (Select All), and drag everything here.")
+
+raw_files = st.file_uploader(
+    "📂 Upload Reports (PDF, Images, ZIP, or Multiple Files)", 
+    type=['pdf', 'png', 'jpg', 'jpeg', 'zip'], 
+    accept_multiple_files=True
+)
+
+processed_files = []
+if raw_files:
+    processed_files = process_uploaded_files(raw_files)
+    if len(processed_files) > 0:
+        st.success(f"Ready to grade **{len(processed_files)}** valid report(s).")
+    else:
+        if raw_files:
+            st.warning("No valid PDF or Image files found in upload.")
+
+# Grading Action
+if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files):
+    
+    st.write("---")
+    progress = st.progress(0)
+    status = st.empty()
+    
+    new_results = []
+    
+    for i, file in enumerate(processed_files):
+        status.markdown(f"**Grading:** `{file.name}`...")
+        
+        feedback = grade_submission(file)
+        score = parse_score(feedback)
+        
+        new_results.append({
+            "Filename": file.name,
+            "Score": score,
+            "Feedback": feedback
+        })
+        progress.progress((i + 1) / len(processed_files))
+        
+        time.sleep(1) # Rate limit safety
+
+    st.session_state.current_results = new_results
+    status.success("✅ Grading Complete! Don't forget to save this session in the sidebar.")
+    progress.empty()
+
+# --- 8. RESULTS DISPLAY ---
+if st.session_state.current_results:
+    st.divider()
+    
+    df = pd.DataFrame(st.session_state.current_results)
+    csv_data = df.to_csv(index=False).encode('utf-8')
+    master_doc_data = create_master_doc(st.session_state.current_results, st.session_state.current_session_name)
+    zip_data = create_zip_bundle(st.session_state.current_results)
+    
+    st.subheader("📤 Batch Export")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.download_button(
+            label="📄 Master Doc (All-in-One)",
+            data=master_doc_data,
+            file_name=f'{st.session_state.current_session_name}_Master.docx',
+            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            use_container_width=True
+        )
+        st.caption("One file containing all reports.")
+
+    with col2:
+        st.download_button(
+            label="📦 Student Bundle (.zip)",
+            data=zip_data,
+            file_name=f'{st.session_state.current_session_name}_Students.zip',
+            mime="application/zip",
+            use_container_width=True
+        )
+        st.caption("Separate files for each student.")
+
+    with col3:
+        st.download_button(
+            label="📊 Gradebook (.csv)", 
+            data=csv_data, 
+            file_name=f'{st.session_state.current_session_name}_Grades.csv', 
+            mime='text/csv',
+            use_container_width=True
+        )
+        st.caption("Spreadsheet of scores.")
+
+    st.divider()
+    
+    tab1, tab2 = st.tabs(["📊 Gradebook View", "📝 Detailed Feedback"])
+
+    with tab1:
+        st.dataframe(df[["Filename", "Score"]], use_container_width=True)
+
+    with tab2:
+        for item in st.session_state.current_results:
+            with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
+                st.markdown(item['Feedback'])
+else:
+    st.info("Upload files to begin.")
