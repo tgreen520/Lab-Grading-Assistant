@@ -32,9 +32,12 @@ MODEL_NAME = "claude-sonnet-4-20250514"
 # --- 3. HARDCODED RUBRIC ---
 PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
-1. FORMATTING (10 pts) [LENIENT]:
-- Criteria: Third-person passive voice, professional tone.
-- Note: Score high (9-10) unless "I/We" is used consistently.
+1. FORMATTING (10 pts):
+- Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly.
+- DEDUCTIONS: 
+  * Minor layout inconsistencies: -0.5 pts.
+  * Missing superscripts/subscripts (e.g., H2O vs H₂O): -1.0 pt.
+  * Consistent use of "I/We": Deduct heavily.
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
@@ -42,71 +45,75 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
 
-4. VARIABLES (10 pts) [SPECIFIC RULE]:
+4. VARIABLES (10 pts):
 - Criteria: IV (units/range), DV (method), 3+ Controlled Variables.
 - SCORING RULE: If control variables are listed but not explained/justified properly, score exactly 8/10.
 
-5. PROCEDURES (10 pts) [SPECIFIC RULE]:
+5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, specific quantities, safety.
-- SCORING RULE: A missing diagram is a MINOR deduction (-0.5 points). Do not penalize heavily for this.
+- SCORING RULE: A missing diagram is a MINOR deduction (-0.5 points).
 
 6. RAW DATA (10 pts) [NO UNCERTAINTIES REQUIRED]:
 - Criteria: Qualitative observations, clear tables, units, consistent significant figures.
 - NOTE: Pre-IB students are NOT required to include uncertainties (±). Do NOT deduct for missing uncertainties.
-- CRITICAL: Deduct if significant figures are inconsistent (e.g., 10.5g in one row, 10g in the next).
+- CRITICAL: Deduct if significant figures are inconsistent.
 
 7. DATA ANALYSIS (10 pts) [SIG FIGS CRITICAL]:
 - Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
-- INTERMEDIATE STEPS: Students may keep extra significant figures in intermediate steps to avoid rounding errors.
-- FINAL ANSWER: The final result MUST be rounded to the correct significant figures based on the data.
-- DEDUCTIONS: 
-  * Lose 0.5 pts if some correct sig figs were used (partial effort).
-  * Lose 1.0 pt if NO attention was paid to sig figs (e.g., writing 12.333333).
+- SIG FIGS: Students may keep extra digits in intermediate steps. ONLY the final result must be rounded correctly.
+- DEDUCTIONS: -0.5 for partial effort, -1.0 for zero attention to sig figs.
 
 8. CONCLUSION (10 pts):
 - Criteria: Supported/Refuted statement, data evidence, literature comparison.
 
 9. EVALUATION (10 pts) [FORMULAIC SCORING]:
-- 6 POINTS: Describes 2 Systematic AND 2 Random errors.
+- 6 POINTS: Describes at least 4 TOTAL errors (must include both Systematic and Random types).
 - +2 POINTS: Explains the impact of these errors on data.
 - +2 POINTS: Suggests realistic improvements.
-- Note: If they have fewer than 2 of each error type, deduct from the base 6 points accordingly.
 
-10. REFERENCES (10 pts) [LENIENT]:
+10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
-- Note: Ignore minor punctuation errors. Score 9-10 if sources are present and reliable.
+- DEDUCTIONS: Minor APA formatting errors (punctuation/italics) are -0.5 pts.
 """
 
 # --- 4. SYSTEM PROMPT ---
 SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader. 
 Your goal is to grade student lab reports according to the specific rules below.
 
-### 🧠 SCORING ALGORITHMS (CRITICAL):
+### ⚖️ CONSISTENCY PROTOCOL (CRITICAL):
+* **Zero Drift:** You must grade every paper with the exact same standard.
+* **Adhere to Deductions:** Apply the specific point deductions (e.g., -0.5, -1.0) rigidly.
 
-1.  **VARIABLES (Section 4):**
+### 🧠 SCORING ALGORITHMS:
+
+1.  **FORMATTING (Section 1):**
+    * **Minor Errors:** Deduct exactly **0.5** for small layout/font issues.
+    * **Subscripts/Superscripts:** Deduct exactly **1.0** point if they fail to use them (e.g., writing cm3 instead of cm³).
+
+2.  **VARIABLES (Section 4):**
     * **Rule:** If they listed the Control Variables but didn't explain WHY or HOW they were controlled, give them **8/10**.
 
-2.  **PROCEDURES (Section 5):**
+3.  **PROCEDURES (Section 5):**
     * **Rule:** If the ONLY thing missing is the diagram, the score should be **9.5/10**.
 
-3.  **DATA ANALYSIS (Section 7) - CALCULATION CHECK:**
-    * **Intermediate vs. Final:** Students are allowed (and encouraged) to keep extra digits in intermediate steps. ONLY grade the sig figs of the **final answer**.
+4.  **DATA ANALYSIS (Section 7) - CALCULATION CHECK:**
+    * **Intermediate vs. Final:** Students are allowed to keep extra digits in intermediate steps. ONLY grade the sig figs of the **final answer**.
     * **Deduction Logic:**
-        * If they mostly got it right but missed one or two: **Deduct 0.5 points**.
-        * If they completely ignored sig figs (e.g., writing 8.33333333): **Deduct 1.0 point**.
+        * Mostly right but missed one/two: **-0.5 points**.
+        * Completely ignored sig figs: **-1.0 point**.
 
-4.  **EVALUATION (Section 9) - USE THIS MATH:**
+5.  **EVALUATION (Section 9) - NEW FORMULA:**
     * Start with **0**.
-    * Add **up to 6 points** for identifying errors (Need **2 Systematic + 2 Random**).
+    * Add **6 points** if they describe at least **4 TOTAL errors**. (Condition: The 4 errors must include at least one random and one systematic).
     * Add **2 points** if they explain the *impact* of these errors.
     * Add **2 points** if they explain *improvements*.
 
-5.  **LENIENCY (Sections 1 & 10):**
-    * Be generous on Formatting and References. High scores default unless major errors exist.
+6.  **REFERENCES (Section 10):**
+    * **Minor APA Errors:** Deduct exactly **0.5** points for small punctuation/formatting mistakes.
 
 ### 📝 FEEDBACK INSTRUCTIONS (SUMMARY STYLE):
 1.  **Summarize Evidence:** Do NOT quote the student directly. Instead, summarize what they did in your own words.
-    * *Good:* "You provided a sample calculation for density. While you kept extra digits in the intermediate steps (which is correct), your final answer had 5 sig figs instead of the required 3."
+    * *Example:* "You effectively summarized the data trend..." instead of "You wrote 'the rate went up'..."
 2.  **Structure:** "✅ Strengths" and "⚠️ Improvements" for every section.
 
 ### OUTPUT FORMAT:
@@ -268,7 +275,7 @@ def process_uploaded_files(uploaded_files):
             
     return final_files, file_counts
 
-# --- MATH CHECKER FUNCTION ---
+# --- MATH CHECKER ---
 def recalculate_total_score(text):
     try:
         pattern = r"\d+\.\s+[A-Z\s]+:\s+([\d\.]+)/10"
@@ -283,6 +290,26 @@ def recalculate_total_score(text):
     except Exception as e:
         print(f"Error recalculating score: {e}")
     return text
+
+# --- NEW: CSV CLEANER FOR SHEETS ---
+def clean_for_sheets(text):
+    """
+    Removes Markdown symbols so Google Sheets looks clean.
+    **Bold** -> Bold
+    ### Header -> Header
+    * Bullet -> • Bullet
+    """
+    if not isinstance(text, str): return text
+    
+    # Remove headers
+    text = re.sub(r'###\s*', '', text)
+    # Remove bold markers
+    text = text.replace('**', '')
+    # Convert bullets
+    text = re.sub(r'^\*\s', '• ', text, flags=re.MULTILINE)
+    text = re.sub(r'^-\s', '• ', text, flags=re.MULTILINE)
+    
+    return text.strip()
 
 def grade_submission(file):
     ext = file.name.split('.')[-1].lower()
@@ -331,9 +358,11 @@ def grade_submission(file):
     
     for attempt in range(max_retries):
         try:
+            # Temperature=0 for Maximum Consistency
             response = client.messages.create(
                 model=MODEL_NAME,
                 max_tokens=3500,
+                temperature=0.0,
                 system=SYSTEM_PROMPT,
                 messages=[{"role": "user", "content": user_message}]
             )
@@ -359,7 +388,7 @@ def parse_score(text):
         pass
     return "N/A"
 
-# --- SMART FORMATTER FOR WORD ---
+# --- WORD FORMATTER (Keep bolding) ---
 def write_markdown_to_docx(doc, text):
     lines = text.split('\n')
     for line in lines:
@@ -426,21 +455,27 @@ def display_results_ui():
     st.divider()
     st.subheader(f"📊 Results: {st.session_state.current_session_name}")
     
+    # Prepare DataFrame for Sheets (Clean Text)
     df = pd.DataFrame(st.session_state.current_results)
     
-    csv_df = df[["Filename", "Score", "Feedback"]]
-    csv_data = csv_df.to_csv(index=False).encode('utf-8')
+    # Create a copy for CSV export and clean the feedback column
+    sheets_df = df[["Filename", "Score", "Feedback"]].copy()
+    sheets_df["Feedback"] = sheets_df["Feedback"].apply(clean_for_sheets)
+    
+    csv_data = sheets_df.to_csv(index=False).encode('utf-8-sig') # utf-8-sig for Excel/Sheets compatibility
     
     master_doc_data = create_master_doc(st.session_state.current_results, st.session_state.current_session_name)
     zip_data = create_zip_bundle(st.session_state.current_results)
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.download_button("📄 Master Doc (All-in-One)", master_doc_data, f'{st.session_state.current_session_name}_Master.docx', "application/vnd.openxmlformats-officedocument.wordprocessingml.document", use_container_width=True)
+        st.download_button("📄 Google Docs Compatible (.docx)", master_doc_data, f'{st.session_state.current_session_name}_Docs.docx', "application/vnd.openxmlformats-officedocument.wordprocessingml.document", use_container_width=True)
+        st.caption("Upload to Drive -> Open as Google Doc")
     with col2:
         st.download_button("📦 Student Bundle (.zip)", zip_data, f'{st.session_state.current_session_name}_Students.zip', "application/zip", use_container_width=True)
     with col3:
-        st.download_button("📊 Gradebook (.csv)", csv_data, f'{st.session_state.current_session_name}_Grades.csv', "text/csv", use_container_width=True)
+        st.download_button("📊 Google Sheets Compatible (.csv)", csv_data, f'{st.session_state.current_session_name}_Sheets.csv', "text/csv", use_container_width=True)
+        st.caption("Import into Google Sheets")
 
     tab1, tab2 = st.tabs(["📊 Gradebook View", "📝 Detailed Feedback"])
     with tab1:
