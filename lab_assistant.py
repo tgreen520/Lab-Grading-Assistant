@@ -5,6 +5,7 @@ import pandas as pd
 import os
 import json
 import zipfile
+import time
 from docx import Document
 from io import BytesIO
 
@@ -151,24 +152,51 @@ def get_media_type(filename):
     return media_types.get(ext, 'image/jpeg')
 
 def process_uploaded_files(uploaded_files):
-    """Handles ZIPs and raw files."""
+    """
+    Smart Processor:
+    1. Handles ZIP files (unzips them).
+    2. Handles standard files.
+    3. FILTERS OUT junk system files (.DS_Store, desktop.ini) from 'Select All' uploads.
+    """
     final_files = []
+    
+    # Files to ignore
+    IGNORED_FILES = {'.ds_store', 'desktop.ini', 'thumbs.db', '__macosx'}
+    VALID_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp'}
+    
     for file in uploaded_files:
-        if file.name.lower().endswith('.zip'):
+        file_name_lower = file.name.lower()
+        
+        # Skip junk files immediately
+        if file_name_lower in IGNORED_FILES or file_name_lower.startswith('._'):
+            continue
+
+        # Check if it is a ZIP file
+        if file_name_lower.endswith('.zip'):
             try:
                 with zipfile.ZipFile(file) as z:
                     for filename in z.namelist():
-                        if filename.startswith('__MACOSX') or filename.startswith('.'): continue
-                        ext = filename.split('.')[-1].lower()
-                        if ext in ['pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp']:
+                        # Filter junk inside ZIP
+                        clean_name = filename.lower()
+                        if any(x in clean_name for x in IGNORED_FILES) or filename.startswith('.'):
+                            continue
+                            
+                        # Check extension
+                        ext = clean_name.split('.')[-1]
+                        if ext in VALID_EXTENSIONS:
                             file_bytes = z.read(filename)
                             virtual_file = BytesIO(file_bytes)
                             virtual_file.name = os.path.basename(filename)
                             final_files.append(virtual_file)
             except Exception as e:
                 st.error(f"Error unzipping {file.name}: {e}")
+                
         else:
-            final_files.append(file)
+            # It's a regular file - check extension
+            ext = file_name_lower.split('.')[-1]
+            if ext in VALID_EXTENSIONS:
+                final_files.append(file)
+            
     return final_files
 
 def grade_submission(file):
@@ -194,16 +222,32 @@ def grade_submission(file):
         }
     ]
 
-    try:
-        response = client.messages.create(
-            model=MODEL_NAME,
-            max_tokens=3500,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": user_message}]
-        )
-        return response.content[0].text
-    except Exception as e:
-        return f"⚠️ Error: {str(e)}"
+    # --- RATE LIMIT HANDLING ---
+    max_retries = 3
+    retry_delay = 5 
+    
+    for attempt in range(max_retries):
+        try:
+            response = client.messages.create(
+                model=MODEL_NAME,
+                max_tokens=3500,
+                system=SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": user_message}]
+            )
+            return response.content[0].text
+            
+        except anthropic.RateLimitError:
+            if attempt < max_retries - 1:
+                sleep_time = retry_delay * (attempt + 1)
+                time.sleep(sleep_time)
+                continue
+            else:
+                return "⚠️ Error: Rate limit exceeded. Try grading fewer files at once."
+                
+        except anthropic.APIError as e:
+             return f"⚠️ API Error: {str(e)}"
+        except Exception as e:
+            return f"⚠️ Unexpected Error: {str(e)}"
 
 def parse_score(text):
     try:
@@ -216,7 +260,6 @@ def parse_score(text):
     return "N/A"
 
 def create_master_doc(results, session_name):
-    """Generates ONE .docx file with ALL reports."""
     doc = Document()
     doc.add_heading(f"Lab Report Grades: {session_name}", 0)
     for item in results:
@@ -225,171 +268,4 @@ def create_master_doc(results, session_name):
         doc.add_paragraph(item['Feedback'])
         doc.add_page_break()
     bio = BytesIO()
-    doc.save(bio)
-    return bio.getvalue()
-
-def create_zip_bundle(results):
-    """Generates a ZIP file containing INDIVIDUAL .docx files for each student."""
-    zip_buffer = BytesIO()
-    
-    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as z:
-        for item in results:
-            # Create individual doc
-            doc = Document()
-            doc.add_heading(f"Feedback: {item['Filename']}", 0)
-            doc.add_heading(f"Score: {item['Score']}", level=1)
-            doc.add_paragraph(item['Feedback'])
-            
-            # Save doc to bytes
-            doc_buffer = BytesIO()
-            doc.save(doc_buffer)
-            
-            # Write bytes to zip
-            # Clean filename to avoid issues
-            safe_name = os.path.splitext(item['Filename'])[0] + "_Feedback.docx"
-            z.writestr(safe_name, doc_buffer.getvalue())
-            
-    return zip_buffer.getvalue()
-
-# --- 6. SIDEBAR (HISTORY & SETTINGS) ---
-with st.sidebar:
-    st.header("💾 History Manager")
-    
-    # Save Current Session
-    st.caption("Save your current grading batch:")
-    save_name = st.text_input("Session Name", placeholder="e.g. Period 3 - Kinetics")
-    
-    if st.button("💾 Save Session"):
-        if st.session_state.current_results:
-            st.session_state.saved_sessions[save_name] = st.session_state.current_results
-            st.success(f"Saved '{save_name}'!")
-        else:
-            st.warning("No results to save yet.")
-            
-    st.divider()
-    
-    # Load Previous Session
-    if st.session_state.saved_sessions:
-        st.subheader("📂 Load Session")
-        selected_session = st.selectbox("Select Batch", list(st.session_state.saved_sessions.keys()))
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("Load"):
-                st.session_state.current_results = st.session_state.saved_sessions[selected_session]
-                st.session_state.current_session_name = selected_session
-                st.rerun()
-        with col2:
-            if st.button("🗑️ Delete"):
-                del st.session_state.saved_sessions[selected_session]
-                st.rerun()
-    else:
-        st.caption("No saved sessions found.")
-
-    st.divider()
-    
-    with st.expander("View Grading Criteria"):
-        st.text(PRE_IB_RUBRIC)
-    st.caption(f"🤖 Model: {MODEL_NAME}")
-
-# --- 7. MAIN INTERFACE ---
-st.title("🧪 Pre-IB Lab Grader")
-st.caption(f"Current Session: **{st.session_state.current_session_name}**")
-
-# File Uploader
-raw_files = st.file_uploader(
-    "📂 Upload Reports (PDF, Images, or ZIP)", 
-    type=['pdf', 'png', 'jpg', 'jpeg', 'zip'], 
-    accept_multiple_files=True
-)
-
-processed_files = []
-if raw_files:
-    processed_files = process_uploaded_files(raw_files)
-    if len(processed_files) > 0:
-        st.info(f"Ready to grade **{len(processed_files)}** report(s).")
-
-# Grading Action
-if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files):
-    
-    st.write("---")
-    progress = st.progress(0)
-    status = st.empty()
-    
-    new_results = []
-    
-    for i, file in enumerate(processed_files):
-        status.markdown(f"**Grading:** `{file.name}`...")
-        
-        feedback = grade_submission(file)
-        score = parse_score(feedback)
-        
-        new_results.append({
-            "Filename": file.name,
-            "Score": score,
-            "Feedback": feedback
-        })
-        progress.progress((i + 1) / len(processed_files))
-
-    st.session_state.current_results = new_results
-    status.success("✅ Grading Complete! Don't forget to save this session in the sidebar.")
-    progress.empty()
-
-# --- 8. RESULTS DISPLAY ---
-if st.session_state.current_results:
-    st.divider()
-    
-    # Prepare exports
-    df = pd.DataFrame(st.session_state.current_results)
-    csv_data = df.to_csv(index=False).encode('utf-8')
-    master_doc_data = create_master_doc(st.session_state.current_results, st.session_state.current_session_name)
-    zip_data = create_zip_bundle(st.session_state.current_results)
-    
-    st.subheader("📤 Batch Export")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.download_button(
-            label="📄 Master Doc (All-in-One)",
-            data=master_doc_data,
-            file_name=f'{st.session_state.current_session_name}_Master.docx',
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            use_container_width=True
-        )
-        st.caption("One file containing all reports.")
-
-    with col2:
-        st.download_button(
-            label="📦 Student Bundle (.zip)",
-            data=zip_data,
-            file_name=f'{st.session_state.current_session_name}_Students.zip',
-            mime="application/zip",
-            use_container_width=True
-        )
-        st.caption("Separate files for each student.")
-
-    with col3:
-        st.download_button(
-            label="📊 Gradebook (.csv)", 
-            data=csv_data, 
-            file_name=f'{st.session_state.current_session_name}_Grades.csv', 
-            mime='text/csv',
-            use_container_width=True
-        )
-        st.caption("Spreadsheet of scores.")
-
-    st.divider()
-    
-    # Display Tabs
-    tab1, tab2 = st.tabs(["📊 Gradebook View", "📝 Detailed Feedback"])
-
-    with tab1:
-        st.dataframe(df[["Filename", "Score"]], use_container_width=True)
-
-    with tab2:
-        for item in st.session_state.current_results:
-            with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
-                st.markdown(item['Feedback'])
-else:
-    st.info("Upload files to begin.")
+    doc.save(bio
