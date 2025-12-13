@@ -1,3 +1,5 @@
+Python
+
 import streamlit as st
 import anthropic
 import base64
@@ -35,7 +37,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 1. FORMATTING (10 pts):
 - Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly.
 - DEDUCTIONS: 
-  * Missing superscripts/subscripts (e.g., H2O vs H₂O): -1.0 pt.
+  * Superscripts/Subscripts: Do NOT deduct for 1 or 2 isolated errors. If there are MORE than 2 errors (e.g., frequent H2O), deduct -1.0 pt.
   * Consistent use of "I/We": Deduct heavily.
   * NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing, indentation).
 
@@ -69,14 +71,14 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 9. EVALUATION (10 pts) [FORMULAIC SCORING]:
 - 6 POINTS: Describes at least 4 TOTAL errors (must include both Systematic and Random types).
-- +2 POINTS: Explains the impact of these errors on data.
-- +2 POINTS: Suggests realistic improvements.
+- UP TO +2 POINTS: Explains the impact of these errors on data. (1 pt for weak/partial explanation).
+- UP TO +2 POINTS: Suggests realistic improvements. (1 pt for weak/partial suggestions).
 
 10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
 - DEDUCTIONS: 
   * Minor APA formatting errors (punctuation/italics): -0.5 pts.
-  * Significant APA formatting errors: MAXIMUM deduction of -1.0 pt.
+  * Significant/Major APA formatting errors: MAXIMUM deduction of -1.0 pt. Do not deduct more than 1 point total for APA formatting.
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -91,7 +93,9 @@ Your goal is to grade student lab reports according to the specific rules below.
 
 1.  **FORMATTING (Section 1):**
     * **Layout:** Do NOT deduct points for minor layout/formatting inconsistencies. Ignore spacing/margin issues.
-    * **Subscripts/Superscripts:** Deduct exactly **1.0** point if they fail to use them (e.g., writing cm3 instead of cm³).
+    * **Subscripts/Superscripts:** * Count the errors. 
+        * If 0-2 errors: **-0 pts** (Ignore).
+        * If >2 errors: **-1.0 pt**.
 
 2.  **VARIABLES (Section 4):**
     * **Rule:** If they listed the Control Variables but didn't explain WHY or HOW they were controlled, give them **8/10**.
@@ -112,8 +116,8 @@ Your goal is to grade student lab reports according to the specific rules below.
 6.  **EVALUATION (Section 9) - NEW FORMULA:**
     * Start with **0**.
     * Add **6 points** if they describe at least **4 TOTAL errors**. (Condition: The 4 errors must include at least one random and one systematic).
-    * Add **2 points** if they explain the *impact* of these errors.
-    * Add **2 points** if they explain *improvements*.
+    * Add **2 points** if they explain the *impact* of errors (Award **1 point** if the explanation is vague/weak).
+    * Add **2 points** if they explain *improvements* (Award **1 point** if the suggestion is vague/weak).
 
 7.  **REFERENCES (Section 10):**
     * **Minor APA Errors:** Deduct **0.5** points.
