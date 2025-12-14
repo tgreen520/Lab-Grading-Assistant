@@ -61,8 +61,7 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 4. VARIABLES (10 pts):
 - Criteria: IV (units/range), DV (method), 3+ Controlled Variables.
 - **ACCEPTABLE FORMATS:** Students may present variables in paragraph form OR in a data table format. BOTH formats are equally acceptable.
-- **⚠️ CRITICAL TABLE DETECTION INSTRUCTION:** 
-  * **STOP and CAREFULLY SCAN the ENTIRE document** for any table or structured list that contains the words: "Variable," "Independent," "Dependent," "Control," "Controlled"
+- **⚠️ CRITICAL TABLE DETECTION INSTRUCTION:** * **STOP and CAREFULLY SCAN the ENTIRE document** for any table or structured list that contains the words: "Variable," "Independent," "Dependent," "Control," "Controlled"
   * **Common table locations:** Right after the hypothesis, in a dedicated "Variables" section, or before the "Materials" section
   * **Table may have headers like:** "Variable Type," "Variable," "Description," "How Controlled," "Units," "Method"
   * **DO NOT miss tables!** If you see a table with these column headers and it lists an Independent Variable, Dependent Variable, and 3+ Control Variables, this is a COMPLETE variables section.
@@ -167,8 +166,7 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Partial Credit:** If student shows awareness of professional tone but has occasional lapses, award 7-9 points depending on severity.
 
 2.  **INTRODUCTION (Section 2):**
-    * **Partial Credit Breakdown:** 
-        * Clear objective: 3-4 pts
+    * **Partial Credit Breakdown:** * Clear objective: 3-4 pts
         * Background theory: 3-4 pts  
         * Balanced equations: 2-3 pts
     * Award points proportionally based on what is present and quality.
@@ -239,14 +237,14 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Definition of "credible sources":** Educational institutions (.edu), scientific publications, peer-reviewed journals, reputable news outlets, government sources (.gov), established scientific organizations.
     * **Examples of MINOR errors (deduct only -0.5 pt TOTAL):**
         * Inconsistent capitalization in titles
-        * Missing or incorrect italics
+        * Missing italics on some journal/website names
         * Minor punctuation issues (commas, periods)
         * Slightly incomplete URLs
         * Date formatting inconsistencies
     * **Examples of issues worth -1.0 pt MAX:**
         * Multiple types of formatting errors combined across several sources
         * Several sources with consistent formatting problems
-    * **Critical Rule:** Do NOT deduct more than 1 point for APA formatting issues. If 3+ credible sources are present and cited in text, assume 9.5/10 or 10/10 unless there are MAJOR problems.
+    * **Critical Rule:** Do NOT deduct more than 1.0 point total for formatting issues as long as 3+ credible sources are present and cited.
     * **Focus:** 90% of the score should be based on whether credible sources exist and are cited, only 10% on formatting perfection.
 
 ### 📝 FEEDBACK INSTRUCTIONS (SUMMARY STYLE):
@@ -340,12 +338,27 @@ def get_media_type(filename):
     }
     return media_types.get(ext, 'image/jpeg')
 
+# --- UPDATED TEXT EXTRACTION TO INCLUDE TABLES ---
 def extract_text_from_docx(file):
     try:
         doc = Document(file)
         full_text = []
+        
+        # 1. Extract Paragraphs
         for para in doc.paragraphs:
             full_text.append(para.text)
+            
+        # 2. Extract Tables (Crucial for Variables/Data sections)
+        # Many students put variables in tables, which doc.paragraphs misses.
+        if doc.tables:
+            full_text.append("\n--- DETECTED TABLES ---\n")
+            for table in doc.tables:
+                for row in table.rows:
+                    # Join cells with a pipe to mimic markdown table structure
+                    row_text = [cell.text.strip() for cell in row.cells]
+                    full_text.append(" | ".join(row_text))
+                full_text.append("\n") # Space between tables
+        
         return "\n".join(full_text)
     except Exception as e:
         return f"Error reading .docx file: {e}"
