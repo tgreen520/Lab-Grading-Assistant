@@ -67,10 +67,8 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 7. DATA ANALYSIS (10 pts) [GRAPH & CALCULATION CRITICAL]:
 - Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
-- **UNCERTAINTY ANALYSIS:** NOT REQUIRED. Do NOT deduct for missing error bars, max/min slopes, or % error propagation.
-- **CALCULATION CHECK:** * Must show a clear **Sample Calculation**.
-  * **Sig Figs:** Grade the FINAL answer only.
-  * **Exception:** Empirical/Molecular Formula answers must be whole numbers (1 sig fig).
+- **UNCERTAINTY ANALYSIS:** NOT REQUIRED. Do NOT deduct for missing error bars/propagation.
+- **INTERMEDIATE PRECISION:** Excessive precision (extra digits) in intermediate steps is ALLOWED. Only penalize significant figures in the **FINAL RESULT**.
 - **MANDATORY GRAPH CHECKLIST:**
   * **Format:** Must be a Scatterplot with a Trendline.
   * **Labels:** Axis labels with Units MUST be present.
@@ -107,15 +105,11 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **3+ errors:** Deduct **1.0 pt**.
 
 2.  **DATA ANALYSIS (Section 7) - GRAPH & CALCULATION AUDIT:**
-    * **UNCERTAINTIES:** Do NOT deduct points for missing error bars, uncertainty propagation, or max/min slopes. This level does not require them.
-    * **CALCULATIONS:** You MUST summarize the calculations found in the report. Quote specific numbers used to demonstrate strengths (correct process) or weaknesses (rounding errors). 
-    * **GRAPH:** You MUST check the graph for: 
-      1. Correct Axis Labels & Units
-      2. Scatterplot format with Trendline
-      3. R² Value listed
-      4. Trendline Equation listed
-      5. Appropriate trendline type (context of experiment)
-    * If ANY are missing, specifically mention them in improvements.
+    * **CALCULATIONS:** Summarize calculations. **Ignore extra digits in intermediate steps.** Only check sig figs for the final answer.
+    * **GRAPH:** Check for: Axis Labels/Units, Scatterplot, Trendline, Equation, R², Trendline Type.
+    * **PLACEMENT RULE:** * If the graph is **PERFECT** (all items present), list the details in **✅ Strengths**.
+      * If the graph is **FLAWED** (missing items), list the specific missing items in **⚠️ Improvements**.
+      * **DO NOT** put the "Graph Audit" checklist in Improvements if the graph is perfect.
 
 3.  **CONCLUSION (Section 8) - STATISTICAL CHECK:**
     * The student MUST mention the **R and/or R² value**.
@@ -123,6 +117,11 @@ Your goal is to grade student lab reports according to the specific rules below.
 
 4.  **REFERENCES (Section 10):**
     * If 3+ Sources -> Minimum Score 9.0.
+
+### 📝 FEEDBACK STYLE (EXPANDED & EDUCATIONAL):
+* **AVOID BREVITY:** Do NOT use one-word bullet points.
+* **EXPLAIN WHY:** Write 2-3 sentences for each section's Strengths/Improvements. Connect the specific evidence from the text to the rubric criteria.
+* **EXAMPLE:** Instead of saying "Good hypothesis," say "The hypothesis is strong because it specifically predicts the relationship between temperature and rate using collision theory as justification."
 
 ### OUTPUT FORMAT:
 Please strictly use the following format.
@@ -137,58 +136,50 @@ STUDENT: [Filename]
 **📝 DETAILED RUBRIC BREAKDOWN:**
 
 **1. FORMATTING: [Score]/10**
-* **✅ Strengths:** [Quote specific good usage]
-* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (1-2 errors = -0.5 pts, 3+ errors = -1.0 pt)]
+* **✅ Strengths:** [Detailed explanation of tone/voice quality]
+* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (1-2 errors = -0.5 pts, 3+ errors = -1.0 pt). Explain specific instances.]
 
 **2. INTRODUCTION: [Score]/10**
-* **✅ Strengths:** [Quote objective/theory]
-* **⚠️ Improvements:** [State exactly what equation or theory is missing]
+* **✅ Strengths:** [Detailed explanation of objective/theory coverage]
+* **⚠️ Improvements:** [Explain exactly what equation or theory is missing and why it matters]
 
 **3. HYPOTHESIS: [Score]/10**
-* **✅ Strengths:** [Quote prediction]
-* **⚠️ Improvements:** [Explain weakness]
+* **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
+* **⚠️ Improvements:** [Explain specifically where the justification falls short]
 
 **4. VARIABLES: [Score]/10**
-* **✅ Strengths:** [**LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]"]
-* **⚠️ Improvements:** [Specific missing details]
+* **✅ Strengths:** [**LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]" and comment on clarity.]
+* **⚠️ Improvements:** [Explain missing details for specific variables]
 
 **5. PROCEDURES: [Score]/10**
-* **✅ Strengths:** [Specific details]
-* **⚠️ Improvements:** [Specific vague steps]
+* **✅ Strengths:** [Comment on reproducibility and safety details]
+* **⚠️ Improvements:** [Identify exactly which step is vague and how to fix it]
 
 **6. RAW DATA: [Score]/10**
-* **✅ Strengths:** [Reference tables]
-* **⚠️ Improvements:** [Quote values with wrong units/sig figs]
+* **✅ Strengths:** [Comment on data organization and unit clarity]
+* **⚠️ Improvements:** [Quote values with wrong units/sig figs and explain the correct format]
 
 **7. DATA ANALYSIS: [Score]/10**
-* **✅ Strengths:** * **CALCULATION SUMMARY:** [Summarize what was calculated. **Quote specific numbers/formulas used correctly** to show evidence.]
-  * [Other graph strengths]
-* **⚠️ Improvements:** * **GRAPH AUDIT:**
-    * Scatterplot with Trendline? [Yes/No]
-    * Trendline Equation displayed? [Yes/No]
-    * R² Value displayed? [Yes/No]
-    * Axis Labels AND Units? [Yes/No]
-    * Trendline type appropriate? [Yes/No]
-  * **CALCULATION/SIG FIGS:** [Quote specific errors in the example calculation or final result sig figs.]
+* **✅ Strengths:** [Summarize the calculation process. If Graph is perfect, praise the inclusion of Equation, R², and Labels here.]
+* **⚠️ Improvements:** [List calculation errors (final answer sig figs). If Graph is missing items, list them here.]
 
 **8. CONCLUSION: [Score]/10**
-* **✅ Strengths:** [Quote data used]
-* **⚠️ Improvements:** * **STATISTICAL CHECK:** Did they discuss R/R² implications? [Yes/No - explain what was missing]
-  * [Other literature comments]
+* **✅ Strengths:** [Quote data used to support the claim]
+* **⚠️ Improvements:** [**STATISTICAL CHECK:** Did they discuss R/R² implications? Did they compare to literature? Explain.]
 
 **9. EVALUATION: [Score]/10**
-* **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..."]
-* **⚠️ Improvements:** [Missing impacts]
+* **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
+* **⚠️ Improvements:** [Explain which errors lacked impact/improvement discussions]
 
 **10. REFERENCES: [Score]/10**
-* **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources."]
-* **⚠️ Improvements:** [Specific formatting error]
+* **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources." Comment on quality.]
+* **⚠️ Improvements:** [Specific formatting error explanation]
 
 ---
 **💡 TOP 3 ACTIONABLE STEPS FOR NEXT TIME:**
-1. [Step 1]
-2. [Step 2]
-3. [Step 3]
+1. [Step 1 - Specific]
+2. [Step 2 - Specific]
+3. [Step 3 - Specific]
 """
 
 # Initialize Session State
@@ -348,13 +339,13 @@ def grade_submission(file):
             "Please grade this lab report based on the Pre-IB rubric below.\n"
             "Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
             "⚠️ CRITICAL INSTRUCTIONS:\n"
-            "1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
-            "2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
+            "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
+            "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING:** Count subscript errors. 1-2 errors = -0.5 pts. 3+ errors = -1.0 pt.\n"
-            "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. \n"
+            "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
             "6. **CONCLUSION:** Check for discussion of R² implications.\n"
-            "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty/error bar analysis.\n\n"
+            "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -377,13 +368,13 @@ def grade_submission(file):
             "Please grade this lab report based on the Pre-IB rubric below.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "INSTRUCTIONS:\n"
-            "1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
-            "2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
+            "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
+            "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING:** Count subscript errors. 1-2 errors = -0.5 pts. 3+ errors = -1.0 pt.\n"
-            "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. \n"
+            "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
             "6. **CONCLUSION:** Check for discussion of R² implications.\n"
-            "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty/error bar analysis.\n"
+            "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n"
         )
         
         user_message = [
