@@ -32,39 +32,32 @@ MODEL_NAME = "claude-sonnet-4-20250514"
 # --- 3. HARDCODED RUBRIC ---
 PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
-GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to follow the rubric, even if execution is imperfect. Recognize effort and partial understanding.
+GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to follow the rubric. Recognize effort.
 
 1. FORMATTING (10 pts):
 - Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly IN THE BODY TEXT.
 - DEDUCTIONS: 
-  * Superscripts/Subscripts IN BODY TEXT ONLY: Count the errors in paragraphs and written explanations. 
-    * If 0-2 errors: **-0 pts** (Ignore).
-    * If >2 errors: **-1.0 pt**.
-  * **IMPORTANT:** Do NOT deduct points for superscript/subscript errors in graph titles, axis labels, or data tables.
-  * Consistent use of "I/We": Deduct heavily.
-  * NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing, indentation).
-- PARTIAL CREDIT: Award partial points if student shows awareness of professional tone but has some lapses.
+  * Superscripts/Subscripts IN BODY TEXT ONLY: Count the errors in paragraphs. 0-2 errors = -0 pts. >2 errors = -1.0 pt.
+  * NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing).
+- SPECIFICITY: Quote instances where "I/We" was used or where superscripts were missed.
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
-- PARTIAL CREDIT: Award points proportionally (e.g., clear objective present: 3-4 pts).
+- PARTIAL CREDIT: Award points proportionally.
+- SPECIFICITY: Reference the specific theory or equation mentioned (or missing).
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
-- PARTIAL CREDIT: Prediction stated but lacks specificity: 5-7 pts.
+- SPECIFICITY: Quote the student's prediction.
 
 4. VARIABLES (10 pts):
 - Criteria: IV (units/range), DV (method), 3+ Controlled Variables.
-- **ACCEPTABLE FORMATS:** Variables may be presented in paragraph form OR in a data table format. BOTH formats are equally acceptable.
-- **CRITICAL TABLE DETECTION:** Check the entire document for tables listing "Variable," "Independent," "Dependent," "Control."
-- **SCORING GUIDE:**
-  * **10/10:** IV + DV + 3+ Control Variables with clear explanations/descriptions (table or paragraph format)
-  * **9/10:** IV + DV + 3+ Control Variables clearly identified in a table OR with minimal explanations
-  * **8/10:** 3+ Control variables listed but not explained in detail
-  * **7/10:** 2 Control variables listed
-  * **6/10:** Only IV and DV properly identified
-  * **0-5/10:** Incomplete or missing.
-- **RULE:** If you find a table listing IV + DV + 3 Controls, the MINIMUM score is 9/10.
+- **CRITICAL TABLE DETECTION:** Check for tables listing "Variable," "Independent," "Dependent," "Control."
+- **SCORING:**
+  * **10/10:** IV + DV + 3+ Control Variables with explanations.
+  * **9/10:** IV + DV + 3+ Control Variables listed (table or text).
+  * **RULE:** If 1 IV + 1 DV + 3 Controls found, MINIMUM score is 9/10.
+- SPECIFICITY: List the exact variables found (e.g., "Found controls: Temp, Mass, Time").
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, specific quantities, safety.
@@ -72,90 +65,83 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 6. RAW DATA (10 pts) [NO UNCERTAINTIES REQUIRED]:
 - Criteria: Qualitative observations, clear tables, units, consistent significant figures.
-- NOTE: Pre-IB students are NOT required to include uncertainties (±). Do NOT deduct for missing uncertainties.
-- CRITICAL: Deduct if significant figures are inconsistent.
-- FORMATTING: Do NOT deduct points for minor formatting issues in tables (borders, alignment, font). Focus on data clarity and units.
+- FORMATTING: Do NOT deduct for table aesthetics. Focus on data clarity.
+- SPECIFICITY: Point to specific tables (e.g., "Table 1") and specific values where units or sig figs are wrong.
 
 7. DATA ANALYSIS (10 pts) [SIG FIGS CRITICAL]:
 - Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
-- SIG FIGS: Students may keep extra digits in intermediate steps. ONLY the final result must be rounded correctly.
-- DEDUCTIONS: -0.5 for partial effort, -1.0 for zero attention to sig figs.
+- SIG FIGS: Only grade the final answer rounding.
+- SPECIFICITY: Quote the calculated value and explain why the rounding is wrong based on the inputs.
 
 8. CONCLUSION (10 pts):
 - Criteria: Statement of support/refutation, specific data evidence.
-- CRITICAL REQUIREMENT: Must include specific comparisons to PUBLISHED LITERATURE (theoretical values or accepted standards).
-- PARTIAL CREDIT: Award points for conclusions that reference data even if literature comparison is weak or missing.
+- CRITICAL REQUIREMENT: Must include specific comparisons to PUBLISHED LITERATURE.
+- SPECIFICITY: Quote the literature value used by the student (e.g., "Compared to theoretical density of 2.7 g/cm³").
 
-9. EVALUATION (10 pts) [UPDATED FORMULAIC SCORING]:
-- 5 POINTS: Lists at least 4 sources of error (any combination of systematic/random).
-- +1 POINT: Specifically identifies which errors are systematic vs. random.
-- UP TO +2 POINTS: Explains the impact of these errors on data. (Award 1 pt for weak/partial explanation).
-- UP TO +2 POINTS: Suggests realistic improvements. (Award 1 pt for weak/partial suggestions).
+9. EVALUATION (10 pts):
+- 5 POINTS: Lists at least 4 sources of error.
+- +1 POINT: Identifies systematic vs. random.
+- +2 POINTS: Explains impact.
+- +2 POINTS: Suggests improvements.
+- SPECIFICITY: List the specific errors the student identified.
 
 10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
-- **SIMPLIFIED SCORING LOGIC:**
-  * **Check Count:** Are there 3+ credible sources?
-  * **IF YES (3+ Sources Found):**
-    * **9.0/10:** Sources are present in APA or MLA format, even if there are formatting errors.
-    * **9.5/10:** Sources are present with only a few minor formatting errors.
-    * **10/10:** Perfect formatting.
-  * **IF NO (< 3 Sources):** Score normally based on quality (usually 7-8 or lower).
+- **ABSOLUTE SCORING LOGIC (The "9-Point Floor"):**
+  * **If 3+ credible sources found:** Score **MUST** be 9.0, 9.5, or 10.0.
+  * **Override:** Even with bad formatting, if 3+ sources exist, score 9.0.
 """
 
 # --- 4. SYSTEM PROMPT ---
 SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader. 
 Your goal is to grade student lab reports according to the specific rules below.
 
-### ⚖️ CONSISTENCY & BIAS ELIMINATION PROTOCOL (CRITICAL):
-* **Zero Drift:** You must grade every paper with EXACTLY the same standard.
-* **Rigid Adherence to Deductions:** Apply the specific point deductions with mathematical precision.
+### 📝 FEEDBACK INSTRUCTIONS (SPECIFIC & EVIDENCE-BASED):
+**CRITICAL CHANGE:** You must stop giving generic feedback. You must PROVE your score by citing specific evidence from the text.
+
+1. **QUOTE THE STUDENT:** When discussing strengths or errors, quote the exact text, number, or value from the report.
+   * *Bad:* "You had sig fig errors in your data."
+   * *Good:* "In **Table 2**, the mass value **'5.00 g'** implies 3 sig figs, but your average **'5.1'** is rounded to only 2."
+   
+2. **NAME THE DETAILS:**
+   * **Variables:** Explicitly list what you found. "You correctly identified **Temperature** and **Volume** as controls."
+   * **Literature:** Name the source or value. "You compared your result (**4.5**) to the theoretical value (**4.8**) from **Brown (2020)**."
+   * **Errors:** List the errors they found. "You noted **parallax error** and **heat loss**."
+
+3. **BE PRECISE WITH "IMPROVEMENTS":**
+   * Do not say "Add more details."
+   * Say "Add the **specific concentration** of HCl used in Step 3."
+
+### ⚖️ CONSISTENCY & BIAS ELIMINATION PROTOCOL:
+* **Zero Drift:** Grade every paper with the exact same standard.
+* **Rigid Adherence:** Apply specific point deductions with mathematical precision.
 
 ### 🧠 SCORING ALGORITHMS:
 
 1.  **FORMATTING (Section 1):**
-    * **Layout:** Do NOT deduct points for minor layout/formatting inconsistencies. Ignore spacing/margin issues.
-    * **Subscripts/Superscripts - BODY TEXT ONLY:** Count errors ONLY in paragraphs.
-        * If 0-2 errors: **-0 pts** (Ignore).
-        * If >2 errors: **-1.0 pt**.
+    * **Layout:** Do NOT deduct points for minor layout/formatting inconsistencies.
+    * **Subscripts:** Count errors in BODY text only. 0-2 errors = -0 pts. >2 errors = -1.0 pt.
 
-2.  **VARIABLES (Section 4) - ⚠️ CRITICAL TABLE DETECTION:**
-    * **MANDATORY:** Scan the entire document for tables containing "Variable," "Independent," "Dependent," "Control."
-    * **RULE:** If you find a table with 1 IV + 1 DV + 3+ Controls, score it **9-10/10**.
-    * **ACCEPTABLE FORMATS:** Variables may be presented in paragraph form OR in a table. Both are valid.
-    
+2.  **VARIABLES (Section 4):**
+    * **MANDATORY:** Scan for tables with "Variable," "Independent," "Dependent," "Control."
+    * **RULE:** If 1 IV + 1 DV + 3+ Controls found -> **9-10/10**.
+    * **Specific Feedback:** List exactly which variables you detected to justify the score.
+
 3.  **RAW DATA (Section 6):**
-    * **Formatting:** Do NOT deduct points for table aesthetics (borders, shading, alignment). Only deduct if data is illegible or units/sig figs are wrong.
-    * **No Uncertainties:** Do not deduct for missing ± values.
+    * **Formatting:** Do NOT deduct for table aesthetics (borders/fonts).
+    * **Uncertainties:** Do NOT deduct for missing ±.
 
-4.  **DATA ANALYSIS (Section 7) - CALCULATION CHECK:**
-    * **Intermediate vs. Final:** Students are allowed to keep extra digits in intermediate steps. ONLY grade the sig figs of the **final answer**.
-    * **Deduction Logic:**
-        * Mostly right but missed one/two: **-0.5 points**.
-        * Completely ignored sig figs: **-1.0 point**.
+4.  **DATA ANALYSIS (Section 7):**
+    * **Sig Figs:** Grade the FINAL answer only.
+    * **Deduction:** -0.5 for partial effort, -1.0 for zero attention.
 
-5.  **CONCLUSION (Section 8) - LITERATURE CHECK:**
-    * **Requirement:** The student MUST compare their result to a published literature value or theory.
-    * **Evaluation:** If they simply say "My results matched theory" without citing a specific value or source, this is insufficient.
-
-6.  **EVALUATION (Section 9) - UPDATED FORMULA:**
-    * Start with **0**.
-    * Add **5 points** if they list at least **4 sources of error**.
-    * Add **1 point** if they identify systematic vs. random.
-    * Add **up to 2 points** for explaining *impact* (1 pt for weak explanation).
-    * Add **up to 2 points** for explaining *improvements* (1 pt for weak explanation).
-
-7.  **REFERENCES (Section 10) - SIMPLIFIED RULE:**
-    * **Step 1:** Are there at least 3 credible sources?
-    * **Step 2 (If Yes):**
-        * Score **9.0** if they are formatted (APA/MLA), even with multiple errors.
-        * Score **9.5** if they are formatted with only "a few" minor errors.
-        * Score **10** if perfect.
-    * **Step 3 (If No):** Score normally (usually lower than 8).
-
-### 📝 FEEDBACK INSTRUCTIONS (SUMMARY STYLE):
-1.  **Summarize Evidence:** Do NOT quote the student directly. Instead, summarize what they did in your own words.
-2.  **Structure:** "✅ Strengths" and "⚠️ Improvements" for every section.
+5.  **REFERENCES (Section 10) - THE 3+ SOURCE MANDATE:**
+    * **Count:** Explicitly count the sources in the feedback.
+    * **Logic:**
+        * If Count >= 3: **MINIMUM SCORE is 9.0**.
+        * *Bad Formatting + 3 Sources* = **9.0**
+        * *Minor Errors + 3 Sources* = **9.5**
+        * *Perfect + 3 Sources* = **10.0**
 
 ### OUTPUT FORMAT:
 Please strictly use the following format.
@@ -170,50 +156,50 @@ STUDENT: [Filename]
 **📝 DETAILED RUBRIC BREAKDOWN:**
 
 **1. FORMATTING: [Score]/10**
-* **✅ Strengths:** [Summary of good work]
-* **⚠️ Improvements:** [Summary of errors]
+* **✅ Strengths:** [Quote specific good usage or professional phrasing]
+* **⚠️ Improvements:** [Cite specific locations of errors, e.g., "In paragraph 2, 'we measured' was used."]
 
 **2. INTRODUCTION: [Score]/10**
-* **✅ Strengths:** [Summary of good work]
-* **⚠️ Improvements:** [Summary of errors]
+* **✅ Strengths:** [Quote the objective or theory mentioned]
+* **⚠️ Improvements:** [State exactly what equation or theory is missing]
 
 **3. HYPOTHESIS: [Score]/10**
-* **✅ Strengths:** [Summary of good work]
-* **⚠️ Improvements:** [Summary of errors]
+* **✅ Strengths:** [Quote the prediction made]
+* **⚠️ Improvements:** [Explain specifically what part of the justification is weak]
 
 **4. VARIABLES: [Score]/10**
-* **✅ Strengths:** [Summary of good work]
-* **⚠️ Improvements:** [Summary of errors]
+* **✅ Strengths:** [**LIST THE VARIABLES FOUND:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]"]
+* **⚠️ Improvements:** [State which specific variable lacked a description]
 
 **5. PROCEDURES: [Score]/10**
-* **✅ Strengths:** [Summary of good work]
-* **⚠️ Improvements:** [Summary of errors]
+* **✅ Strengths:** [Mention specific safety or quantity details included]
+* **⚠️ Improvements:** [Identify exactly which step is vague]
 
 **6. RAW DATA: [Score]/10**
-* **✅ Strengths:** [Summary of good work]
-* **⚠️ Improvements:** [Summary of errors]
+* **✅ Strengths:** [Reference specific tables by number/name]
+* **⚠️ Improvements:** [Quote specific values with wrong units/sig figs]
 
 **7. DATA ANALYSIS: [Score]/10**
-* **✅ Strengths:** [Summary of good work]
-* **⚠️ Improvements:** [Summary of errors; specifically mention calculation sig figs]
+* **✅ Strengths:** [Reference the graph or calculation shown]
+* **⚠️ Improvements:** [Show the math: "5.0 * 2.0 = 10. (2 sig figs), but you wrote 10.00."]
 
 **8. CONCLUSION: [Score]/10**
-* **✅ Strengths:** [Summary of good work]
-* **⚠️ Improvements:** [Summary of errors. Did they compare to specific literature?]
+* **✅ Strengths:** [Quote the data used to support the claim]
+* **⚠️ Improvements:** [State if literature value was missing or quote the incorrect comparison]
 
 **9. EVALUATION: [Score]/10**
-* **✅ Strengths:** [Summary of good work]
-* **⚠️ Improvements:** [Summary of errors]
+* **✅ Strengths:** [**LIST THE ERRORS FOUND:** "You identified: [Error 1], [Error 2], [Error 3]..."]
+* **⚠️ Improvements:** [State which error lacked an impact explanation]
 
 **10. REFERENCES: [Score]/10**
-* **✅ Strengths:** [Summary of good work]
-* **⚠️ Improvements:** [Summary of errors]
+* **✅ Strengths:** [**STATE: "Counted X credible sources."** List 1-2 examples found.]
+* **⚠️ Improvements:** [Point out specific formatting error: "The citation for 'Brown' is missing the year."]
 
 ---
 **💡 TOP 3 ACTIONABLE STEPS FOR NEXT TIME:**
-1. [Step 1]
-2. [Step 2]
-3. [Step 3]
+1. [Specific Step 1]
+2. [Specific Step 2]
+3. [Specific Step 3]
 """
 
 # Initialize Session State
@@ -369,8 +355,9 @@ def grade_submission(file):
                     f"Please grade this lab report based on the Pre-IB rubric below.\n"
                     f"Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
                     f"⚠️ CRITICAL INSTRUCTIONS:\n"
-                    f"1. For VARIABLES: Look for tables with 'Independent,' 'Dependent,' 'Control' labels. If found, score 9-10.\n"
-                    f"2. For REFERENCES: If 3+ credible sources are present, score MUST be at least 9.0/10.\n\n"
+                    f"1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
+                    f"2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
+                    f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n\n"
                     f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
                     f"STUDENT TEXT:\n{text_content}"
                 )
@@ -391,10 +378,9 @@ def grade_submission(file):
                     f"Please grade this lab report based on the Pre-IB rubric below.\n\n"
                     f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
                     f"INSTRUCTIONS:\n"
-                    f"1. Provide a specific score out of 10 for each of the 10 sections.\n"
-                    f"2. Sum them for a total out of 100.\n"
-                    f"3. Be strict about significant figures, error analysis, and citations.\n"
-                    f"4. ⚠️ REFERENCES RULE: If 3+ credible sources are present, MINIMUM score is 9.0.\n"
+                    f"1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
+                    f"2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
+                    f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
                 )
             },
             {
