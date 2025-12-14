@@ -67,6 +67,7 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
   * **Table may have headers like:** "Variable Type," "Variable," "Description," "How Controlled," "Units," "Method"
   * **DO NOT miss tables!** If you see a table with these column headers and it lists an Independent Variable, Dependent Variable, and 3+ Control Variables, this is a COMPLETE variables section.
   * **Example of what to look for:** A table with rows labeled "Independent," "Dependent," and multiple "Control" entries
+- **TABLE FORMAT = EXCELLENT WORK:** If variables are presented in a clear table format with proper identification, this deserves 9-10/10.
 - SCORING RULE: If control variables are listed but not explained/justified properly, score exactly 8/10.
 - LENIENT GRADING APPROACH:
   * **Focus on identification over perfection**: Students who identify variables correctly should receive most points even if descriptions are brief.
@@ -112,9 +113,9 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
 - LENIENT GRADING APPROACH:
-  * **Primary focus: Are sources present?** This is 90% of the score.
+  * **Primary focus: Are sources present and cited in the text?** This is 90% of the score.
   * **Secondary consideration: Formatting quality** This is only 10% of the score.
-  * **DEFAULT SCORING: If 3+ credible sources are listed, START at 9.5/10 or 10/10.**
+  * **DEFAULT SCORING: If 3+ credible sources are listed and cited in text, START at 9.5/10 or 10/10.**
   * **10/10:** Perfect or near-perfect APA formatting with 3+ credible sources cited
   * **9.5/10:** 3+ credible sources cited with minor APA formatting errors such as inconsistent capitalization, missing italics on one or two sources, or minor punctuation issues (-0.5 pts)
   * **9/10:** 3+ sources with multiple minor errors across several sources OR 1-2 more significant formatting issues (-1.0 pt MAX)
@@ -175,19 +176,28 @@ Your goal is to grade student lab reports according to the specific rules below.
 3.  **HYPOTHESIS (Section 3):**
     * **Partial Credit:** A hypothesis that lacks specificity or weak justification can still earn 5-7 points if the basic structure is present.
 
-4.  **VARIABLES (Section 4):**
+4.  **VARIABLES (Section 4) - ⚠️ CRITICAL TABLE DETECTION:**
+    * **MANDATORY FIRST STEP:** Before grading this section, you MUST thoroughly scan the document for tables containing variable information.
+    * **WHERE TO LOOK:** Check after the hypothesis, in a section labeled "Variables," before "Materials," or anywhere in the first half of the document.
+    * **WHAT TO LOOK FOR:** Any table or structured list with these keywords:
+        - Column headers: "Variable Type," "Type of variable," "Variable," "Description," "How Controlled," "How it is measured"
+        - Row labels: "Independent," "Dependent," "Control," "Controlled"
+    * **RECOGNITION RULE:** If you see a table with:
+        - 1 row labeled "Independent" (or similar)
+        - 1 row labeled "Dependent" (or similar)  
+        - 3+ rows labeled "Control" or "Controlled" (or similar)
+        - AND each has a description/explanation
+        - **THIS IS A COMPLETE VARIABLES SECTION = MINIMUM 9/10**
     * **LENIENT APPROACH:** Focus on whether students understand the three variable types, not perfection in descriptions.
     * **ACCEPTABLE FORMATS:** Variables may be presented in paragraph form OR in a table format. Both are equally valid.
-        * **Table format example:** A table with columns like "Variable Type," "Variable," "Description," "Units/How Controlled" is FULLY acceptable.
-        * **CRITICAL:** Carefully examine the document for tables - they may appear anywhere in the report, not just in a dedicated "Variables" section.
-        * Grade table format the same as paragraph format - look for clear identification of IV, DV, and 3+ control variables.
     * **Scoring Guide:**
-        * **10/10:** IV + DV + 3+ Control Variables clearly identified with explanations (in ANY format - table or paragraph)
-        * **9/10:** IV + DV + 3+ Control Variables identified, minimal explanations
-        * **8/10:** IV + DV + 3 Control Variables listed but not explained (FIXED RULE)
+        * **10/10:** Table or paragraph with IV + DV + 3+ Controls with thorough explanations
+        * **9/10:** Table or paragraph with IV + DV + 3+ Controls clearly identified and described
+        * **8/10:** IV + DV + 3+ Controls listed but explanations are minimal (FIXED RULE)
         * **7/10:** 2 Control variables listed
         * **6/10:** Only IV and DV identified
-    * **Important:** If you find a table with variable types clearly labeled (Independent, Dependent, Control) with descriptions, this is EXCELLENT work and deserves 9-10 points.
+        * **0-5/10:** Variables section missing or incomplete (fewer than IV + DV identified)
+    * **ERROR PREVENTION:** Do NOT score 0/10 or very low if a properly formatted variables table exists in the document. A score of 0 means NO variables were identified at all. Always verify you've checked the entire document for tables before assigning any score below 6/10.
     * **Partial Credit:** Be generous. If a student shows they understand what variables are (in any format), they should score 7-10 points.
 
 5.  **PROCEDURES (Section 5):**
@@ -441,7 +451,11 @@ def grade_submission(file):
                 "type": "text",
                 "text": (
                     f"Please grade this lab report based on the Pre-IB rubric below.\n"
-                    f"Note: This is a converted Word Document. Attached is the text followed by images.\n\n"
+                    f"Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
+                    f"⚠️ CRITICAL INSTRUCTIONS:\n"
+                    f"1. For SECTION 4 (VARIABLES): Carefully read through the text below for any table or list containing 'Variable,' 'Independent,' 'Dependent,' 'Control.' Tables in Word documents appear as formatted text. Look for structured lists with these terms.\n"
+                    f"2. If you find a table-like structure with variable types (Independent/Dependent/Control) and 3+ controls described, score it 9-10/10.\n"
+                    f"3. Do NOT score Variables as 0/10 unless there is absolutely no mention of variables anywhere in the document.\n\n"
                     f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
                     f"STUDENT TEXT:\n{text_content}"
                 )
