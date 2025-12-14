@@ -345,16 +345,39 @@ def recalculate_total_score(text):
         print(f"Error recalculating score: {e}")
     return text
 
-# --- CSV CLEANER FOR SHEETS ---
+# --- NEW: CSV FEEDBACK PARSER ---
+def parse_feedback_for_csv(text):
+    data = {}
+    
+    # Clean text first
+    text = re.sub(r'#+\s*', '', text) # Remove headers
+    text = re.sub(r'\*\*', '', text) # Remove bold
+    
+    # 1. Extract Overall Summary
+    try:
+        summary_match = re.search(r"OVERALL SUMMARY & VISUAL ANALYSIS:(.*?)(?=1\. FORMATTING|DETAILED RUBRIC BREAKDOWN)", text, re.DOTALL)
+        if summary_match:
+            data["Overall Summary"] = summary_match.group(1).strip()
+    except:
+        data["Overall Summary"] = "Parsing Error"
+
+    # 2. Extract Section Scores and Comments
+    # Regex looks for "1. SECTION NAME: Score/10"
+    sections = re.findall(r"(\d+)\.\s+([A-Z\s]+):\s+([\d\.]+)/10\n(.*?)(?=\n\d+\.|\Z|💡)", text, re.DOTALL)
+    
+    for _, name, score, content in sections:
+        clean_name = name.strip().title() # e.g. "Formatting"
+        data[f"{clean_name} Score"] = score
+        # Clean up the bullets
+        clean_content = content.strip().replace('\n', ' ').replace('✅ Strengths:', 'Strengths:').replace('⚠️ Improvements:', 'Improvements:')
+        data[f"{clean_name} Feedback"] = clean_content
+
+    return data
+
 def clean_for_sheets(text):
     if not isinstance(text, str): return text
-    # Remove headers
-    text = re.sub(r'###\s*', '', text)
-    # Remove bold markers
+    text = re.sub(r'#+\s*', '', text)
     text = text.replace('**', '')
-    # Convert bullets
-    text = re.sub(r'^\*\s', '• ', text, flags=re.MULTILINE)
-    text = re.sub(r'^-\s', '• ', text, flags=re.MULTILINE)
     return text.strip()
 
 def grade_submission(file, model_id):
@@ -460,28 +483,19 @@ def grade_submission(file, model_id):
         except Exception as e:
             return f"⚠️ Error: {str(e)}"
 
-def parse_score(text):
-    try:
-        lines = text.split('\n')
-        for line in lines:
-            if "SCORE:" in line:
-                return line.split("SCORE:")[1].strip()
-    except:
-        pass
-    return "N/A"
-
 # --- WORD FORMATTER (Strict Symbol Cleaning) ---
 def write_markdown_to_docx(doc, text):
     lines = text.split('\n')
     for line in lines:
         line = line.strip()
         if not line:
-            continue # SKIP EMPTY LINES (Previous fix maintained)
+            continue # SKIP EMPTY LINES FOR CONTINUOUS FLOW
         
-        # 1. Handle H1 Title (# ) - CLEANED
+        # 1. Handle Score Header (Smaller - Level 4)
         if line.startswith('# '): 
             clean = line.replace('# ', '').replace('*', '').strip()
-            doc.add_heading(clean, level=0)
+            # Changed from Level 0 (Huge) to Level 4 (Small/Bold)
+            doc.add_heading(clean, level=4) 
             continue
         
         # 2. Handle H3 (### ) - CLEANED
@@ -495,8 +509,12 @@ def write_markdown_to_docx(doc, text):
             clean = line.replace('## ', '').replace('*', '').strip()
             doc.add_heading(clean, level=2)
             continue
+        
+        # 4. REMOVE SEPARATORS
+        if line.startswith('---') or line.startswith('___'):
+            continue
 
-        # 4. Handle Bullets (* or -) - CLEANED
+        # 5. Handle Bullets (* or -) - CLEANED
         if line.startswith('* ') or line.startswith('- '):
             p = doc.add_paragraph(style='List Bullet')
             content = line[2:] 
@@ -504,7 +522,7 @@ def write_markdown_to_docx(doc, text):
             p = doc.add_paragraph()
             content = line
 
-        # 5. Handle Bold (**text**) - CLEANED
+        # 6. Handle Bold (**text**) - CLEANED
         parts = re.split(r'(\*\*.*?\*\*)', content)
         for part in parts:
             if part.startswith('**') and part.endswith('**'):
@@ -519,7 +537,8 @@ def create_master_doc(results, session_name):
     doc.add_heading(f"Lab Report Grades: {session_name}", 0)
     for item in results:
         doc.add_heading(item['Filename'], level=1)
-        doc.add_heading(f"Score: {item['Score']}", level=2)
+        # REMOVED REDUNDANT SCORE HEADER
+        # doc.add_heading(f"Score: {item['Score']}", level=2) 
         write_markdown_to_docx(doc, item['Feedback'])
         doc.add_page_break()
     bio = BytesIO()
@@ -532,7 +551,8 @@ def create_zip_bundle(results):
         for item in results:
             doc = Document()
             doc.add_heading(f"Feedback: {item['Filename']}", 0)
-            doc.add_heading(f"Score: {item['Score']}", level=1)
+            # REMOVED REDUNDANT SCORE HEADER
+            # doc.add_heading(f"Score: {item['Score']}", level=1)
             write_markdown_to_docx(doc, item['Feedback'])
             doc_buffer = BytesIO()
             doc.save(doc_buffer)
@@ -547,14 +567,21 @@ def display_results_ui():
     st.divider()
     st.subheader(f"📊 Results: {st.session_state.current_session_name}")
     
-    # Prepare DataFrame for Sheets (Clean Text)
-    df = pd.DataFrame(st.session_state.current_results)
-    
-    # Create a copy for CSV export and clean the feedback column
-    sheets_df = df[["Filename", "Score", "Feedback"]].copy()
-    sheets_df["Feedback"] = sheets_df["Feedback"].apply(clean_for_sheets)
-    
-    csv_data = sheets_df.to_csv(index=False).encode('utf-8-sig') # utf-8-sig for Excel/Sheets compatibility
+    # --- EXPANDED CSV LOGIC ---
+    results_list = []
+    for item in st.session_state.current_results:
+        # Start with basic info
+        row_data = {
+            "Filename": item['Filename'],
+            "Overall Score": item['Score']
+        }
+        # Parse the structured feedback
+        feedback_data = parse_feedback_for_csv(item['Feedback'])
+        row_data.update(feedback_data)
+        results_list.append(row_data)
+        
+    csv_df = pd.DataFrame(results_list)
+    csv_data = csv_df.to_csv(index=False).encode('utf-8-sig') 
     
     master_doc_data = create_master_doc(st.session_state.current_results, st.session_state.current_session_name)
     zip_data = create_zip_bundle(st.session_state.current_results)
@@ -566,12 +593,12 @@ def display_results_ui():
     with col2:
         st.download_button("📦 Student Bundle (.zip)", zip_data, f'{st.session_state.current_session_name}_Students.zip', "application/zip", use_container_width=True)
     with col3:
-        st.download_button("📊 Google Sheets Compatible (.csv)", csv_data, f'{st.session_state.current_session_name}_Sheets.csv', "text/csv", use_container_width=True)
-        st.caption("Import into Google Sheets")
+        st.download_button("📊 Detailed CSV Export", csv_data, f'{st.session_state.current_session_name}_Detailed.csv', "text/csv", use_container_width=True)
+        st.caption("Includes separate columns for every section score and comment.")
 
     tab1, tab2 = st.tabs(["📊 Gradebook View", "📝 Detailed Feedback"])
     with tab1:
-        st.dataframe(df[["Filename", "Score"]], use_container_width=True)
+        st.dataframe(csv_df, use_container_width=True)
     with tab2:
         for item in st.session_state.current_results:
             with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
@@ -581,11 +608,11 @@ def display_results_ui():
 with st.sidebar:
     st.header("⚙️ Configuration")
     
-    # NEW: Model ID Input to prevent 404 errors with newer models
+    # UPDATED DEFAULT MODEL ID
     user_model_id = st.text_input(
         "🤖 Model ID", 
         value="claude-sonnet-4-5-20250929", 
-        help="Change this if you have a specific Beta model or newer ID (e.g. Sonnet 4.5)"
+        help="Change this if you have a specific Beta model or newer ID"
     )
     
     st.divider()
