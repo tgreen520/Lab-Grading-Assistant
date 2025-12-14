@@ -44,6 +44,8 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
+- **OBJECTIVE:** Specific lab objectives must be explicitly stated.
+  * **Penalty:** If missing or unclear, **-1.0 point**.
 - PARTIAL CREDIT: Award points proportionally.
 
 3. HYPOTHESIS (10 pts):
@@ -76,18 +78,28 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
   * **Logic:** Trendline type must be appropriate (e.g., don't force linear fit on curved data).
 - DEDUCTION: -0.5 for partial effort, -1.0 for zero attention.
 
-8. CONCLUSION (10 pts):
-- Criteria: Statement of support/refutation, specific data evidence.
-- CRITICAL REQUIREMENT 1: Must include specific comparisons to PUBLISHED LITERATURE.
-- **CRITICAL REQUIREMENT 2 (STATISTICS):** * Must discuss **R² (Coefficient of Determination)** implications (fit).
-  * Must discuss **R (Correlation Coefficient)** implications (strength/direction).
-  * **DEDUCTION:** If the **R value** explanation is missing, **deduct -0.5 points**.
+8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
+- **IV/DV RELATIONSHIP:** Must explain the specific relationship (trend) shown by the graph.
+  * **Penalty:** If not explained thoroughly, **-1.0 point**.
+- **THEORY CONNECTION:** Must connect results to Chemical Theory.
+  * **Penalty:** If missing, **-1.0 point**.
+- **QUANTITATIVE SUPPORT:** Must support conclusion with specific numbers.
+  * **Penalty:** If missing, **-2.0 points**.
+- **QUALITATIVE SUPPORT:** Must support conclusion with observations.
+  * **Penalty:** If missing, **-0.5 points**.
+- **STATISTICS:** Must explain **R Value** (correlation) and **R²** (fit).
+  * **Penalty:** If R value explanation missing, **-0.5 points**.
+- **LITERATURE:** Must compare to published value.
 
-9. EVALUATION (10 pts):
-- 5 POINTS: Lists at least 4 sources of error.
-- +1 POINT: Identifies systematic vs. random.
-- +2 POINTS: Explains impact.
-- +2 POINTS: Suggests improvements.
+9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
+- **BASE SCORE:** Start at 0. Add points ONLY if specific criteria are met.
+- **5 POINTS:** Lists at least 4 distinct sources of error.
+- **+1 POINT:** Correctly identifies Systematic vs. Random errors.
+- **+2 POINTS (IMPACT):**
+  * **Requirement:** Must specifically describe how **ALL** listed errors affected the data (e.g., directional impact: "caused higher mass").
+  * **DEDUCTION:** If this requirement is NOT met (e.g., vague descriptions or missing impact for some errors), **DEDUCT 1 POINT** from the Evaluation score.
+- **+2 POINTS (IMPROVEMENT):** Must suggest **SPECIFIC** equipment or procedural changes (e.g., "Use a 50mL pipette").
+  * **PENALTY:** If the student says "Be more careful," "Do more trials," or "Avoid parallax," **AWARD 0 for this part.**
 
 10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
@@ -111,27 +123,34 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **1-2 errors:** Deduct **0.5 pts**. (Score MUST be 9.5).
     * **3+ errors:** Deduct **1.0 pt**. (Score MUST be 9.0).
 
-3.  **DATA ANALYSIS (Section 7) - GRAPH & CALCULATION AUDIT:**
+3.  **INTRODUCTION (Section 2) - OBJECTIVE CHECK:**
+    * **Check:** Did the student explicitly state specific lab objectives?
+    * **Penalty:** If missing or vague, **deduct 1.0 point**.
+
+4.  **DATA ANALYSIS (Section 7) - GRAPH & CALCULATION AUDIT:**
     * **CALCULATIONS:** Summarize calculations. **Ignore extra digits in intermediate steps.** Only check sig figs for the final answer.
     * **GRAPH:** Check for: Axis Labels/Units, Scatterplot, Trendline, Equation, R², Trendline Type.
     * **PLACEMENT RULE:** * If the graph is **PERFECT** (all items present), list the details in **✅ Strengths**.
       * If the graph is **FLAWED** (missing items), list the specific missing items in **⚠️ Improvements**.
 
-4.  **CONCLUSION (Section 8) - STATISTICAL CHECK:**
-    * **Check 1:** Did they mention **R²** (Coefficient of Determination)?
-    * **Check 2:** Did they mention **R** (Correlation Coefficient)?
-    * **Penalty:** If **R value** discussion is missing, **deduct 0.5 points**.
+5.  **CONCLUSION (Section 8) - DEDUCTION LOGIC:**
+    * **Check 1 (Trend):** Did they explain the IV/DV relationship shown in the graph? If no, **-1.0 pt**.
+    * **Check 2 (Theory):** Did they connect it to chemical theory? If no, **-1.0 pt**.
+    * **Check 3 (Quantitative):** Did they quote specific numbers? If no, **-2.0 pts**.
+    * **Check 4 (Qualitative):** Did they quote observations? If no, **-0.5 pts**.
+    * **Check 5 (Statistics):** Did they explain the **R value**? If no, **-0.5 pts**.
 
-5.  **EVALUATION (Section 9) - VAGUENESS PENALTY:**
-    * **Impact Check:** Search for words like "higher," "lower," "increase," "decrease." If missing, the student fails the Impact criteria.
-    * **Improvement Check:** Search for specific apparatus names or distinct procedural steps. Reject "be careful" or "repeat experiment."
+6.  **EVALUATION (Section 9) - STRICT IMPACT RULE:**
+    * **CRITERIA:** The student must describe the specific impact (direction) for **ALL** errors listed.
+    * **PENALTY:** If they list 4 errors but only explain the impact for 3 (or if the explanation is vague like "it affected data"), **DEDUCT 1 POINT** from the Evaluation score.
 
-6.  **REFERENCES (Section 10):**
+7.  **REFERENCES (Section 10):**
     * If 3+ Sources -> Minimum Score 9.0.
 
-### 📝 FEEDBACK STYLE (EXPANDED & EDUCATIONAL):
-* **AVOID BREVITY:** Do NOT use one-word bullet points.
-* **EXPLAIN WHY:** Write 2-3 sentences for each section's Strengths/Improvements. Connect the specific evidence from the text to the rubric criteria.
+### 📝 FEEDBACK STYLE (EXPANDED & HUMAN-LIKE):
+* **AVOID ROBOTIC CHECKLISTS:** Do not use "[Yes/No]" in your final output. 
+* **USE NATURAL LANGUAGE:** Instead of "R² present: No", write "The conclusion discusses the data trends but fails to mention the R² value or its implications."
+* **EXPLAIN WHY:** Write 2-3 sentences for each section.
 
 ### OUTPUT FORMAT:
 Please strictly use the following format.
@@ -151,7 +170,7 @@ STUDENT: [Filename]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
-* **⚠️ Improvements:** [Explain exactly what equation or theory is missing and why it matters]
+* **⚠️ Improvements:** [**OBJECTIVE CHECK:** "Objective explicit? [Yes/No]" (-1 pt if No). Also explain missing equations/theory.]
 
 **3. HYPOTHESIS: [Score]/10**
 * **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
@@ -171,17 +190,20 @@ STUDENT: [Filename]
 
 **7. DATA ANALYSIS: [Score]/10**
 * **✅ Strengths:** [Summarize the calculation process. If Graph is perfect, praise the inclusion of Equation, R², and Labels here.]
-* **⚠️ Improvements:** [List calculation errors (final answer sig figs). If Graph is missing items, list them here.]
+* **⚠️ Improvements:** [**GRAPH AUDIT:** Write a natural summary of what is missing. Example: "The graph includes a trendline but is missing the equation and R² value. Additionally, the y-axis lacks units."]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used to support the claim]
-* **⚠️ Improvements:** [**STATISTICAL CHECK:** * R² explained? [Yes/No]
-  * **R Value explained?** [Yes/No] (If No, deduct 0.5)
-  * Did they compare to literature? [Yes/No]]
+* **⚠️ Improvements:** [**CRITICAL CHECKS:** Summarize missing elements naturally. Ensure you comment on:
+  1. IV/DV Relationship (-1)
+  2. Chemical Theory (-1)
+  3. Quantitative Support (-2)
+  4. Qualitative Support (-0.5)
+  5. R Value Explanation (-0.5)]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
-* **⚠️ Improvements:** [**VAGUENESS CHECK:** Did they explain the DIRECTION of the error (higher/lower)? Did they suggest SPECIFIC equipment? If not, state exactly what is missing.]
+* **⚠️ Improvements:** [**VAGUENESS CHECK:** State specifically if they failed to describe the impact for **ALL** errors. Example: "You listed 4 errors but only explained the impact for 2 of them. You must describe how EVERY error affected the data (higher/lower) to get full points."]
 
 **10. REFERENCES: [Score]/10**
 * **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources." Comment on quality.]
@@ -356,9 +378,9 @@ def grade_submission(file):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Must explain R value (correlation). If missing, deduct 0.5 pts.\n"
+            "6. **CONCLUSION:** Check for IV/DV trend (-1), Theory (-1), Quant Data (-2), Qual Data (-0.5), and R value (-0.5).\n"
             "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n"
-            "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment.\n\n"
+            "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -386,9 +408,9 @@ def grade_submission(file):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Must explain R value (correlation). If missing, deduct 0.5 pts.\n"
+            "6. **CONCLUSION:** Check for IV/DV trend (-1), Theory (-1), Quant Data (-2), Qual Data (-0.5), and R value (-0.5).\n"
             "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n"
-            "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment.\n"
+            "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors.\n"
         )
         
         user_message = [
