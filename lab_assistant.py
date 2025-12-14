@@ -36,14 +36,12 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 1. FORMATTING (10 pts):
 - Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly IN THE BODY TEXT.
-- DEDUCTIONS: 
-  * **SUPERSCRIPT/SUBSCRIPT THREE-STRIKE RULE:**
-    * Count the errors in paragraphs/body text (Ignore graphs/tables).
-    * **1 or 2 errors:** **-0 Points** (Mention as a warning only).
-    * **3 or more errors:** **-1.0 Point**.
-  * Consistent use of "I/We": Deduct heavily.
-  * NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing).
-- SPECIFICITY: Quote instances where "I/We" was used or where superscripts were missed.
+- **MANDATORY COUNTING RULE:**
+  * **Step 1:** You MUST count specific instances of subscript/superscript errors in the body text.
+  * **Step 2:**
+    * **1 or 2 errors:** **DEDUCT 0 POINTS.** (Write: "Found 1 error, but ignored as minor.")
+    * **3 or more errors:** **DEDUCT 1.0 POINT.**
+- NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing).
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
@@ -61,7 +59,7 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
   * **10/10:** IV + DV + 3+ Control Variables with explanations.
   * **9/10:** IV + DV + 3+ Control Variables listed (table or text).
   * **RULE:** If 1 IV + 1 DV + 3 Controls found, MINIMUM score is 9/10.
-- SPECIFICITY: List the exact variables found (e.g., "Found controls: Temp, Mass, Time").
+- SPECIFICITY: List the exact variables found.
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, specific quantities, safety.
@@ -70,19 +68,21 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 6. RAW DATA (10 pts) [NO UNCERTAINTIES REQUIRED]:
 - Criteria: Qualitative observations, clear tables, units, consistent significant figures.
 - FORMATTING: Do NOT deduct for table aesthetics. Focus on data clarity.
-- SPECIFICITY: Point to specific tables (e.g., "Table 1") and specific values where units or sig figs are wrong.
+- SPECIFICITY: Point to specific tables and values.
 
 7. DATA ANALYSIS (10 pts) [SIG FIGS CRITICAL]:
 - Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
 - SIG FIGS: Grade the FINAL answer only.
-- **EXCEPTION:** When calculating **Empirical or Molecular Formulas**, the final answer (subscript) MUST be rounded to a whole number (1 sig fig). Do NOT deduct points for this specific rounding.
+- **EMPIRICAL/MOLECULAR FORMULA EXCEPTION:**
+  * If the calculation is finding a chemical formula (e.g., C2H4), the final answer MUST be a WHOLE NUMBER integer.
+  * **DO NOT** treat this as a sig fig error.
+  * **DO NOT** deduct points for rounding to the nearest whole number (e.g., 1.99 -> 2). This is scientifically correct for formulas.
 - DEDUCTION: -0.5 for partial effort, -1.0 for zero attention.
-- SPECIFICITY: Quote the calculated value and explain why the rounding is wrong based on the inputs.
 
 8. CONCLUSION (10 pts):
 - Criteria: Statement of support/refutation, specific data evidence.
 - CRITICAL REQUIREMENT: Must include specific comparisons to PUBLISHED LITERATURE.
-- SPECIFICITY: Quote the literature value used by the student (e.g., "Compared to theoretical density of 2.7 g/cm³").
+- SPECIFICITY: Quote the literature value used by the student.
 
 9. EVALUATION (10 pts):
 - 5 POINTS: Lists at least 4 sources of error.
@@ -103,40 +103,30 @@ SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader.
 Your goal is to grade student lab reports according to the specific rules below.
 
 ### 📝 FEEDBACK INSTRUCTIONS (SPECIFIC & EVIDENCE-BASED):
-**CRITICAL CHANGE:** You must stop giving generic feedback. You must PROVE your score by citing specific evidence from the text.
+**CRITICAL:** You must PROVE your score by citing specific evidence from the text.
 
-1. **QUOTE THE STUDENT:** When discussing strengths or errors, quote the exact text, number, or value from the report.
+1. **QUOTE THE STUDENT:** When discussing strengths or errors, quote the exact text, number, or value.
 2. **NAME THE DETAILS:** Explicitly list variables found, literature values used, and errors identified.
-3. **BE PRECISE:** Do not say "Add details." Say "Add the concentration of HCl."
 
-### ⚖️ CONSISTENCY & BIAS ELIMINATION PROTOCOL:
-* **Zero Drift:** Grade every paper with the exact same standard.
-* **Rigid Adherence:** Apply specific point deductions with mathematical precision.
+### 🧠 SCORING ALGORITHMS (STRICT ENFORCEMENT):
 
-### 🧠 SCORING ALGORITHMS:
-
-1.  **FORMATTING (Section 1) - THE "THREE-STRIKE" RULE:**
-    * **STEP 1:** Count the number of subscript/superscript errors in the body text (ignore tables/graphs).
-    * **STEP 2:** Apply Logic:
-        * **Count = 1 or 2:** **NO DEDUCTION (-0 pts)**. Mention it as a "warning" only.
-        * **Count >= 3:** **DEDUCT 1.0 PT**.
+1.  **FORMATTING (Section 1) - THE COUNTING RULE:**
+    * **Instruction:** You must explicitly write "Found X subscript errors" in the feedback.
+    * **Logic:**
+        * If X < 3: **DEDUCTION IS 0**. (You may mention it, but do NOT lower the score).
+        * If X >= 3: **DEDUCT 1.0 PT**.
     * **Layout:** Do NOT deduct points for minor layout/formatting inconsistencies.
 
 2.  **VARIABLES (Section 4):**
     * **MANDATORY:** Scan for tables with "Variable," "Independent," "Dependent," "Control."
     * **RULE:** If 1 IV + 1 DV + 3+ Controls found -> **9-10/10**.
-    * **Specific Feedback:** List exactly which variables you detected to justify the score.
 
-3.  **RAW DATA (Section 6):**
-    * **Formatting:** Do NOT deduct for table aesthetics (borders/fonts).
-    * **Uncertainties:** Do NOT deduct for missing ±.
+3.  **DATA ANALYSIS (Section 7) - EMPIRICAL FORMULA EXCEPTION:**
+    * **CHECK:** Is the student calculating an Empirical or Molecular Formula?
+    * **IF YES:** Ignore standard sig fig rules for the final subscripts. The answer MUST be a whole number integer (e.g., CH4, not CH3.99).
+    * **ACTION:** Do NOT deduct points for rounding to whole numbers in chemical formulas.
 
-4.  **DATA ANALYSIS (Section 7):**
-    * **Sig Figs:** Grade the FINAL answer only.
-    * **Exception:** If calculation is for **Empirical/Molecular Formula**, the final answer MUST be a whole number (1 sig fig). Do NOT deduct for this.
-    * **Deduction:** -0.5 for partial effort, -1.0 for zero attention.
-
-5.  **REFERENCES (Section 10) - THE 3+ SOURCE MANDATE:**
+4.  **REFERENCES (Section 10) - THE 3+ SOURCE MANDATE:**
     * **Count:** Explicitly count the sources in the feedback.
     * **Logic:**
         * If Count >= 3: **MINIMUM SCORE is 9.0**.
@@ -157,50 +147,50 @@ STUDENT: [Filename]
 **📝 DETAILED RUBRIC BREAKDOWN:**
 
 **1. FORMATTING: [Score]/10**
-* **✅ Strengths:** [Quote specific good usage or professional phrasing]
-* **⚠️ Improvements:** [**STATE: "Found X instances of subscript/superscript errors."** Only deduct if X >= 3.]
+* **✅ Strengths:** [Quote specific good usage]
+* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (Only deduct if X >= 3)]
 
 **2. INTRODUCTION: [Score]/10**
-* **✅ Strengths:** [Quote the objective or theory mentioned]
-* **⚠️ Improvements:** [State exactly what equation or theory is missing]
+* **✅ Strengths:** [Quote objective/theory]
+* **⚠️ Improvements:** [State exactly what is missing]
 
 **3. HYPOTHESIS: [Score]/10**
-* **✅ Strengths:** [Quote the prediction made]
-* **⚠️ Improvements:** [Explain specifically what part of the justification is weak]
+* **✅ Strengths:** [Quote prediction]
+* **⚠️ Improvements:** [Explain weakness]
 
 **4. VARIABLES: [Score]/10**
-* **✅ Strengths:** [**LIST THE VARIABLES FOUND:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]"]
-* **⚠️ Improvements:** [State which specific variable lacked a description]
+* **✅ Strengths:** [**LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]"]
+* **⚠️ Improvements:** [Specific missing details]
 
 **5. PROCEDURES: [Score]/10**
-* **✅ Strengths:** [Mention specific safety or quantity details included]
-* **⚠️ Improvements:** [Identify exactly which step is vague]
+* **✅ Strengths:** [Specific details]
+* **⚠️ Improvements:** [Specific vague steps]
 
 **6. RAW DATA: [Score]/10**
-* **✅ Strengths:** [Reference specific tables by number/name]
-* **⚠️ Improvements:** [Quote specific values with wrong units/sig figs]
+* **✅ Strengths:** [Reference tables]
+* **⚠️ Improvements:** [Quote values with wrong units/sig figs]
 
 **7. DATA ANALYSIS: [Score]/10**
-* **✅ Strengths:** [Reference the graph or calculation shown]
-* **⚠️ Improvements:** [Show the math: "5.0 * 2.0 = 10. (2 sig figs), but you wrote 10.00."]
+* **✅ Strengths:** [Reference calculation]
+* **⚠️ Improvements:** [Show math. **NOTE:** If empirical formula, acknowledge whole number rounding is correct.]
 
 **8. CONCLUSION: [Score]/10**
-* **✅ Strengths:** [Quote the data used to support the claim]
-* **⚠️ Improvements:** [State if literature value was missing or quote the incorrect comparison]
+* **✅ Strengths:** [Quote data used]
+* **⚠️ Improvements:** [State if literature value missing]
 
 **9. EVALUATION: [Score]/10**
-* **✅ Strengths:** [**LIST THE ERRORS FOUND:** "You identified: [Error 1], [Error 2], [Error 3]..."]
-* **⚠️ Improvements:** [State which error lacked an impact explanation]
+* **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..."]
+* **⚠️ Improvements:** [Missing impacts]
 
 **10. REFERENCES: [Score]/10**
-* **✅ Strengths:** [**STATE: "Counted X credible sources."** List 1-2 examples found.]
-* **⚠️ Improvements:** [Point out specific formatting error: "The citation for 'Brown' is missing the year."]
+* **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources."]
+* **⚠️ Improvements:** [Specific formatting error]
 
 ---
 **💡 TOP 3 ACTIONABLE STEPS FOR NEXT TIME:**
-1. [Specific Step 1]
-2. [Specific Step 2]
-3. [Specific Step 3]
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
 """
 
 # Initialize Session State
@@ -359,7 +349,8 @@ def grade_submission(file):
                     f"1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
                     f"2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
                     f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
-                    f"4. **FORMATTING:** Count subscript errors. 1-2 errors = NO DEDUCTION. 3+ errors = -1 pt.\n\n"
+                    f"4. **FORMATTING:** Explicitly count subscript errors. If count < 3, DEDUCT 0.\n"
+                    f"5. **EMPIRICAL FORMULAS:** If finding a chemical formula, rounding to whole numbers is CORRECT. Do not deduct.\n\n"
                     f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
                     f"STUDENT TEXT:\n{text_content}"
                 )
@@ -383,7 +374,8 @@ def grade_submission(file):
                     f"1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
                     f"2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
                     f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
-                    f"4. **FORMATTING:** Count subscript errors. 1-2 errors = NO DEDUCTION. 3+ errors = -1 pt.\n"
+                    f"4. **FORMATTING:** Explicitly count subscript errors. If count < 3, DEDUCT 0.\n"
+                    f"5. **EMPIRICAL FORMULAS:** If finding a chemical formula, rounding to whole numbers is CORRECT. Do not deduct.\n"
                 )
             },
             {
