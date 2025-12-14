@@ -79,7 +79,9 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 8. CONCLUSION (10 pts):
 - Criteria: Statement of support/refutation, specific data evidence.
 - CRITICAL REQUIREMENT 1: Must include specific comparisons to PUBLISHED LITERATURE.
-- CRITICAL REQUIREMENT 2: Must reference **R and R² values** and explain what they imply about the data (strength of correlation/fit).
+- **CRITICAL REQUIREMENT 2 (STATISTICS):** * Must discuss **R² (Coefficient of Determination)** implications (fit).
+  * Must discuss **R (Correlation Coefficient)** implications (strength/direction).
+  * **DEDUCTION:** If the **R value** explanation is missing, **deduct -0.5 points**.
 
 9. EVALUATION (10 pts):
 - 5 POINTS: Lists at least 4 sources of error.
@@ -103,7 +105,6 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Decimal Scores are MANDATORY.**
     * If you deduct 0.5 points, the score is **9.5**. 
     * **DO NOT** round 9.5 down to 9.0.
-    * Example: 10 - 0.5 = 9.5.
 
 2.  **FORMATTING (Section 1) - TIERED DEDUCTION:**
     * **Count** subscript/superscript errors in body text.
@@ -115,13 +116,17 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **GRAPH:** Check for: Axis Labels/Units, Scatterplot, Trendline, Equation, R², Trendline Type.
     * **PLACEMENT RULE:** * If the graph is **PERFECT** (all items present), list the details in **✅ Strengths**.
       * If the graph is **FLAWED** (missing items), list the specific missing items in **⚠️ Improvements**.
-      * **DO NOT** put the "Graph Audit" checklist in Improvements if the graph is perfect.
 
 4.  **CONCLUSION (Section 8) - STATISTICAL CHECK:**
-    * The student MUST mention the **R and/or R² value**.
-    * They MUST explain **what it implies** about their data.
+    * **Check 1:** Did they mention **R²** (Coefficient of Determination)?
+    * **Check 2:** Did they mention **R** (Correlation Coefficient)?
+    * **Penalty:** If **R value** discussion is missing, **deduct 0.5 points**.
 
-5.  **REFERENCES (Section 10):**
+5.  **EVALUATION (Section 9) - VAGUENESS PENALTY:**
+    * **Impact Check:** Search for words like "higher," "lower," "increase," "decrease." If missing, the student fails the Impact criteria.
+    * **Improvement Check:** Search for specific apparatus names or distinct procedural steps. Reject "be careful" or "repeat experiment."
+
+6.  **REFERENCES (Section 10):**
     * If 3+ Sources -> Minimum Score 9.0.
 
 ### 📝 FEEDBACK STYLE (EXPANDED & EDUCATIONAL):
@@ -170,11 +175,13 @@ STUDENT: [Filename]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used to support the claim]
-* **⚠️ Improvements:** [**STATISTICAL CHECK:** Did they discuss R/R² implications? Did they compare to literature? Explain.]
+* **⚠️ Improvements:** [**STATISTICAL CHECK:** * R² explained? [Yes/No]
+  * **R Value explained?** [Yes/No] (If No, deduct 0.5)
+  * Did they compare to literature? [Yes/No]]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
-* **⚠️ Improvements:** [Explain which errors lacked impact/improvement discussions]
+* **⚠️ Improvements:** [**VAGUENESS CHECK:** Did they explain the DIRECTION of the error (higher/lower)? Did they suggest SPECIFIC equipment? If not, state exactly what is missing.]
 
 **10. REFERENCES: [Score]/10**
 * **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources." Comment on quality.]
@@ -349,8 +356,9 @@ def grade_submission(file):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for discussion of R² implications.\n"
-            "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n\n"
+            "6. **CONCLUSION:** Must explain R value (correlation). If missing, deduct 0.5 pts.\n"
+            "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n"
+            "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -378,8 +386,9 @@ def grade_submission(file):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for discussion of R² implications.\n"
+            "6. **CONCLUSION:** Must explain R value (correlation). If missing, deduct 0.5 pts.\n"
             "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n"
+            "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment.\n"
         )
         
         user_message = [
