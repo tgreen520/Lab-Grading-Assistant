@@ -53,11 +53,10 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 4. VARIABLES (10 pts):
 - Criteria: IV (units/range), DV (method), 3+ Controlled Variables.
-- **CRITICAL TABLE DETECTION:** Check for tables listing "Variable," "Independent," "Dependent," "Control."
-- **SCORING:**
+- **SCORING TIERS:**
   * **10/10:** IV + DV + 3+ Control Variables with explanations.
-  * **9/10:** IV + DV + 3+ Control Variables listed (table or text).
-  * **RULE:** If 1 IV + 1 DV + 3 Controls found, MINIMUM score is 9/10.
+  * **9.5/10:** Variables listed, but description of **how to measure DV** is vague. (Deduct 0.5).
+  * **9.0/10:** Variables listed, but explanations missing for multiple variables. (Deduct 1.0).
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, specific quantities, safety.
@@ -88,23 +87,20 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 - **QUALITATIVE SUPPORT:** Must support conclusion with observations.
   * **Penalty:** If missing, **-0.5 points**.
 - **STATISTICS (R vs R²):**
-  * **R (Correlation Coefficient):** Must explain strength and DIRECTION.
-  * **R² (Coefficient of Determination):** Must explain fit/variability/random error. Note: R² does NOT indicate accuracy.
-  * **Penalty:** If R explanation missing, **-0.5 points**. If R² explanation missing, **-0.5 points**.
-- **LITERATURE:** Must compare to published value.
+  * **R (Correlation Coefficient):** Must explain strength and DIRECTION. **Penalty:** If missing, **-1.0 point**.
+  * **R² (Coefficient of Determination):** Must explain fit/variability. **Penalty:** If explained poorly, **-0.5 points**.
+  * **NOTE:** If R is missing but R² is explained well, DO NOT deduct for R². Total stats deduction should be -1.0.
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
 - **BASE SCORE:** Start at 0. Add points ONLY if specific criteria are met.
 - **5 POINTS:** Lists at least 4 distinct sources of error.
 - **+1 POINT:** Correctly identifies Systematic vs. Random errors.
 - **+2 POINTS (IMPACT):**
-  * **Requirement:** Describe specific directional impact (e.g., "caused mass to be higher") for ALL errors.
-  * **SCORING:**
-    * **0/2 Points (Deduct 2):** Impact not explained or completely generic ("affected results").
-    * **1/2 Points (Deduct 1):** Impact explained for some but not all, or partially vague.
-    * **2/2 Points:** Specific directional impact for ALL errors.
-- **+2 POINTS (IMPROVEMENT):** Must suggest **SPECIFIC** equipment or procedural changes (e.g., "Use a 50mL pipette").
-  * **PENALTY:** If the student says "Be more careful," "Do more trials," or "Avoid parallax," **AWARD 0 for this part.**
+  * **2 Points:** Specific directional impact ("caused mass to increase") described for **ALL** errors.
+  * **1 Point (Partial Deduction):** Directional impact described for **SOME** errors, or partially vague. (Deduct 1.0).
+  * **0 Points (Full Deduction):** No directional impact described, or only says "affected results". (Deduct 2.0).
+- **+2 POINTS (IMPROVEMENT):** Must suggest **SPECIFIC** equipment or procedural changes.
+  * **PENALTY:** If vague ("be careful"), **AWARD 0 for this part.**
 
 10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
@@ -123,30 +119,24 @@ Your goal is to grade student lab reports according to the specific rules below.
     * If you deduct 0.5 points, the score is **9.5**. 
     * **DO NOT** round 9.5 down to 9.0.
 
-2.  **FORMATTING (Section 1) - TIERED DEDUCTION:**
-    * **Count** subscript/superscript errors in body text.
-    * **1-2 errors:** Deduct **0.5 pts**. (Score MUST be 9.5).
-    * **3+ errors:** Deduct **1.0 pt**. (Score MUST be 9.0).
+2.  **VARIABLES (Section 4) - VAGUENESS CHECK:**
+    * Check the **Dependent Variable (DV)** description.
+    * If the method of measurement is **vague** (e.g., "we measured time" instead of "we used a stopwatch to measure time until color change"), **Deduct 0.5 points** (Score 9.5).
+    * Do NOT deduct 1.0 point unless multiple variables are undefined.
 
-3.  **DATA ANALYSIS (Section 7) - GRAPH & CALCULATION AUDIT:**
-    * **CALCULATIONS:** Summarize calculations. **Ignore extra digits in intermediate steps.** Only check sig figs for the final answer.
-    * **GRAPH:** Check for: Axis Labels/Units, Scatterplot, Trendline, Equation, R², Trendline Type.
-    * **PLACEMENT RULE:** * If the graph is **PERFECT** (all items present), list the details in **✅ Strengths**.
-      * If the graph is **FLAWED** (missing items), list the specific missing items in **⚠️ Improvements**.
+3.  **CONCLUSION (Section 8) - STATISTICAL INTELLIGENCE:**
+    * **R² Check:** Look for keywords: "fit," "variability," "scatter," "trendline." If present, give credit for R² explanation.
+    * **R Check:** Look for keywords: "correlation," "strength," "positive/negative."
+    * **Scoring:**
+      * Missing R only = -1.0 point.
+      * Missing R AND R² explanation = -1.5 points.
+      * **Do not penalize R² explanation if it is correct, even if R is missing.**
 
-4.  **CONCLUSION (Section 8) - STATISTICAL DEFINITIONS:**
-    * **R (Correlation Coefficient):** Indicates **strength** and **direction** of relationship.
-    * **R² (Coefficient of Determination):** Indicates **variability**, **fit** to trendline, or **random error**.
-    * **ERROR:** If student says "R² shows data is accurate," mark this as **wrong**. R² does not show accuracy.
-
-5.  **EVALUATION (Section 9) - IMPACT SCORING:**
-    * **Total available for Impact:** 2 points.
-    * **0 Points:** No impact explanation.
-    * **1 Point:** Partial/Vague explanation.
-    * **2 Points:** Specific directional impact for ALL errors.
-
-6.  **REFERENCES (Section 10):**
-    * If 3+ Sources -> Minimum Score 9.0.
+4.  **EVALUATION (Section 9) - PARTIAL CREDIT LOGIC:**
+    * **Impact Scoring:**
+      * Explain for ALL errors = +2 points.
+      * Explain for SOME errors (or partial detail) = +1 point (**Deduct 1**).
+      * Explain for NONE (or "affected data") = +0 points (**Deduct 2**).
 
 ### 📝 FEEDBACK STYLE (EXPANDED & HUMAN-LIKE):
 * **AVOID ROBOTIC CHECKLISTS:** Do not use "[Yes/No]" in your final output. 
@@ -179,7 +169,7 @@ STUDENT: [Filename]
 
 **4. VARIABLES: [Score]/10**
 * **✅ Strengths:** [**LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]" and comment on clarity.]
-* **⚠️ Improvements:** [Explain missing details for specific variables]
+* **⚠️ Improvements:** [If DV measurement is vague, state: "The method for measuring the DV was vague (-0.5 pts)." Suggest specific improvement.]
 
 **5. PROCEDURES: [Score]/10**
 * **✅ Strengths:** [Comment on reproducibility and safety details]
@@ -200,11 +190,11 @@ STUDENT: [Filename]
   2. Chemical Theory (-1)
   3. Quantitative Support (-2)
   4. Qualitative Support (-0.5)
-  5. **R vs R² Explanation (-0.5 if missing/wrong)**]
+  5. **R and R² Explanation** (-1.0 if R missing, -0.5 if R² explained poorly)]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
-* **⚠️ Improvements:** [**VAGUENESS CHECK:** State specifically if they failed to describe the impact for **ALL** errors. Example: "You listed 4 errors but only explained the impact for 2 of them. You must describe how EVERY error affected the data (higher/lower) to get full points."]
+* **⚠️ Improvements:** [**IMPACT CHECK:** "You explained the impact for X errors, but failed to explain the direction (higher/lower) for Y errors." (If partial, deduct 1 point. If none, deduct 2 points).]
 
 **10. REFERENCES: [Score]/10**
 * **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources." Comment on quality.]
@@ -379,9 +369,9 @@ def grade_submission(file):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for IV/DV trend (-1), Theory (-1), Quant Data (-2), Qual Data (-0.5), and R/R² values (-0.5).\n"
+            "6. **CONCLUSION:** Check for IV/DV trend (-1), Theory (-1), Quant Data (-2), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
             "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n"
-            "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors.\n\n"
+            "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -409,9 +399,9 @@ def grade_submission(file):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for IV/DV trend (-1), Theory (-1), Quant Data (-2), Qual Data (-0.5), and R/R² values (-0.5).\n"
+            "6. **CONCLUSION:** Check for IV/DV trend (-1), Theory (-1), Quant Data (-2), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
             "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n"
-            "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors.\n"
+            "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
         )
         
         user_message = [
