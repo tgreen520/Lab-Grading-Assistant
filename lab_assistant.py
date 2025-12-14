@@ -68,11 +68,10 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 7. DATA ANALYSIS (10 pts) [GRAPH & CALCULATION CRITICAL]:
 - Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
 - **MANDATORY GRAPH CHECKLIST:**
-  * **Type:** Must be a Scatterplot with a Trendline.
-  * **Equation:** Trendline Equation MUST be listed on graph.
-  * **Stats:** R² value MUST be listed on graph.
-  * **Axes:** Must have Labels and Units.
-  * **Fit:** Trendline type must be appropriate (e.g., Linear vs. Polynomial).
+  * **Format:** Must be a Scatterplot with a Trendline.
+  * **Labels:** Axis labels with Units MUST be present.
+  * **Stats:** R² value AND Trendline Equation MUST be listed on the graph.
+  * **Logic:** Trendline type must be appropriate (e.g., don't force linear fit on curved data).
 - **SIG FIGS:** Grade the FINAL answer only.
 - **EXCEPTION:** Empirical/Molecular Formula answers must be whole numbers (1 sig fig).
 - DEDUCTION: -0.5 for partial effort, -1.0 for zero attention.
@@ -80,7 +79,7 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 8. CONCLUSION (10 pts):
 - Criteria: Statement of support/refutation, specific data evidence.
 - CRITICAL REQUIREMENT 1: Must include specific comparisons to PUBLISHED LITERATURE.
-- CRITICAL REQUIREMENT 2: Must reference **R/R² values** and explain what they imply about the data (correlation/fit).
+- CRITICAL REQUIREMENT 2: Must reference **R and R² values** and explain what they imply about the data (strength of correlation/fit).
 
 9. EVALUATION (10 pts):
 - 5 POINTS: Lists at least 4 sources of error.
@@ -106,12 +105,17 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **3+ errors:** Deduct **1.0 pt**.
 
 2.  **DATA ANALYSIS (Section 7) - GRAPH AUDIT:**
-    * You MUST check the graph for: Scatterplot format, Trendline Equation, R² Value, Axis Units.
-    * If ANY of these are missing, deduct points.
+    * You MUST check the graph for: 
+      1. Correct Axis Labels & Units
+      2. Scatterplot format with Trendline
+      3. R² Value listed
+      4. Trendline Equation listed
+      5. Appropriate trendline type (context of experiment)
+    * If ANY are missing, specifically mention them in improvements.
 
 3.  **CONCLUSION (Section 8) - STATISTICAL CHECK:**
-    * The student MUST mention the **R² value** (or correlation coefficient).
-    * They MUST explain **what it implies** (e.g., "R² of 0.99 shows a strong linear correlation").
+    * The student MUST mention the **R and/or R² value**.
+    * They MUST explain **what it implies** about their data.
 
 4.  **REFERENCES (Section 10):**
     * If 3+ Sources -> Minimum Score 9.0.
@@ -155,16 +159,16 @@ STUDENT: [Filename]
 **7. DATA ANALYSIS: [Score]/10**
 * **✅ Strengths:** [Reference calculation]
 * **⚠️ Improvements:** * **GRAPH AUDIT:**
-    * Scatterplot used? [Yes/No]
-    * Trendline Equation shown? [Yes/No]
-    * R² Value shown? [Yes/No]
-    * Axis Labels & Units correct? [Yes/No]
+    * Scatterplot with Trendline? [Yes/No]
+    * Trendline Equation displayed? [Yes/No]
+    * R² Value displayed? [Yes/No]
+    * Axis Labels AND Units? [Yes/No]
     * Trendline type appropriate? [Yes/No]
   * [Other calculation comments]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used]
-* **⚠️ Improvements:** * **STATISTICAL CHECK:** Did they discuss R² implications? [Yes/No - explain]
+* **⚠️ Improvements:** * **STATISTICAL CHECK:** Did they discuss R/R² implications? [Yes/No - explain what was missing]
   * [Other literature comments]
 
 **9. EVALUATION: [Score]/10**
