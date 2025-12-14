@@ -26,7 +26,9 @@ else:
     st.info("On Streamlit Cloud, add your key to the 'Secrets' settings.")
     st.stop()
 
-MODEL_NAME = "claude-sonnet-4-20250514"
+# NOTE: Ensure this model name is correct for your access level. 
+# Standard IDs: "claude-3-sonnet-20240229" or "claude-3-opus-20240229"
+MODEL_NAME = "claude-3-sonnet-20240229" 
 
 # --- 3. HARDCODED RUBRIC ---
 PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
@@ -418,7 +420,8 @@ def grade_submission(file):
             }
         ]
 
-    max_retries = 3
+    # --- UPDATED RETRY LOGIC FOR 529 OVERLOAD ERRORS ---
+    max_retries = 5 # Increased from 3
     retry_delay = 5 
     
     for attempt in range(max_retries):
@@ -435,11 +438,22 @@ def grade_submission(file):
             corrected_text = recalculate_total_score(raw_text)
             return corrected_text
             
-        except anthropic.RateLimitError:
-            if attempt < max_retries - 1:
+        except (anthropic.RateLimitError, anthropic.APIStatusError) as e:
+            # Check for Overloaded (529) or Rate Limit (429)
+            if isinstance(e, anthropic.APIStatusError) and e.status_code == 529:
+                status_msg = f"⚠️ Server Overloaded (529). Retrying attempt {attempt+1}/{max_retries}..."
+                print(status_msg) # Log to console
+                time.sleep(retry_delay * (attempt + 1)) # Exponential backoff
+                continue
+            
+            if isinstance(e, anthropic.RateLimitError):
+                status_msg = f"⚠️ Rate Limit Hit. Retrying attempt {attempt+1}/{max_retries}..."
+                print(status_msg)
                 time.sleep(retry_delay * (attempt + 1))
                 continue
-            return "⚠️ Error: Rate limit exceeded."
+                
+            return f"⚠️ Error: {str(e)}"
+            
         except Exception as e:
             return f"⚠️ Error: {str(e)}"
 
@@ -618,6 +632,9 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     for i, file in enumerate(processed_files):
         status.markdown(f"**Grading:** `{file.name}`...")
         
+        # POLITE DELAY to avoid 529s on loop
+        time.sleep(2) 
+
         feedback = grade_submission(file)
         score = parse_score(feedback)
         
@@ -628,7 +645,6 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
         })
         progress.progress((i + 1) / len(processed_files))
         
-        time.sleep(1) 
 
     st.session_state.current_results = new_results
     status.success("✅ Grading Complete! Scrolling down...")
