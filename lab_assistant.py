@@ -26,9 +26,7 @@ else:
     st.info("On Streamlit Cloud, add your key to the 'Secrets' settings.")
     st.stop()
 
-# NOTE: Ensure this model name is correct for your access level. 
-# Standard IDs: "claude-3-sonnet-20240229" or "claude-3-opus-20240229"
-MODEL_NAME = "claude-3-sonnet-20240229" 
+MODEL_NAME = "claude-sonnet-4-20250514"
 
 # --- 3. HARDCODED RUBRIC ---
 PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
@@ -81,7 +79,6 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
 - **IV/DV RELATIONSHIP:** Must explain the specific relationship (trend) shown by the graph.
-  * **ACCEPTED TERMINOLOGY:** "Proportional" is accepted for positive trends. "Inverse" is accepted for negative trends.
   * **Penalty:** If not explained thoroughly, **-1.0 point**.
 - **THEORY CONNECTION:** Must connect results to Chemical Theory.
   * **Penalty:** If missing, **-1.0 point**.
@@ -127,9 +124,7 @@ Your goal is to grade student lab reports according to the specific rules below.
     * If the method of measurement is **vague** (e.g., "we measured time" instead of "we used a stopwatch to measure time until color change"), **Deduct 0.5 points** (Score 9.5).
     * Do NOT deduct 1.0 point unless multiple variables are undefined.
 
-3.  **CONCLUSION (Section 8) - STATISTICAL & TERMINOLOGY INTELLIGENCE:**
-    * **IV/DV Trend:** * **ALLOW SYNONYMS:** "Proportional" = Positive Relationship. "Inverse" = Negative Relationship. 
-      * **Do NOT deduct** if these terms are used.
+3.  **CONCLUSION (Section 8) - STATISTICAL INTELLIGENCE:**
     * **R² Check:** Look for keywords: "fit," "variability," "scatter," "trendline." If present, give credit for R² explanation.
     * **R Check:** Look for keywords: "correlation," "strength," "positive/negative."
     * **Scoring:**
@@ -191,7 +186,7 @@ STUDENT: [Filename]
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used to support the claim]
 * **⚠️ Improvements:** [**CRITICAL CHECKS:** Summarize missing elements naturally. Ensure you comment on:
-  1. IV/DV Relationship (-1) **(Note: "Proportional" and "Inverse" are ACCEPTED)**
+  1. IV/DV Relationship (-1)
   2. Chemical Theory (-1)
   3. Quantitative Support (-2)
   4. Qualitative Support (-0.5)
@@ -420,8 +415,7 @@ def grade_submission(file):
             }
         ]
 
-    # --- UPDATED RETRY LOGIC FOR 529 OVERLOAD ERRORS ---
-    max_retries = 5 # Increased from 3
+    max_retries = 3
     retry_delay = 5 
     
     for attempt in range(max_retries):
@@ -438,22 +432,11 @@ def grade_submission(file):
             corrected_text = recalculate_total_score(raw_text)
             return corrected_text
             
-        except (anthropic.RateLimitError, anthropic.APIStatusError) as e:
-            # Check for Overloaded (529) or Rate Limit (429)
-            if isinstance(e, anthropic.APIStatusError) and e.status_code == 529:
-                status_msg = f"⚠️ Server Overloaded (529). Retrying attempt {attempt+1}/{max_retries}..."
-                print(status_msg) # Log to console
-                time.sleep(retry_delay * (attempt + 1)) # Exponential backoff
-                continue
-            
-            if isinstance(e, anthropic.RateLimitError):
-                status_msg = f"⚠️ Rate Limit Hit. Retrying attempt {attempt+1}/{max_retries}..."
-                print(status_msg)
+        except anthropic.RateLimitError:
+            if attempt < max_retries - 1:
                 time.sleep(retry_delay * (attempt + 1))
                 continue
-                
-            return f"⚠️ Error: {str(e)}"
-            
+            return "⚠️ Error: Rate limit exceeded."
         except Exception as e:
             return f"⚠️ Error: {str(e)}"
 
@@ -632,9 +615,6 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     for i, file in enumerate(processed_files):
         status.markdown(f"**Grading:** `{file.name}`...")
         
-        # POLITE DELAY to avoid 529s on loop
-        time.sleep(2) 
-
         feedback = grade_submission(file)
         score = parse_score(feedback)
         
@@ -645,6 +625,7 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
         })
         progress.progress((i + 1) / len(processed_files))
         
+        time.sleep(1) 
 
     st.session_state.current_results = new_results
     status.success("✅ Grading Complete! Scrolling down...")
