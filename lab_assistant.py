@@ -36,21 +36,19 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 1. FORMATTING (10 pts):
 - Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly IN THE BODY TEXT.
-- **MANDATORY COUNTING RULE:**
-  * **Step 1:** You MUST count specific instances of subscript/superscript errors in the body text.
-  * **Step 2:**
-    * **1 or 2 errors:** **DEDUCT 0 POINTS.** (Write: "Found 1 error, but ignored as minor.")
-    * **3 or more errors:** **DEDUCT 1.0 POINT.**
-- NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing).
+- DEDUCTIONS (TIERED): 
+  * **SUPERSCRIPT/SUBSCRIPT ERRORS:** Count errors in paragraphs/body text (Ignore graphs/tables).
+    * **1 or 2 errors:** **-0.5 Points**.
+    * **3 or more errors:** **-1.0 Point**.
+  * Consistent use of "I/We": Deduct heavily.
+  * NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing).
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
 - PARTIAL CREDIT: Award points proportionally.
-- SPECIFICITY: Reference the specific theory or equation mentioned (or missing).
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
-- SPECIFICITY: Quote the student's prediction.
 
 4. VARIABLES (10 pts):
 - Criteria: IV (units/range), DV (method), 3+ Controlled Variables.
@@ -59,43 +57,41 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
   * **10/10:** IV + DV + 3+ Control Variables with explanations.
   * **9/10:** IV + DV + 3+ Control Variables listed (table or text).
   * **RULE:** If 1 IV + 1 DV + 3 Controls found, MINIMUM score is 9/10.
-- SPECIFICITY: List the exact variables found.
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, specific quantities, safety.
 - SCORING RULE: A missing diagram is a MINOR deduction (-0.5 points).
 
-6. RAW DATA (10 pts) [NO UNCERTAINTIES REQUIRED]:
+6. RAW DATA (10 pts):
 - Criteria: Qualitative observations, clear tables, units, consistent significant figures.
 - FORMATTING: Do NOT deduct for table aesthetics. Focus on data clarity.
-- SPECIFICITY: Point to specific tables and values.
 
-7. DATA ANALYSIS (10 pts) [SIG FIGS CRITICAL]:
+7. DATA ANALYSIS (10 pts) [GRAPH & CALCULATION CRITICAL]:
 - Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
-- SIG FIGS: Grade the FINAL answer only.
-- **EMPIRICAL/MOLECULAR FORMULA EXCEPTION:**
-  * If the calculation is finding a chemical formula (e.g., C2H4), the final answer MUST be a WHOLE NUMBER integer.
-  * **DO NOT** treat this as a sig fig error.
-  * **DO NOT** deduct points for rounding to the nearest whole number (e.g., 1.99 -> 2). This is scientifically correct for formulas.
+- **GRAPH CHECKLIST (CRITICAL):**
+  * **Format:** Must be a Scatterplot (not line graph/bar chart) with a Trendline.
+  * **Labels:** Axis labels with Units.
+  * **Stats:** R² value AND Trendline Equation must be displayed.
+  * **Logic:** Trendline type must be appropriate (e.g., don't force linear fit on obviously curved data).
+- **SIG FIGS:** Grade the FINAL answer only.
+- **EXCEPTION:** Empirical/Molecular Formula answers must be whole numbers (1 sig fig).
 - DEDUCTION: -0.5 for partial effort, -1.0 for zero attention.
 
 8. CONCLUSION (10 pts):
 - Criteria: Statement of support/refutation, specific data evidence.
-- CRITICAL REQUIREMENT: Must include specific comparisons to PUBLISHED LITERATURE.
-- SPECIFICITY: Quote the literature value used by the student.
+- CRITICAL REQUIREMENT 1: Must include specific comparisons to PUBLISHED LITERATURE.
+- CRITICAL REQUIREMENT 2: Must reference **R/R² values** and explain what they imply about the data (correlation/fit).
 
 9. EVALUATION (10 pts):
 - 5 POINTS: Lists at least 4 sources of error.
 - +1 POINT: Identifies systematic vs. random.
 - +2 POINTS: Explains impact.
 - +2 POINTS: Suggests improvements.
-- SPECIFICITY: List the specific errors the student identified.
 
 10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
 - **ABSOLUTE SCORING LOGIC (The "9-Point Floor"):**
   * **If 3+ credible sources found:** Score **MUST** be 9.0, 9.5, or 10.0.
-  * **Override:** Even with bad formatting, if 3+ sources exist, score 9.0.
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -103,36 +99,36 @@ SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader.
 Your goal is to grade student lab reports according to the specific rules below.
 
 ### 📝 FEEDBACK INSTRUCTIONS (SPECIFIC & EVIDENCE-BASED):
-**CRITICAL:** You must PROVE your score by citing specific evidence from the text.
-
-1. **QUOTE THE STUDENT:** When discussing strengths or errors, quote the exact text, number, or value.
-2. **NAME THE DETAILS:** Explicitly list variables found, literature values used, and errors identified.
+**CRITICAL:** You must PROVE your score by citing specific evidence.
+1. **QUOTE THE STUDENT:** "In Table 1, you wrote '5g' instead of '5.00g'."
+2. **NAME THE DETAILS:** "You identified Temperature and Volume as controls."
 
 ### 🧠 SCORING ALGORITHMS (STRICT ENFORCEMENT):
 
-1.  **FORMATTING (Section 1) - THE COUNTING RULE:**
-    * **Instruction:** You must explicitly write "Found X subscript errors" in the feedback.
-    * **Logic:**
-        * If X < 3: **DEDUCTION IS 0**. (You may mention it, but do NOT lower the score).
-        * If X >= 3: **DEDUCT 1.0 PT**.
-    * **Layout:** Do NOT deduct points for minor layout/formatting inconsistencies.
+1.  **FORMATTING (Section 1) - TIERED DEDUCTION:**
+    * **Count** subscript/superscript errors in body text.
+    * **1-2 errors:** Deduct **0.5 pts**.
+    * **3+ errors:** Deduct **1.0 pt**.
 
 2.  **VARIABLES (Section 4):**
-    * **MANDATORY:** Scan for tables with "Variable," "Independent," "Dependent," "Control."
-    * **RULE:** If 1 IV + 1 DV + 3+ Controls found -> **9-10/10**.
+    * **MANDATORY:** Scan for tables. If 1 IV + 1 DV + 3+ Controls found -> **9-10/10**.
 
-3.  **DATA ANALYSIS (Section 7) - EMPIRICAL FORMULA EXCEPTION:**
-    * **CHECK:** Is the student calculating an Empirical or Molecular Formula?
-    * **IF YES:** Ignore standard sig fig rules for the final subscripts. The answer MUST be a whole number integer (e.g., CH4, not CH3.99).
-    * **ACTION:** Do NOT deduct points for rounding to whole numbers in chemical formulas.
+3.  **DATA ANALYSIS (Section 7) - GRAPH AUDIT:**
+    * You MUST critique the graph specifically on these points:
+      1. Is it a **Scatterplot** with a **Trendline**?
+      2. Are **Axis Labels** and **Units** present?
+      3. Is the **Trendline Equation** visible?
+      4. Is the **R² Value** visible?
+      5. Is the trendline type (Linear/Exp/Poly) appropriate for the data?
+    * **Empirical Formula Exception:** Rounding to whole numbers is CORRECT.
 
-4.  **REFERENCES (Section 10) - THE 3+ SOURCE MANDATE:**
-    * **Count:** Explicitly count the sources in the feedback.
-    * **Logic:**
-        * If Count >= 3: **MINIMUM SCORE is 9.0**.
-        * *Bad Formatting + 3 Sources* = **9.0**
-        * *Minor Errors + 3 Sources* = **9.5**
-        * *Perfect + 3 Sources* = **10.0**
+4.  **CONCLUSION (Section 8) - STATISTICAL CHECK:**
+    * The student MUST mention the **R² value** (or correlation coefficient).
+    * They MUST explain **what it implies** (e.g., "R² of 0.99 shows a strong linear correlation").
+    * If missing -> Deduct points.
+
+5.  **REFERENCES (Section 10) - THE 3+ SOURCE MANDATE:**
+    * If Count >= 3: **MINIMUM SCORE is 9.0**.
 
 ### OUTPUT FORMAT:
 Please strictly use the following format.
@@ -148,11 +144,11 @@ STUDENT: [Filename]
 
 **1. FORMATTING: [Score]/10**
 * **✅ Strengths:** [Quote specific good usage]
-* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (Only deduct if X >= 3)]
+* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (1-2 = -0.5, 3+ = -1.0)]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Quote objective/theory]
-* **⚠️ Improvements:** [State exactly what is missing]
+* **⚠️ Improvements:** [State exactly what equation or theory is missing]
 
 **3. HYPOTHESIS: [Score]/10**
 * **✅ Strengths:** [Quote prediction]
@@ -172,11 +168,11 @@ STUDENT: [Filename]
 
 **7. DATA ANALYSIS: [Score]/10**
 * **✅ Strengths:** [Reference calculation]
-* **⚠️ Improvements:** [Show math. **NOTE:** If empirical formula, acknowledge whole number rounding is correct.]
+* **⚠️ Improvements:** [**GRAPH CHECK:** Comment specifically on: Scatterplot? Trendline? Equation? R²? Axis Units?]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used]
-* **⚠️ Improvements:** [State if literature value missing]
+* **⚠️ Improvements:** [**STAT CHECK:** Did they discuss R/R² implications? Did they compare to literature?]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..."]
@@ -349,33 +345,9 @@ def grade_submission(file):
                     f"1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
                     f"2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
                     f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
-                    f"4. **FORMATTING:** Explicitly count subscript errors. If count < 3, DEDUCT 0.\n"
-                    f"5. **EMPIRICAL FORMULAS:** If finding a chemical formula, rounding to whole numbers is CORRECT. Do not deduct.\n\n"
-                    f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
-                    f"STUDENT TEXT:\n{text_content}"
-                )
-            }
-        ]
-        images = extract_images_from_docx(file)
-        if images:
-            user_message.extend(images)
-    else:
-        base64_data = encode_file(file)
-        if not base64_data: return "Error processing file."
-        media_type = get_media_type(file.name)
-        
-        user_message = [
-            {
-                "type": "text",
-                "text": (
-                    f"Please grade this lab report based on the Pre-IB rubric below.\n\n"
-                    f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
-                    f"INSTRUCTIONS:\n"
-                    f"1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
-                    f"2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
-                    f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
-                    f"4. **FORMATTING:** Explicitly count subscript errors. If count < 3, DEDUCT 0.\n"
-                    f"5. **EMPIRICAL FORMULAS:** If finding a chemical formula, rounding to whole numbers is CORRECT. Do not deduct.\n"
+                    f"4. **FORMATTING:** Count subscript errors. 1-2 errors = -0.5 pts. 3+ errors = -1.0 pt.\n"
+                    f"5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. \n"
+                    f"6. **CONCLUSION:** Check for discussion of R² implications.\n"
                 )
             },
             {
