@@ -3,7 +3,6 @@ import anthropic
 import base64
 import pandas as pd
 import os
-import json
 import zipfile
 import time
 import re
@@ -210,9 +209,10 @@ def get_media_type(filename):
     }
     return media_types.get(ext, 'image/jpeg')
 
-# --- UPDATED TEXT EXTRACTION TO INCLUDE TABLES ---
+# --- UPDATED TEXT EXTRACTION (WITH POINTER RESET) ---
 def extract_text_from_docx(file):
     try:
+        file.seek(0) # CRITICAL FIX: Reset pointer before reading
         doc = Document(file)
         full_text = []
         
@@ -236,7 +236,7 @@ def extract_text_from_docx(file):
 def extract_images_from_docx(file):
     images = []
     try:
-        file.seek(0)
+        file.seek(0) # CRITICAL FIX: Reset pointer before reading
         with zipfile.ZipFile(file) as z:
             for filename in z.namelist():
                 if filename.startswith('word/media/') and filename.split('.')[-1].lower() in ['png', 'jpg', 'jpeg', 'gif']:
@@ -329,20 +329,30 @@ def grade_submission(file):
     
     if ext == 'docx':
         text_content = extract_text_from_docx(file)
+        
+        # Check for empty text to warn user
+        if len(text_content.strip()) < 50:
+            text_content += "\n\n[SYSTEM NOTE: Very little text text extracted. Content may be in images or text boxes.]"
+            
+        # Use String Concatenation instead of f-string to prevent brace errors
+        prompt_text = (
+            "Please grade this lab report based on the Pre-IB rubric below.\n"
+            "Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
+            "⚠️ CRITICAL INSTRUCTIONS:\n"
+            "1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
+            "2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
+            "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
+            "4. **FORMATTING:** Count subscript errors. 1-2 errors = -0.5 pts. 3+ errors = -1.0 pt.\n"
+            "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. \n"
+            "6. **CONCLUSION:** Check for discussion of R² implications.\n\n"
+            "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
+            "STUDENT TEXT:\n" + text_content
+        )
+        
         user_message = [
             {
                 "type": "text",
-                "text": (
-                    f"Please grade this lab report based on the Pre-IB rubric below.\n"
-                    f"Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
-                    f"⚠️ CRITICAL INSTRUCTIONS:\n"
-                    f"1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
-                    f"2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
-                    f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
-                    f"4. **FORMATTING:** Count subscript errors. 1-2 errors = -0.5 pts. 3+ errors = -1.0 pt.\n"
-                    f"5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. \n"
-                    f"6. **CONCLUSION:** Check for discussion of R² implications.\n"
-                )
+                "text": prompt_text
             }
         ]
         images = extract_images_from_docx(file)
@@ -353,20 +363,22 @@ def grade_submission(file):
         if not base64_data: return "Error processing file."
         media_type = get_media_type(file.name)
         
+        prompt_text = (
+            "Please grade this lab report based on the Pre-IB rubric below.\n\n"
+            "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
+            "INSTRUCTIONS:\n"
+            "1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
+            "2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
+            "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
+            "4. **FORMATTING:** Count subscript errors. 1-2 errors = -0.5 pts. 3+ errors = -1.0 pt.\n"
+            "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. \n"
+            "6. **CONCLUSION:** Check for discussion of R² implications.\n"
+        )
+        
         user_message = [
             {
                 "type": "text",
-                "text": (
-                    f"Please grade this lab report based on the Pre-IB rubric below.\n\n"
-                    f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
-                    f"INSTRUCTIONS:\n"
-                    f"1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
-                    f"2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
-                    f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
-                    f"4. **FORMATTING:** Count subscript errors. 1-2 errors = -0.5 pts. 3+ errors = -1.0 pt.\n"
-                    f"5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. \n"
-                    f"6. **CONCLUSION:** Check for discussion of R² implications.\n"
-                )
+                "text": prompt_text
             },
             {
                 "type": "document" if media_type == 'application/pdf' else "image",
