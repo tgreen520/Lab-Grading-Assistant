@@ -79,6 +79,7 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
 - **IV/DV RELATIONSHIP:** Must explain the specific relationship (trend) shown by the graph.
+  * **ACCEPTED TERMINOLOGY:** "Proportional" is accepted for positive trends. "Inverse" is accepted for negative trends.
   * **Penalty:** If not explained thoroughly, **-1.0 point**.
 - **THEORY CONNECTION:** Must connect results to Chemical Theory.
   * **Penalty:** If missing, **-1.0 point**.
@@ -124,7 +125,9 @@ Your goal is to grade student lab reports according to the specific rules below.
     * If the method of measurement is **vague** (e.g., "we measured time" instead of "we used a stopwatch to measure time until color change"), **Deduct 0.5 points** (Score 9.5).
     * Do NOT deduct 1.0 point unless multiple variables are undefined.
 
-3.  **CONCLUSION (Section 8) - STATISTICAL INTELLIGENCE:**
+3.  **CONCLUSION (Section 8) - STATISTICAL & TERMINOLOGY INTELLIGENCE:**
+    * **IV/DV Trend:** * **ALLOW SYNONYMS:** "Proportional" = Positive Relationship. "Inverse" = Negative Relationship. 
+      * **Do NOT deduct** if these terms are used.
     * **R² Check:** Look for keywords: "fit," "variability," "scatter," "trendline." If present, give credit for R² explanation.
     * **R Check:** Look for keywords: "correlation," "strength," "positive/negative."
     * **Scoring:**
@@ -186,7 +189,7 @@ STUDENT: [Filename]
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used to support the claim]
 * **⚠️ Improvements:** [**CRITICAL CHECKS:** Summarize missing elements naturally. Ensure you comment on:
-  1. IV/DV Relationship (-1)
+  1. IV/DV Relationship (-1) **(Note: "Proportional" and "Inverse" are ACCEPTED)**
   2. Chemical Theory (-1)
   3. Quantitative Support (-2)
   4. Qualitative Support (-0.5)
