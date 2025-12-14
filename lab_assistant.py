@@ -97,9 +97,11 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 - **+2 POINTS (IMPACT):**
   * **2 Points:** Specific directional impact ("caused mass to increase") described for **100% of listed errors**.
   * **1 Point (Partial Deduction):** Directional impact described for **SOME** errors, or if even ONE is missing/vague. (Deduct 1.0).
-  * **0 Points (Full Deduction):** No directional impact described, or only says "affected results". (Deduct 2.0).
+  * **0 Points (Full Deduction):** No directional impact described for ANY error. (Deduct 2.0).
 - **+2 POINTS (IMPROVEMENT):** Must suggest **SPECIFIC** equipment or procedural changes.
-  * **PENALTY:** If vague ("be careful"), **AWARD 0 for this part.**
+  * **2 Points:** Specific improvements for all errors.
+  * **1.5 Points (Deduct 0.5):** Improvements listed but slightly vague (e.g. "use more precise equipment" without naming it).
+  * **0 Points (Full Deduction):** No improvements or completely generic ("be more careful").
 
 10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
@@ -133,10 +135,15 @@ Your goal is to grade student lab reports according to the specific rules below.
       * Missing R AND R² explanation = -1.5 points.
       * **Do not penalize R² explanation if it is correct, even if R is missing.**
 
-4.  **EVALUATION (Section 9) - STRICT IMPACT AUDIT:**
-    * **Requirement:** The student gets 2 points for Impact ONLY if they explain the specific directional impact (higher/lower) for **EVERY SINGLE ERROR** they listed.
-    * **Partial Penalty:** If they list 4 errors but only explain the direction for 1, 2, or 3 of them -> **DEDUCT 1 POINT.**
-    * **Full Penalty:** If they explain the direction for 0 errors -> **DEDUCT 2 POINTS.**
+4.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+    * **IMPACT (2 pts):**
+      * Impact explained for **100%** of errors? -> **+2 Points.**
+      * Impact explained for **SOME** errors (even if only 1 is missing)? -> **+1 Point (Deduct 1.0).**
+      * Impact explained for **NONE**? -> **+0 Points (Deduct 2.0).**
+    * **IMPROVEMENTS (2 pts):**
+      * Specific equipment/method named? -> **+2 Points.**
+      * Vague suggestions ("use better tools")? -> **+1.5 Points (Deduct 0.5).**
+      * No suggestions/Generic ("be careful")? -> **+0 Points (Deduct 2.0).**
 
 ### 📝 FEEDBACK STYLE (EXPANDED & HUMAN-LIKE):
 * **AVOID ROBOTIC CHECKLISTS:** Do not use "[Yes/No]" in your final output. 
@@ -144,11 +151,11 @@ Your goal is to grade student lab reports according to the specific rules below.
 * **EXPLAIN WHY:** Write 2-3 sentences for each section.
 
 ### OUTPUT FORMAT:
-Please strictly use the following format.
+Please strictly use the following format. Do not use horizontal rules (---) between sections.
 
 # 📝 SCORE: [Total Points]/100
 STUDENT: [Filename]
----
+
 **📊 OVERALL SUMMARY & VISUAL ANALYSIS:**
 * [1-2 sentences on quality]
 * [Critique of graphs/images]
@@ -194,13 +201,13 @@ STUDENT: [Filename]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
-* **⚠️ Improvements:** [**IMPACT AUDIT:** "You listed [X] errors but only provided specific directional impacts for [Y] of them. (-1 pt)" or "Impacts were missing for: [Error Name]."]
+* **⚠️ Improvements:** [**IMPACT/IMPROVEMENT AUDIT:** * "You listed [X] errors but only provided specific directional impacts for [Y] of them. (-1 pt)"
+  * "Improvements were listed but were slightly vague (e.g., did not name specific equipment). (-0.5 pt)" ]
 
 **10. REFERENCES: [Score]/10**
 * **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources." Comment on quality.]
 * **⚠️ Improvements:** [Specific formatting error explanation]
 
----
 **💡 TOP 3 ACTIONABLE STEPS FOR NEXT TIME:**
 1. [Step 1 - Specific]
 2. [Step 2 - Specific]
@@ -463,28 +470,33 @@ def parse_score(text):
         pass
     return "N/A"
 
-# --- WORD FORMATTER (Keep bolding) ---
+# --- WORD FORMATTER (Strict Symbol Cleaning) ---
 def write_markdown_to_docx(doc, text):
     lines = text.split('\n')
     for line in lines:
         line = line.strip()
         if not line:
+            continue # SKIP EMPTY LINES (Previous fix maintained)
+        
+        # 1. Handle H1 Title (# ) - CLEANED
+        if line.startswith('# '): 
+            clean = line.replace('# ', '').replace('*', '').strip()
+            doc.add_heading(clean, level=0)
             continue
         
+        # 2. Handle H3 (### ) - CLEANED
         if line.startswith('### '):
-            doc.add_heading(line.replace('### ', '').strip(), level=3)
+            clean = line.replace('### ', '').replace('*', '').strip()
+            doc.add_heading(clean, level=3)
             continue
         
-        if line.startswith('# '): # Handle H1 for Score
-            doc.add_heading(line.replace('# ', '').strip(), level=1)
-            continue
-        
-        if line.startswith('**') and line.endswith('**') and len(line) < 60:
-            p = doc.add_paragraph()
-            run = p.add_run(line.replace('**', ''))
-            run.bold = True
+        # 3. Handle H2 (## ) - CLEANED
+        if line.startswith('## '): 
+            clean = line.replace('## ', '').replace('*', '').strip()
+            doc.add_heading(clean, level=2)
             continue
 
+        # 4. Handle Bullets (* or -) - CLEANED
         if line.startswith('* ') or line.startswith('- '):
             p = doc.add_paragraph(style='List Bullet')
             content = line[2:] 
@@ -492,14 +504,15 @@ def write_markdown_to_docx(doc, text):
             p = doc.add_paragraph()
             content = line
 
+        # 5. Handle Bold (**text**) - CLEANED
         parts = re.split(r'(\*\*.*?\*\*)', content)
         for part in parts:
             if part.startswith('**') and part.endswith('**'):
-                clean_text = part[2:-2]
+                clean_text = part[2:-2].replace('*', '') # Strip any lingering asterisks
                 run = p.add_run(clean_text)
                 run.bold = True
             else:
-                p.add_run(part)
+                p.add_run(part.replace('*', '')) # Strip lingering asterisks
 
 def create_master_doc(results, session_name):
     doc = Document()
