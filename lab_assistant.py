@@ -584,7 +584,7 @@ with st.sidebar:
     # NEW: Model ID Input to prevent 404 errors with newer models
     user_model_id = st.text_input(
         "🤖 Model ID", 
-        value="claude-3-5-sonnet-20241022", 
+        value="claude-sonnet-4-5-20250929", 
         help="Change this if you have a specific Beta model or newer ID (e.g. Sonnet 4.5)"
     )
     
