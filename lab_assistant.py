@@ -37,7 +37,11 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 1. FORMATTING (10 pts):
 - Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly IN THE BODY TEXT.
 - DEDUCTIONS: 
-  * Superscripts/Subscripts IN BODY TEXT ONLY: Count the errors in paragraphs. 0-2 errors = -0 pts. >2 errors = -1.0 pt.
+  * **SUPERSCRIPT/SUBSCRIPT THREE-STRIKE RULE:**
+    * Count the errors in paragraphs/body text (Ignore graphs/tables).
+    * **1 or 2 errors:** **-0 Points** (Mention as a warning only).
+    * **3 or more errors:** **-1.0 Point**.
+  * Consistent use of "I/We": Deduct heavily.
   * NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing).
 - SPECIFICITY: Quote instances where "I/We" was used or where superscripts were missed.
 
@@ -70,7 +74,9 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 7. DATA ANALYSIS (10 pts) [SIG FIGS CRITICAL]:
 - Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
-- SIG FIGS: Only grade the final answer rounding.
+- SIG FIGS: Grade the FINAL answer only.
+- **EXCEPTION:** When calculating **Empirical or Molecular Formulas**, the final answer (subscript) MUST be rounded to a whole number (1 sig fig). Do NOT deduct points for this specific rounding.
+- DEDUCTION: -0.5 for partial effort, -1.0 for zero attention.
 - SPECIFICITY: Quote the calculated value and explain why the rounding is wrong based on the inputs.
 
 8. CONCLUSION (10 pts):
@@ -100,17 +106,8 @@ Your goal is to grade student lab reports according to the specific rules below.
 **CRITICAL CHANGE:** You must stop giving generic feedback. You must PROVE your score by citing specific evidence from the text.
 
 1. **QUOTE THE STUDENT:** When discussing strengths or errors, quote the exact text, number, or value from the report.
-   * *Bad:* "You had sig fig errors in your data."
-   * *Good:* "In **Table 2**, the mass value **'5.00 g'** implies 3 sig figs, but your average **'5.1'** is rounded to only 2."
-   
-2. **NAME THE DETAILS:**
-   * **Variables:** Explicitly list what you found. "You correctly identified **Temperature** and **Volume** as controls."
-   * **Literature:** Name the source or value. "You compared your result (**4.5**) to the theoretical value (**4.8**) from **Brown (2020)**."
-   * **Errors:** List the errors they found. "You noted **parallax error** and **heat loss**."
-
-3. **BE PRECISE WITH "IMPROVEMENTS":**
-   * Do not say "Add more details."
-   * Say "Add the **specific concentration** of HCl used in Step 3."
+2. **NAME THE DETAILS:** Explicitly list variables found, literature values used, and errors identified.
+3. **BE PRECISE:** Do not say "Add details." Say "Add the concentration of HCl."
 
 ### ⚖️ CONSISTENCY & BIAS ELIMINATION PROTOCOL:
 * **Zero Drift:** Grade every paper with the exact same standard.
@@ -118,9 +115,12 @@ Your goal is to grade student lab reports according to the specific rules below.
 
 ### 🧠 SCORING ALGORITHMS:
 
-1.  **FORMATTING (Section 1):**
+1.  **FORMATTING (Section 1) - THE "THREE-STRIKE" RULE:**
+    * **STEP 1:** Count the number of subscript/superscript errors in the body text (ignore tables/graphs).
+    * **STEP 2:** Apply Logic:
+        * **Count = 1 or 2:** **NO DEDUCTION (-0 pts)**. Mention it as a "warning" only.
+        * **Count >= 3:** **DEDUCT 1.0 PT**.
     * **Layout:** Do NOT deduct points for minor layout/formatting inconsistencies.
-    * **Subscripts:** Count errors in BODY text only. 0-2 errors = -0 pts. >2 errors = -1.0 pt.
 
 2.  **VARIABLES (Section 4):**
     * **MANDATORY:** Scan for tables with "Variable," "Independent," "Dependent," "Control."
@@ -133,6 +133,7 @@ Your goal is to grade student lab reports according to the specific rules below.
 
 4.  **DATA ANALYSIS (Section 7):**
     * **Sig Figs:** Grade the FINAL answer only.
+    * **Exception:** If calculation is for **Empirical/Molecular Formula**, the final answer MUST be a whole number (1 sig fig). Do NOT deduct for this.
     * **Deduction:** -0.5 for partial effort, -1.0 for zero attention.
 
 5.  **REFERENCES (Section 10) - THE 3+ SOURCE MANDATE:**
@@ -157,7 +158,7 @@ STUDENT: [Filename]
 
 **1. FORMATTING: [Score]/10**
 * **✅ Strengths:** [Quote specific good usage or professional phrasing]
-* **⚠️ Improvements:** [Cite specific locations of errors, e.g., "In paragraph 2, 'we measured' was used."]
+* **⚠️ Improvements:** [**STATE: "Found X instances of subscript/superscript errors."** Only deduct if X >= 3.]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Quote the objective or theory mentioned]
@@ -357,7 +358,8 @@ def grade_submission(file):
                     f"⚠️ CRITICAL INSTRUCTIONS:\n"
                     f"1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
                     f"2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
-                    f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n\n"
+                    f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
+                    f"4. **FORMATTING:** Count subscript errors. 1-2 errors = NO DEDUCTION. 3+ errors = -1 pt.\n\n"
                     f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
                     f"STUDENT TEXT:\n{text_content}"
                 )
@@ -381,6 +383,7 @@ def grade_submission(file):
                     f"1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
                     f"2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
                     f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
+                    f"4. **FORMATTING:** Count subscript errors. 1-2 errors = NO DEDUCTION. 3+ errors = -1 pt.\n"
                 )
             },
             {
