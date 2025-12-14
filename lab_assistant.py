@@ -67,6 +67,7 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 7. DATA ANALYSIS (10 pts) [GRAPH & CALCULATION CRITICAL]:
 - Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
+- **UNCERTAINTY ANALYSIS:** NOT REQUIRED. Do NOT deduct for missing error bars, max/min slopes, or % error propagation.
 - **CALCULATION CHECK:** * Must show a clear **Sample Calculation**.
   * **Sig Figs:** Grade the FINAL answer only.
   * **Exception:** Empirical/Molecular Formula answers must be whole numbers (1 sig fig).
@@ -106,6 +107,7 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **3+ errors:** Deduct **1.0 pt**.
 
 2.  **DATA ANALYSIS (Section 7) - GRAPH & CALCULATION AUDIT:**
+    * **UNCERTAINTIES:** Do NOT deduct points for missing error bars, uncertainty propagation, or max/min slopes. This level does not require them.
     * **CALCULATIONS:** You MUST summarize the calculations found in the report. Quote specific numbers used to demonstrate strengths (correct process) or weaknesses (rounding errors). 
     * **GRAPH:** You MUST check the graph for: 
       1. Correct Axis Labels & Units
@@ -351,7 +353,8 @@ def grade_submission(file):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING:** Count subscript errors. 1-2 errors = -0.5 pts. 3+ errors = -1.0 pt.\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. \n"
-            "6. **CONCLUSION:** Check for discussion of R² implications.\n\n"
+            "6. **CONCLUSION:** Check for discussion of R² implications.\n"
+            "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty/error bar analysis.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -380,6 +383,7 @@ def grade_submission(file):
             "4. **FORMATTING:** Count subscript errors. 1-2 errors = -0.5 pts. 3+ errors = -1.0 pt.\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. \n"
             "6. **CONCLUSION:** Check for discussion of R² implications.\n"
+            "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty/error bar analysis.\n"
         )
         
         user_message = [
