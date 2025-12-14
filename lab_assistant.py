@@ -67,13 +67,14 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 7. DATA ANALYSIS (10 pts) [GRAPH & CALCULATION CRITICAL]:
 - Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
+- **CALCULATION CHECK:** * Must show a clear **Sample Calculation**.
+  * **Sig Figs:** Grade the FINAL answer only.
+  * **Exception:** Empirical/Molecular Formula answers must be whole numbers (1 sig fig).
 - **MANDATORY GRAPH CHECKLIST:**
   * **Format:** Must be a Scatterplot with a Trendline.
   * **Labels:** Axis labels with Units MUST be present.
   * **Stats:** R² value AND Trendline Equation MUST be listed on the graph.
   * **Logic:** Trendline type must be appropriate (e.g., don't force linear fit on curved data).
-- **SIG FIGS:** Grade the FINAL answer only.
-- **EXCEPTION:** Empirical/Molecular Formula answers must be whole numbers (1 sig fig).
 - DEDUCTION: -0.5 for partial effort, -1.0 for zero attention.
 
 8. CONCLUSION (10 pts):
@@ -104,8 +105,9 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **1-2 errors:** Deduct **0.5 pts**.
     * **3+ errors:** Deduct **1.0 pt**.
 
-2.  **DATA ANALYSIS (Section 7) - GRAPH AUDIT:**
-    * You MUST check the graph for: 
+2.  **DATA ANALYSIS (Section 7) - GRAPH & CALCULATION AUDIT:**
+    * **CALCULATIONS:** You MUST summarize the calculations found in the report. Quote specific numbers used to demonstrate strengths (correct process) or weaknesses (rounding errors). 
+    * **GRAPH:** You MUST check the graph for: 
       1. Correct Axis Labels & Units
       2. Scatterplot format with Trendline
       3. R² Value listed
@@ -157,14 +159,15 @@ STUDENT: [Filename]
 * **⚠️ Improvements:** [Quote values with wrong units/sig figs]
 
 **7. DATA ANALYSIS: [Score]/10**
-* **✅ Strengths:** [Reference calculation]
+* **✅ Strengths:** * **CALCULATION SUMMARY:** [Summarize what was calculated. **Quote specific numbers/formulas used correctly** to show evidence.]
+  * [Other graph strengths]
 * **⚠️ Improvements:** * **GRAPH AUDIT:**
     * Scatterplot with Trendline? [Yes/No]
     * Trendline Equation displayed? [Yes/No]
     * R² Value displayed? [Yes/No]
     * Axis Labels AND Units? [Yes/No]
     * Trendline type appropriate? [Yes/No]
-  * [Other calculation comments]
+  * **CALCULATION/SIG FIGS:** [Quote specific errors in the example calculation or final result sig figs.]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used]
