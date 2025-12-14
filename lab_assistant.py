@@ -26,10 +26,6 @@ else:
     st.info("On Streamlit Cloud, add your key to the 'Secrets' settings.")
     st.stop()
 
-# NOTE: Ensure this model name is correct for your access level. 
-# Standard IDs: "claude-3-sonnet-20240229" or "claude-3-opus-20240229"
-MODEL_NAME = "claude-sonnet-4-5-20250929"
-
 # --- 3. HARDCODED RUBRIC ---
 PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
@@ -99,8 +95,8 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 - **5 POINTS:** Lists at least 4 distinct sources of error.
 - **+1 POINT:** Correctly identifies Systematic vs. Random errors.
 - **+2 POINTS (IMPACT):**
-  * **2 Points:** Specific directional impact ("caused mass to increase") described for **ALL** errors.
-  * **1 Point (Partial Deduction):** Directional impact described for **SOME** errors, or partially vague. (Deduct 1.0).
+  * **2 Points:** Specific directional impact ("caused mass to increase") described for **100% of listed errors**.
+  * **1 Point (Partial Deduction):** Directional impact described for **SOME** errors, or if even ONE is missing/vague. (Deduct 1.0).
   * **0 Points (Full Deduction):** No directional impact described, or only says "affected results". (Deduct 2.0).
 - **+2 POINTS (IMPROVEMENT):** Must suggest **SPECIFIC** equipment or procedural changes.
   * **PENALTY:** If vague ("be careful"), **AWARD 0 for this part.**
@@ -137,11 +133,10 @@ Your goal is to grade student lab reports according to the specific rules below.
       * Missing R AND R² explanation = -1.5 points.
       * **Do not penalize R² explanation if it is correct, even if R is missing.**
 
-4.  **EVALUATION (Section 9) - PARTIAL CREDIT LOGIC:**
-    * **Impact Scoring:**
-      * Explain for ALL errors = +2 points.
-      * Explain for SOME errors (or partial detail) = +1 point (**Deduct 1**).
-      * Explain for NONE (or "affected data") = +0 points (**Deduct 2**).
+4.  **EVALUATION (Section 9) - STRICT IMPACT AUDIT:**
+    * **Requirement:** The student gets 2 points for Impact ONLY if they explain the specific directional impact (higher/lower) for **EVERY SINGLE ERROR** they listed.
+    * **Partial Penalty:** If they list 4 errors but only explain the direction for 1, 2, or 3 of them -> **DEDUCT 1 POINT.**
+    * **Full Penalty:** If they explain the direction for 0 errors -> **DEDUCT 2 POINTS.**
 
 ### 📝 FEEDBACK STYLE (EXPANDED & HUMAN-LIKE):
 * **AVOID ROBOTIC CHECKLISTS:** Do not use "[Yes/No]" in your final output. 
@@ -151,7 +146,7 @@ Your goal is to grade student lab reports according to the specific rules below.
 ### OUTPUT FORMAT:
 Please strictly use the following format.
 
-SCORE: [Total Points]/100
+# 📝 SCORE: [Total Points]/100
 STUDENT: [Filename]
 ---
 **📊 OVERALL SUMMARY & VISUAL ANALYSIS:**
@@ -199,7 +194,7 @@ STUDENT: [Filename]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
-* **⚠️ Improvements:** [**IMPACT CHECK:** "You explained the impact for X errors, but failed to explain the direction (higher/lower) for Y errors." (If partial, deduct 1 point. If none, deduct 2 points).]
+* **⚠️ Improvements:** [**IMPACT AUDIT:** "You listed [X] errors but only provided specific directional impacts for [Y] of them. (-1 pt)" or "Impacts were missing for: [Error Name]."]
 
 **10. REFERENCES: [Score]/10**
 * **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources." Comment on quality.]
@@ -337,7 +332,8 @@ def recalculate_total_score(text):
                 total_score = int(total_score)
             else:
                 total_score = round(total_score, 1)
-            text = re.sub(r"SCORE:\s*[\d\.]+/100", f"SCORE: {total_score}/100", text, count=1)
+            # UPDATED REGEX FOR HEADER SCORE
+            text = re.sub(r"#\s*📝\s*SCORE:\s*[\d\.]+/100", f"# 📝 SCORE: {total_score}/100", text, count=1)
     except Exception as e:
         print(f"Error recalculating score: {e}")
     return text
@@ -354,7 +350,7 @@ def clean_for_sheets(text):
     text = re.sub(r'^-\s', '• ', text, flags=re.MULTILINE)
     return text.strip()
 
-def grade_submission(file):
+def grade_submission(file, model_id):
     ext = file.name.split('.')[-1].lower()
     
     if ext == 'docx':
@@ -421,14 +417,14 @@ def grade_submission(file):
         ]
 
     # --- UPDATED RETRY LOGIC FOR 529 OVERLOAD ERRORS ---
-    max_retries = 5 # Increased from 3
+    max_retries = 5 
     retry_delay = 5 
     
     for attempt in range(max_retries):
         try:
             # Temperature=0 for Maximum Consistency
             response = client.messages.create(
-                model=MODEL_NAME,
+                model=model_id, # Uses the ID passed from Sidebar
                 max_tokens=3500,
                 temperature=0.0,
                 system=SYSTEM_PROMPT,
@@ -477,6 +473,10 @@ def write_markdown_to_docx(doc, text):
         
         if line.startswith('### '):
             doc.add_heading(line.replace('### ', '').strip(), level=3)
+            continue
+        
+        if line.startswith('# '): # Handle H1 for Score
+            doc.add_heading(line.replace('# ', '').strip(), level=1)
             continue
         
         if line.startswith('**') and line.endswith('**') and len(line) < 60:
@@ -566,6 +566,16 @@ def display_results_ui():
 
 # --- 6. SIDEBAR ---
 with st.sidebar:
+    st.header("⚙️ Configuration")
+    
+    # NEW: Model ID Input to prevent 404 errors with newer models
+    user_model_id = st.text_input(
+        "🤖 Model ID", 
+        value="claude-3-5-sonnet-20241022", 
+        help="Change this if you have a specific Beta model or newer ID (e.g. Sonnet 4.5)"
+    )
+    
+    st.divider()
     st.header("💾 History Manager")
     save_name = st.text_input("Session Name", placeholder="e.g. Period 3 - Kinetics")
     if st.button("💾 Save Session"):
@@ -575,7 +585,6 @@ with st.sidebar:
         else:
             st.warning("No results to save yet.")
             
-    # FIXED LOGIC: Only show divider if there is something below it
     if st.session_state.saved_sessions:
         st.divider()
         st.subheader("📂 Load Session")
@@ -591,11 +600,10 @@ with st.sidebar:
                 del st.session_state.saved_sessions[selected_session]
                 st.rerun()
 
-    st.divider() # Always separate history from criteria
+    st.divider() 
     
     with st.expander("View Grading Criteria"):
         st.text(PRE_IB_RUBRIC)
-    st.caption(f"🤖 Model: {MODEL_NAME}")
 
 # --- 7. MAIN INTERFACE ---
 st.title("🧪 Pre-IB Lab Grader")
@@ -635,7 +643,7 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
         # POLITE DELAY to avoid 529s on loop
         time.sleep(2) 
 
-        feedback = grade_submission(file)
+        feedback = grade_submission(file, user_model_id) # PASSING USER MODEL ID
         score = parse_score(feedback)
         
         new_results.append({
