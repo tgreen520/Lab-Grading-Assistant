@@ -61,17 +61,21 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 4. VARIABLES (10 pts):
 - Criteria: IV (units/range), DV (method), 3+ Controlled Variables.
 - **ACCEPTABLE FORMATS:** Students may present variables in paragraph form OR in a data table format. BOTH formats are equally acceptable.
-- **TABLE FORMAT GUIDANCE:** If variables are presented in a table with columns like "Variable Type," "Description," "Units," etc., this is FULLY acceptable and should be graded the same as paragraph format.
-- **CRITICAL INSTRUCTION:** Carefully examine the ENTIRE document for a variables table - it may appear as a standalone table with headers like "Variable," "Type of Variable," "How it is measured or controlled." This is EXCELLENT work.
+- **⚠️ CRITICAL TABLE DETECTION INSTRUCTION:** 
+  * **STOP and CAREFULLY SCAN the ENTIRE document** for any table or structured list that contains the words: "Variable," "Independent," "Dependent," "Control," "Controlled"
+  * **Common table locations:** Right after the hypothesis, in a dedicated "Variables" section, or before the "Materials" section
+  * **Table may have headers like:** "Variable Type," "Variable," "Description," "How Controlled," "Units," "Method"
+  * **DO NOT miss tables!** If you see a table with these column headers and it lists an Independent Variable, Dependent Variable, and 3+ Control Variables, this is a COMPLETE variables section.
+  * **Example of what to look for:** A table with rows labeled "Independent," "Dependent," and multiple "Control" entries
 - SCORING RULE: If control variables are listed but not explained/justified properly, score exactly 8/10.
 - LENIENT GRADING APPROACH:
   * **Focus on identification over perfection**: Students who identify variables correctly should receive most points even if descriptions are brief.
   * **10/10:** IV + DV + 3+ Control Variables with clear explanations/descriptions (table or paragraph format)
-  * **9/10:** IV + DV + 3+ Control Variables identified with minimal explanations
+  * **9/10:** IV + DV + 3+ Control Variables clearly identified in a table OR with minimal explanations in paragraph form
   * **8/10:** 3+ Control variables listed but not explained in detail
   * **7/10:** 2 Control variables listed
   * **6/10:** Only IV and DV properly identified
-  * **Table with all three variable types clearly identified with descriptions**: 10/10
+  * **EXPLICIT RULE: If you find a table with columns for variable types (Independent/Dependent/Control) that lists 1 IV + 1 DV + 3+ Controls = MINIMUM 9/10**
 - PARTIAL CREDIT: Award generously for demonstrating understanding of variable types, even if details are incomplete.
 
 5. PROCEDURES (10 pts):
@@ -110,21 +114,21 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 - LENIENT GRADING APPROACH:
   * **Primary focus: Are sources present and cited in the text?** This is 90% of the score.
   * **Secondary consideration: Formatting quality** This is only 10% of the score.
-  * If sources are present and cited in text, START at 9/10 minimum.
-  * **10/10:** Perfect or near-perfect APA formatting with all sources cited
-  * **9.5/10:** Minor APA formatting errors such as inconsistent capitalization, missing italics on one or two sources, or minor punctuation issues (-0.5 pts)
-  * **9/10:** Multiple minor errors across several sources OR 1-2 more significant formatting issues (-1.0 pt MAX)
+  * **DEFAULT SCORING: If 3+ credible sources are listed and cited in text, START at 9.5/10 or 10/10.**
+  * **10/10:** Perfect or near-perfect APA formatting with 3+ credible sources cited
+  * **9.5/10:** 3+ credible sources cited with minor APA formatting errors such as inconsistent capitalization, missing italics on one or two sources, or minor punctuation issues (-0.5 pts)
+  * **9/10:** 3+ sources with multiple minor errors across several sources OR 1-2 more significant formatting issues (-1.0 pt MAX)
   * **7-8/10:** Sources present but no in-text citations OR only 1-2 sources present
   * **0-3/10:** No references section at all
-- **IMPORTANT:** If a student has 10+ sources that are cited throughout the text, they should receive 9.5/10 or 10/10 unless there are MAJOR systematic problems.
+- **IMPORTANT:** If a student has 3+ credible sources (educational institutions, scientific sources, reputable publications) that are cited throughout the text, they should receive 9.5/10 or 10/10 unless there are MAJOR systematic problems.
 - **Examples of minor errors (worth only -0.5 pt TOTAL):**
   * Inconsistent capitalization in titles
   * Missing italics on some journal/website names
   * Minor punctuation inconsistencies
   * Date format variations
   * Slightly incomplete URLs that still function
-- CRITICAL: Do NOT deduct more than 1.0 point total for formatting issues as long as sources are present and cited.
-- PARTIAL CREDIT: Prioritize the presence of sources over perfect formatting. Students who made an effort to cite sources should receive 9-10 points in most cases.
+- CRITICAL: Do NOT deduct more than 1.0 point total for formatting issues as long as 3+ credible sources are present and cited.
+- PARTIAL CREDIT: Prioritize the presence and credibility of sources over perfect formatting. Students who made an effort to cite 3+ credible sources should receive 9.5-10 points in most cases.
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -214,14 +218,15 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Partial Credit for Fewer Errors:** If student lists 2-3 errors, award 3-4 points proportionally.
 
 10.  **REFERENCES (Section 10):**
-    * **LENIENT APPROACH:** If sources are present and cited, students should receive 9-10 points in almost all cases.
+    * **LENIENT APPROACH:** If 3+ credible sources are listed and cited, students should receive 9.5-10 points as the default.
     * **Scoring Guide:**
-        * Sources present + cited in text + perfect/near-perfect formatting = **10/10**
-        * Sources present + cited in text + minor APA errors (missing italics, capitalization inconsistencies, punctuation) = **9.5/10** (-0.5 pt)
-        * Sources present + cited in text + multiple minor APA errors = **9/10** (MAX -1.0 pt for formatting)
+        * 3+ credible sources + cited in text + perfect/near-perfect formatting = **10/10**
+        * 3+ credible sources + cited in text + minor APA errors (missing italics, capitalization inconsistencies, punctuation) = **9.5/10** (-0.5 pt)
+        * 3+ credible sources + cited in text + multiple minor APA errors = **9/10** (MAX -1.0 pt for formatting)
         * Sources present but missing in-text citations = 7-8/10
         * Only 1-2 sources = 7-8/10
         * No references section = 0-3/10
+    * **Definition of "credible sources":** Educational institutions (.edu), scientific publications, peer-reviewed journals, reputable news outlets, government sources (.gov), established scientific organizations.
     * **Examples of MINOR errors (deduct only -0.5 pt TOTAL):**
         * Inconsistent capitalization in titles
         * Missing or incorrect italics
@@ -229,10 +234,10 @@ Your goal is to grade student lab reports according to the specific rules below.
         * Slightly incomplete URLs
         * Date formatting inconsistencies
     * **Examples of issues worth -1.0 pt MAX:**
-        * Multiple types of formatting errors combined
+        * Multiple types of formatting errors combined across several sources
         * Several sources with consistent formatting problems
-    * **Critical Rule:** Do NOT deduct more than 1 point for APA formatting issues. If 10+ sources are present and cited in text, assume 9.5/10 or 10/10 unless there are MAJOR problems.
-    * **Focus:** 90% of the score should be based on whether sources exist and are cited, only 10% on formatting perfection.
+    * **Critical Rule:** Do NOT deduct more than 1 point for APA formatting issues. If 3+ credible sources are present and cited in text, assume 9.5/10 or 10/10 unless there are MAJOR problems.
+    * **Focus:** 90% of the score should be based on whether credible sources exist and are cited, only 10% on formatting perfection.
 
 ### 📝 FEEDBACK INSTRUCTIONS (SUMMARY STYLE):
 1.  **Summarize Evidence:** Do NOT quote the student directly. Instead, summarize what they did in your own words.
@@ -460,7 +465,8 @@ def grade_submission(file):
                     f"1. Provide a specific score out of 10 for each of the 10 sections.\n"
                     f"2. Sum them for a total out of 100.\n"
                     f"3. Be strict about significant figures, error analysis, and citations.\n"
-                    f"4. Award partial credit when students make genuine attempts to follow the rubric."
+                    f"4. Award partial credit when students make genuine attempts to follow the rubric.\n"
+                    f"5. ⚠️ CRITICAL FOR VARIABLES SECTION: Before grading Section 4 (Variables), carefully scan the ENTIRE document for any table that contains columns like 'Variable Type,' 'Variable,' 'Description,' or rows labeled 'Independent,' 'Dependent,' 'Control.' If such a table exists with 1 IV + 1 DV + 3+ Controls, score it as 9-10/10. DO NOT miss tables!"
                 )
             },
             {
