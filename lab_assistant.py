@@ -112,9 +112,9 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
 - LENIENT GRADING APPROACH:
-  * **Primary focus: Are sources present and cited in the text?** This is 90% of the score.
+  * **Primary focus: Are sources present?** This is 90% of the score.
   * **Secondary consideration: Formatting quality** This is only 10% of the score.
-  * **DEFAULT SCORING: If 3+ credible sources are listed and cited in text, START at 9.5/10 or 10/10.**
+  * **DEFAULT SCORING: If 3+ credible sources are listed, START at 9.5/10 or 10/10.**
   * **10/10:** Perfect or near-perfect APA formatting with 3+ credible sources cited
   * **9.5/10:** 3+ credible sources cited with minor APA formatting errors such as inconsistent capitalization, missing italics on one or two sources, or minor punctuation issues (-0.5 pts)
   * **9/10:** 3+ sources with multiple minor errors across several sources OR 1-2 more significant formatting issues (-1.0 pt MAX)
