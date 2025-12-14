@@ -28,7 +28,7 @@ else:
 
 # NOTE: Ensure this model name is correct for your access level. 
 # Standard IDs: "claude-3-sonnet-20240229" or "claude-3-opus-20240229"
-MODEL_NAME = "claude-3-sonnet-20240229" 
+MODEL_NAME = "claude-sonnet-4-5-20250929"
 
 # --- 3. HARDCODED RUBRIC ---
 PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
