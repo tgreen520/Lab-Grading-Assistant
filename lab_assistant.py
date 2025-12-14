@@ -40,95 +40,67 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
   * Superscripts/Subscripts IN BODY TEXT ONLY: Count the errors in paragraphs and written explanations. 
     * If 0-2 errors: **-0 pts** (Ignore).
     * If >2 errors: **-1.0 pt**.
-  * **IMPORTANT:** Do NOT deduct points for superscript/subscript errors in graph titles, axis labels, or data tables. These are technical elements where formatting limitations are common.
+  * **IMPORTANT:** Do NOT deduct points for superscript/subscript errors in graph titles, axis labels, or data tables.
   * Consistent use of "I/We": Deduct heavily.
   * NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing, indentation).
 - PARTIAL CREDIT: Award partial points if student shows awareness of professional tone but has some lapses.
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
-- PARTIAL CREDIT: Award points proportionally. For example:
-  * Clear objective present: 3-4 pts
-  * Background theory included: 3-4 pts
-  * Balanced equations present: 2-3 pts
+- PARTIAL CREDIT: Award points proportionally (e.g., clear objective present: 3-4 pts).
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
-- PARTIAL CREDIT: 
-  * Prediction stated but lacks specificity: 5-7 pts
-  * Scientific justification attempted but weak: award appropriate partial credit
+- PARTIAL CREDIT: Prediction stated but lacks specificity: 5-7 pts.
 
 4. VARIABLES (10 pts):
 - Criteria: IV (units/range), DV (method), 3+ Controlled Variables.
-- **ACCEPTABLE FORMATS:** Students may present variables in paragraph form OR in a data table format. BOTH formats are equally acceptable.
-- **⚠️ CRITICAL TABLE DETECTION INSTRUCTION:** * **STOP and CAREFULLY SCAN the ENTIRE document** for any table or structured list that contains the words: "Variable," "Independent," "Dependent," "Control," "Controlled"
-  * **Common table locations:** Right after the hypothesis, in a dedicated "Variables" section, or before the "Materials" section
-  * **Table may have headers like:** "Variable Type," "Variable," "Description," "How Controlled," "Units," "Method"
-  * **DO NOT miss tables!** If you see a table with these column headers and it lists an Independent Variable, Dependent Variable, and 3+ Control Variables, this is a COMPLETE variables section.
-  * **Example of what to look for:** A table with rows labeled "Independent," "Dependent," and multiple "Control" entries
-- **TABLE FORMAT = EXCELLENT WORK:** If variables are presented in a clear table format with proper identification, this deserves 9-10/10.
-- SCORING RULE: If control variables are listed but not explained/justified properly, score exactly 8/10.
-- LENIENT GRADING APPROACH:
-  * **Focus on identification over perfection**: Students who identify variables correctly should receive most points even if descriptions are brief.
+- **ACCEPTABLE FORMATS:** Variables may be presented in paragraph form OR in a data table format. BOTH formats are equally acceptable.
+- **CRITICAL TABLE DETECTION:** Check the entire document for tables listing "Variable," "Independent," "Dependent," "Control."
+- **SCORING GUIDE:**
   * **10/10:** IV + DV + 3+ Control Variables with clear explanations/descriptions (table or paragraph format)
-  * **9/10:** IV + DV + 3+ Control Variables clearly identified in a table OR with minimal explanations in paragraph form
+  * **9/10:** IV + DV + 3+ Control Variables clearly identified in a table OR with minimal explanations
   * **8/10:** 3+ Control variables listed but not explained in detail
   * **7/10:** 2 Control variables listed
   * **6/10:** Only IV and DV properly identified
-  * **EXPLICIT RULE: If you find a table with columns for variable types (Independent/Dependent/Control) that lists 1 IV + 1 DV + 3+ Controls = MINIMUM 9/10**
-- PARTIAL CREDIT: Award generously for demonstrating understanding of variable types, even if details are incomplete.
+  * **0-5/10:** Incomplete or missing.
+- **RULE:** If you find a table listing IV + DV + 3 Controls, the MINIMUM score is 9/10.
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, specific quantities, safety.
 - SCORING RULE: A missing diagram is a MINOR deduction (-0.5 points).
-- PARTIAL CREDIT: Award points for procedures that are mostly complete but lack some specificity.
 
 6. RAW DATA (10 pts) [NO UNCERTAINTIES REQUIRED]:
 - Criteria: Qualitative observations, clear tables, units, consistent significant figures.
 - NOTE: Pre-IB students are NOT required to include uncertainties (±). Do NOT deduct for missing uncertainties.
 - CRITICAL: Deduct if significant figures are inconsistent.
-- PARTIAL CREDIT: Award points for data tables that are present but have minor formatting issues.
+- FORMATTING: Do NOT deduct points for minor formatting issues in tables (borders, alignment, font). Focus on data clarity and units.
 
 7. DATA ANALYSIS (10 pts) [SIG FIGS CRITICAL]:
 - Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
 - SIG FIGS: Students may keep extra digits in intermediate steps. ONLY the final result must be rounded correctly.
 - DEDUCTIONS: -0.5 for partial effort, -1.0 for zero attention to sig figs.
-- PARTIAL CREDIT: 
-  * Calculation shown but incomplete: award partial points
-  * Graph present but missing labels or trendline: award partial points
 
 8. CONCLUSION (10 pts):
 - Criteria: Statement of support/refutation, specific data evidence.
-- CRITICAL REQUIREMENT: Must include specific comparisons to PUBLISHED LITERATURE (theoretical values or accepted standards) to support or contradict the results.
+- CRITICAL REQUIREMENT: Must include specific comparisons to PUBLISHED LITERATURE (theoretical values or accepted standards).
 - PARTIAL CREDIT: Award points for conclusions that reference data even if literature comparison is weak or missing.
 
 9. EVALUATION (10 pts) [UPDATED FORMULAIC SCORING]:
 - 5 POINTS: Lists at least 4 sources of error (any combination of systematic/random).
 - +1 POINT: Specifically identifies which errors are systematic vs. random.
-- UP TO +2 POINTS: Explains the impact of these errors on data. (Award 1 pt for weak/partial explanation, 2 pts for thorough explanation).
-- UP TO +2 POINTS: Suggests realistic improvements for future experiments. (Award 1 pt for weak/partial suggestions, 2 pts for strong suggestions).
-- PARTIAL CREDIT: Award proportional points even if student lists fewer than 4 errors (e.g., 2-3 errors listed = 3-4 points).
+- UP TO +2 POINTS: Explains the impact of these errors on data. (Award 1 pt for weak/partial explanation).
+- UP TO +2 POINTS: Suggests realistic improvements. (Award 1 pt for weak/partial suggestions).
 
 10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
-- LENIENT GRADING APPROACH:
-  * **Primary focus: Are sources present and cited in the text?** This is 90% of the score.
-  * **Secondary consideration: Formatting quality** This is only 10% of the score.
-  * **DEFAULT SCORING: If 3+ credible sources are listed and cited in text, START at 9.5/10 or 10/10.**
-  * **10/10:** Perfect or near-perfect APA formatting with 3+ credible sources cited
-  * **9.5/10:** 3+ credible sources cited with minor APA formatting errors such as inconsistent capitalization, missing italics on one or two sources, or minor punctuation issues (-0.5 pts)
-  * **9/10:** 3+ sources with multiple minor errors across several sources OR 1-2 more significant formatting issues (-1.0 pt MAX)
-  * **7-8/10:** Sources present but no in-text citations OR only 1-2 sources present
-  * **0-3/10:** No references section at all
-- **IMPORTANT:** If a student has 3+ credible sources (educational institutions, scientific sources, reputable publications) that are cited throughout the text, they should receive 9.5/10 or 10/10 unless there are MAJOR systematic problems.
-- **Examples of minor errors (worth only -0.5 pt TOTAL):**
-  * Inconsistent capitalization in titles
-  * Missing italics on some journal/website names
-  * Minor punctuation inconsistencies
-  * Date format variations
-  * Slightly incomplete URLs that still function
-- CRITICAL: Do NOT deduct more than 1.0 point total for formatting issues as long as 3+ credible sources are present and cited.
-- PARTIAL CREDIT: Prioritize the presence and credibility of sources over perfect formatting. Students who made an effort to cite 3+ credible sources should receive 9.5-10 points in most cases.
+- **AUTOMATIC SCORING LOGIC (The "9-Point Floor"):**
+  * **CHECK:** Does the student have **3+ credible sources**?
+  * **IF YES:** The score MUST be between 9.0 and 10.0.
+    * **10/10:** Perfect or near-perfect APA formatting.
+    * **9.5/10:** Minor APA formatting issues (italics, punctuation, capitalization).
+    * **9.0/10:** Significant APA formatting issues (but sources are present and resemble APA).
+  * **IF NO:** (Fewer than 3 sources) -> Grade normally (usually 7-8 or lower).
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -136,121 +108,55 @@ SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader.
 Your goal is to grade student lab reports according to the specific rules below.
 
 ### ⚖️ CONSISTENCY & BIAS ELIMINATION PROTOCOL (CRITICAL):
-**ABSOLUTE GRADING CONSISTENCY IS MANDATORY**
-
-* **Zero Drift:** You must grade every paper with EXACTLY the same standard. The first paper and the last paper must be held to identical criteria.
-* **Blind Grading Mindset:** Grade each report as if it's the only one you'll ever see. Do not adjust standards based on what you've seen in previous reports.
-* **No Comparative Grading:** Never grade a report as "better than the last one" or "worse than average." Each report stands alone against the rubric.
-* **Eliminate Fatigue Bias:** Maintain the same level of scrutiny and attention to detail for every single report, regardless of how many you've graded.
-* **No Name/Order Bias:** The student's name or the order in which reports are graded must never influence the score.
-* **Rigid Adherence to Deductions:** Apply the specific point deductions (e.g., -0.5, -1.0) with mathematical precision. If Report #1 loses 0.5 points for a missing graph label, Report #20 must lose exactly 0.5 points for the same issue.
-* **Calibration Check:** Before scoring each section, mentally review: "What exact criteria am I looking for? What are the specific point deductions?" This prevents standards from drifting.
-* **Partial Credit Philosophy:** Recognize and reward genuine effort. Students learning lab report writing should receive credit for attempts that show understanding, even if execution is incomplete. However, apply this philosophy CONSISTENTLY - similar levels of effort should receive similar partial credit across all reports.
-* **Document Your Reasoning:** When deducting points, ensure the reason would apply equally to any student showing the same issue.
-
-**CONSISTENCY SELF-CHECK (Apply to every report):**
-- Would I deduct the same points if this were the first report I graded today?
-- Am I applying the exact same standard I used for the previous report?
-- Is this score based solely on the rubric criteria, not on comparison to other reports?
-- Have I avoided any unconscious bias based on writing quality, name, or order?
+* **Zero Drift:** You must grade every paper with EXACTLY the same standard.
+* **Rigid Adherence to Deductions:** Apply the specific point deductions with mathematical precision.
 
 ### 🧠 SCORING ALGORITHMS:
 
 1.  **FORMATTING (Section 1):**
     * **Layout:** Do NOT deduct points for minor layout/formatting inconsistencies. Ignore spacing/margin issues.
-    * **Subscripts/Superscripts - BODY TEXT ONLY:** Count errors ONLY in paragraphs and written explanations (Introduction, Conclusion, Evaluation, etc.).
-        * **IGNORE errors in:** Graph titles, axis labels, data tables, figure captions.
-        * If 0-2 errors in body text: **-0 pts** (Ignore).
-        * If >2 errors in body text: **-1.0 pt**.
-    * **Rationale:** Graphs and tables often have technical limitations for formatting chemical formulas. Only assess professional writing in body text.
-    * **Partial Credit:** If student shows awareness of professional tone but has occasional lapses, award 7-9 points depending on severity.
+    * **Subscripts/Superscripts - BODY TEXT ONLY:** Count errors ONLY in paragraphs.
+        * If 0-2 errors: **-0 pts** (Ignore).
+        * If >2 errors: **-1.0 pt**.
 
-2.  **INTRODUCTION (Section 2):**
-    * **Partial Credit Breakdown:** * Clear objective: 3-4 pts
-        * Background theory: 3-4 pts  
-        * Balanced equations: 2-3 pts
-    * Award points proportionally based on what is present and quality.
+2.  **VARIABLES (Section 4) - ⚠️ CRITICAL TABLE DETECTION:**
+    * **MANDATORY:** Scan the entire document for tables containing "Variable," "Independent," "Dependent," "Control."
+    * **RULE:** If you find a table with 1 IV + 1 DV + 3+ Controls, score it **9-10/10**.
+    * **ACCEPTABLE FORMATS:** Variables may be presented in paragraph form OR in a table. Both are valid.
+    
+3.  **RAW DATA (Section 6):**
+    * **Formatting:** Do NOT deduct points for table aesthetics (borders, shading, alignment). Only deduct if data is illegible or units/sig figs are wrong.
+    * **No Uncertainties:** Do not deduct for missing ± values.
 
-3.  **HYPOTHESIS (Section 3):**
-    * **Partial Credit:** A hypothesis that lacks specificity or weak justification can still earn 5-7 points if the basic structure is present.
-
-4.  **VARIABLES (Section 4) - ⚠️ CRITICAL TABLE DETECTION:**
-    * **MANDATORY FIRST STEP:** Before grading this section, you MUST thoroughly scan the document for tables containing variable information.
-    * **WHERE TO LOOK:** Check after the hypothesis, in a section labeled "Variables," before "Materials," or anywhere in the first half of the document.
-    * **WHAT TO LOOK FOR:** Any table or structured list with these keywords:
-        - Column headers: "Variable Type," "Type of variable," "Variable," "Description," "How Controlled," "How it is measured"
-        - Row labels: "Independent," "Dependent," "Control," "Controlled"
-    * **RECOGNITION RULE:** If you see a table with:
-        - 1 row labeled "Independent" (or similar)
-        - 1 row labeled "Dependent" (or similar)  
-        - 3+ rows labeled "Control" or "Controlled" (or similar)
-        - AND each has a description/explanation
-        - **THIS IS A COMPLETE VARIABLES SECTION = MINIMUM 9/10**
-    * **LENIENT APPROACH:** Focus on whether students understand the three variable types, not perfection in descriptions.
-    * **ACCEPTABLE FORMATS:** Variables may be presented in paragraph form OR in a table format. Both are equally valid.
-    * **Scoring Guide:**
-        * **10/10:** Table or paragraph with IV + DV + 3+ Controls with thorough explanations
-        * **9/10:** Table or paragraph with IV + DV + 3+ Controls clearly identified and described
-        * **8/10:** IV + DV + 3+ Controls listed but explanations are minimal (FIXED RULE)
-        * **7/10:** 2 Control variables listed
-        * **6/10:** Only IV and DV identified
-        * **0-5/10:** Variables section missing or incomplete (fewer than IV + DV identified)
-    * **ERROR PREVENTION:** Do NOT score 0/10 or very low if a properly formatted variables table exists in the document. A score of 0 means NO variables were identified at all. Always verify you've checked the entire document for tables before assigning any score below 6/10.
-    * **Partial Credit:** Be generous. If a student shows they understand what variables are (in any format), they should score 7-10 points.
-
-5.  **PROCEDURES (Section 5):**
-    * **Rule:** If the ONLY thing missing is the diagram, the score should be **9.5/10**.
-    * **Partial Credit:** Procedures that are mostly complete but lack some specific quantities can earn 7-9 points.
-
-6.  **RAW DATA (Section 6):**
-    * **Partial Credit:** Data tables present but with minor issues (formatting, some missing units) can earn 7-9 points.
-
-7.  **DATA ANALYSIS (Section 7) - CALCULATION CHECK:**
+4.  **DATA ANALYSIS (Section 7) - CALCULATION CHECK:**
     * **Intermediate vs. Final:** Students are allowed to keep extra digits in intermediate steps. ONLY grade the sig figs of the **final answer**.
     * **Deduction Logic:**
         * Mostly right but missed one/two: **-0.5 points**.
         * Completely ignored sig figs: **-1.0 point**.
-    * **Partial Credit:** Incomplete calculations or graphs can earn 5-8 points depending on what's present.
 
-8.  **CONCLUSION (Section 8) - LITERATURE CHECK:**
+5.  **CONCLUSION (Section 8) - LITERATURE CHECK:**
     * **Requirement:** The student MUST compare their result to a published literature value or theory.
     * **Evaluation:** If they simply say "My results matched theory" without citing a specific value or source, this is insufficient.
-    * **Partial Credit:** A conclusion that references their own data but lacks literature comparison can earn 6-8 points.
 
-9.  **EVALUATION (Section 9) - UPDATED FORMULA:**
+6.  **EVALUATION (Section 9) - UPDATED FORMULA:**
     * Start with **0**.
-    * Add **5 points** if they list at least **4 sources of error** (any combination of systematic/random).
-    * Add **1 point** if they specifically identify which errors are systematic vs. random.
-    * Add **2 points** if they explain the *impact* of errors thoroughly (Award **1 point** if the explanation is vague/weak).
-    * Add **2 points** if they explain *improvements* well (Award **1 point** if the suggestion is vague/weak).
-    * **Partial Credit for Fewer Errors:** If student lists 2-3 errors, award 3-4 points proportionally.
+    * Add **5 points** if they list at least **4 sources of error**.
+    * Add **1 point** if they identify systematic vs. random.
+    * Add **up to 2 points** for explaining *impact* (1 pt for weak explanation).
+    * Add **up to 2 points** for explaining *improvements* (1 pt for weak explanation).
 
-10.  **REFERENCES (Section 10):**
-    * **LENIENT APPROACH:** If 3+ credible sources are listed and cited, students should receive 9.5-10 points as the default.
-    * **Scoring Guide:**
-        * 3+ credible sources + cited in text + perfect/near-perfect formatting = **10/10**
-        * 3+ credible sources + cited in text + minor APA errors (missing italics, capitalization inconsistencies, punctuation) = **9.5/10** (-0.5 pt)
-        * 3+ credible sources + cited in text + multiple minor APA errors = **9/10** (MAX -1.0 pt for formatting)
-        * Sources present but missing in-text citations = 7-8/10
-        * Only 1-2 sources = 7-8/10
-        * No references section = 0-3/10
-    * **Definition of "credible sources":** Educational institutions (.edu), scientific publications, peer-reviewed journals, reputable news outlets, government sources (.gov), established scientific organizations.
-    * **Examples of MINOR errors (deduct only -0.5 pt TOTAL):**
-        * Inconsistent capitalization in titles
-        * Missing italics on some journal/website names
-        * Minor punctuation issues (commas, periods)
-        * Slightly incomplete URLs
-        * Date formatting inconsistencies
-    * **Examples of issues worth -1.0 pt MAX:**
-        * Multiple types of formatting errors combined across several sources
-        * Several sources with consistent formatting problems
-    * **Critical Rule:** Do NOT deduct more than 1.0 point total for formatting issues as long as 3+ credible sources are present and cited.
-    * **Focus:** 90% of the score should be based on whether credible sources exist and are cited, only 10% on formatting perfection.
+7.  **REFERENCES (Section 10) - THE 3+ SOURCE RULE:**
+    * **STEP 1:** Count the credible sources (websites, journals, books).
+    * **STEP 2 (If < 3 sources):** Score normally (usually 7-8 or lower).
+    * **STEP 3 (If 3+ sources present):** You MUST score this section **9.0 or higher**.
+        * **10/10:** Formatting is perfect.
+        * **9.5/10:** Formatting has minor errors (punctuation, italics).
+        * **9.0/10:** Formatting has significant errors, but it still resembles APA style.
+    * **CRITICAL:** Do NOT give 8.5 or lower if there are 3+ sources. The minimum is 9.0.
 
 ### 📝 FEEDBACK INSTRUCTIONS (SUMMARY STYLE):
 1.  **Summarize Evidence:** Do NOT quote the student directly. Instead, summarize what they did in your own words.
 2.  **Structure:** "✅ Strengths" and "⚠️ Improvements" for every section.
-3.  **Acknowledge Effort:** When awarding partial credit, mention what the student did well and what needs improvement.
 
 ### OUTPUT FORMAT:
 Please strictly use the following format.
@@ -297,7 +203,7 @@ STUDENT: [Filename]
 * **⚠️ Improvements:** [Summary of errors. Did they compare to specific literature?]
 
 **9. EVALUATION: [Score]/10**
-* **✅ Strengths:** [Summary of good work - note how many errors listed, if systematic/random identified]
+* **✅ Strengths:** [Summary of good work]
 * **⚠️ Improvements:** [Summary of errors]
 
 **10. REFERENCES: [Score]/10**
@@ -349,12 +255,10 @@ def extract_text_from_docx(file):
             full_text.append(para.text)
             
         # 2. Extract Tables (Crucial for Variables/Data sections)
-        # Many students put variables in tables, which doc.paragraphs misses.
         if doc.tables:
             full_text.append("\n--- DETECTED TABLES ---\n")
             for table in doc.tables:
                 for row in table.rows:
-                    # Join cells with a pipe to mimic markdown table structure
                     row_text = [cell.text.strip() for cell in row.cells]
                     full_text.append(" | ".join(row_text))
                 full_text.append("\n") # Space between tables
@@ -466,9 +370,8 @@ def grade_submission(file):
                     f"Please grade this lab report based on the Pre-IB rubric below.\n"
                     f"Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
                     f"⚠️ CRITICAL INSTRUCTIONS:\n"
-                    f"1. For SECTION 4 (VARIABLES): Carefully read through the text below for any table or list containing 'Variable,' 'Independent,' 'Dependent,' 'Control.' Tables in Word documents appear as formatted text. Look for structured lists with these terms.\n"
-                    f"2. If you find a table-like structure with variable types (Independent/Dependent/Control) and 3+ controls described, score it 9-10/10.\n"
-                    f"3. Do NOT score Variables as 0/10 unless there is absolutely no mention of variables anywhere in the document.\n\n"
+                    f"1. For VARIABLES: Look for tables with 'Independent,' 'Dependent,' 'Control' labels. If found, score 9-10.\n"
+                    f"2. For REFERENCES: If 3+ credible sources are present, the score MUST be between 9.0 and 10.0, regardless of formatting.\n\n"
                     f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
                     f"STUDENT TEXT:\n{text_content}"
                 )
@@ -492,8 +395,7 @@ def grade_submission(file):
                     f"1. Provide a specific score out of 10 for each of the 10 sections.\n"
                     f"2. Sum them for a total out of 100.\n"
                     f"3. Be strict about significant figures, error analysis, and citations.\n"
-                    f"4. Award partial credit when students make genuine attempts to follow the rubric.\n"
-                    f"5. ⚠️ CRITICAL FOR VARIABLES SECTION: Before grading Section 4 (Variables), carefully scan the ENTIRE document for any table that contains columns like 'Variable Type,' 'Variable,' 'Description,' or rows labeled 'Independent,' 'Dependent,' 'Control.' If such a table exists with 1 IV + 1 DV + 3+ Controls, score it as 9-10/10. DO NOT miss tables!"
+                    f"4. ⚠️ REFERENCES RULE: If 3+ credible sources are present, MINIMUM score is 9.0.\n"
                 )
             },
             {
