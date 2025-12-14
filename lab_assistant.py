@@ -37,8 +37,8 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 - Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly IN THE BODY TEXT.
 - DEDUCTIONS (TIERED): 
   * **SUPERSCRIPT/SUBSCRIPT ERRORS:** Count errors in paragraphs/body text (Ignore graphs/tables).
-    * **1 or 2 errors:** **-0.5 Points**.
-    * **3 or more errors:** **-1.0 Point**.
+    * **1 or 2 errors:** **-0.5 Points** (resulting score: 9.5).
+    * **3 or more errors:** **-1.0 Point** (resulting score: 9.0).
   * Consistent use of "I/We": Deduct heavily.
   * NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing).
 
@@ -99,29 +99,34 @@ Your goal is to grade student lab reports according to the specific rules below.
 
 ### 🧠 SCORING ALGORITHMS (STRICT ENFORCEMENT):
 
-1.  **FORMATTING (Section 1) - TIERED DEDUCTION:**
-    * **Count** subscript/superscript errors in body text.
-    * **1-2 errors:** Deduct **0.5 pts**.
-    * **3+ errors:** Deduct **1.0 pt**.
+1.  **MATH ENFORCEMENT (CRITICAL):**
+    * **Decimal Scores are MANDATORY.**
+    * If you deduct 0.5 points, the score is **9.5**. 
+    * **DO NOT** round 9.5 down to 9.0.
+    * Example: 10 - 0.5 = 9.5.
 
-2.  **DATA ANALYSIS (Section 7) - GRAPH & CALCULATION AUDIT:**
+2.  **FORMATTING (Section 1) - TIERED DEDUCTION:**
+    * **Count** subscript/superscript errors in body text.
+    * **1-2 errors:** Deduct **0.5 pts**. (Score MUST be 9.5).
+    * **3+ errors:** Deduct **1.0 pt**. (Score MUST be 9.0).
+
+3.  **DATA ANALYSIS (Section 7) - GRAPH & CALCULATION AUDIT:**
     * **CALCULATIONS:** Summarize calculations. **Ignore extra digits in intermediate steps.** Only check sig figs for the final answer.
     * **GRAPH:** Check for: Axis Labels/Units, Scatterplot, Trendline, Equation, R², Trendline Type.
     * **PLACEMENT RULE:** * If the graph is **PERFECT** (all items present), list the details in **✅ Strengths**.
       * If the graph is **FLAWED** (missing items), list the specific missing items in **⚠️ Improvements**.
       * **DO NOT** put the "Graph Audit" checklist in Improvements if the graph is perfect.
 
-3.  **CONCLUSION (Section 8) - STATISTICAL CHECK:**
+4.  **CONCLUSION (Section 8) - STATISTICAL CHECK:**
     * The student MUST mention the **R and/or R² value**.
     * They MUST explain **what it implies** about their data.
 
-4.  **REFERENCES (Section 10):**
+5.  **REFERENCES (Section 10):**
     * If 3+ Sources -> Minimum Score 9.0.
 
 ### 📝 FEEDBACK STYLE (EXPANDED & EDUCATIONAL):
 * **AVOID BREVITY:** Do NOT use one-word bullet points.
 * **EXPLAIN WHY:** Write 2-3 sentences for each section's Strengths/Improvements. Connect the specific evidence from the text to the rubric criteria.
-* **EXAMPLE:** Instead of saying "Good hypothesis," say "The hypothesis is strong because it specifically predicts the relationship between temperature and rate using collision theory as justification."
 
 ### OUTPUT FORMAT:
 Please strictly use the following format.
@@ -137,7 +142,7 @@ STUDENT: [Filename]
 
 **1. FORMATTING: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of tone/voice quality]
-* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (1-2 errors = -0.5 pts, 3+ errors = -1.0 pt). Explain specific instances.]
+* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (If X=1 or 2, Score **MUST** be 9.5. If X>=3, Score is 9.0 or lower).]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
@@ -342,7 +347,7 @@ def grade_submission(file):
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
             "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
-            "4. **FORMATTING:** Count subscript errors. 1-2 errors = -0.5 pts. 3+ errors = -1.0 pt.\n"
+            "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
             "6. **CONCLUSION:** Check for discussion of R² implications.\n"
             "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n\n"
@@ -371,7 +376,7 @@ def grade_submission(file):
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
             "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
-            "4. **FORMATTING:** Count subscript errors. 1-2 errors = -0.5 pts. 3+ errors = -1.0 pt.\n"
+            "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
             "6. **CONCLUSION:** Check for discussion of R² implications.\n"
             "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n"
