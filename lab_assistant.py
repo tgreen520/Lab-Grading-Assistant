@@ -483,6 +483,25 @@ def grade_submission(file, model_id):
         except Exception as e:
             return f"⚠️ Error: {str(e)}"
 
+# --- PARSE SCORE FUNCTION (FIXED) ---
+def parse_score(text):
+    """Extract the total score from Claude's feedback text."""
+    try:
+        # Look for the score in the header format: "# 📝 SCORE: XX/100"
+        match = re.search(r"#\s*📝\s*SCORE:\s*([\d\.]+)/100", text)
+        if match:
+            return match.group(1).strip()
+        
+        # Fallback: Look for old format "SCORE: XX/100"
+        match = re.search(r"SCORE:\s*([\d\.]+)/100", text)
+        if match:
+            return match.group(1).strip()
+            
+    except Exception as e:
+        print(f"Error parsing score: {e}")
+    
+    return "N/A"
+
 # --- WORD FORMATTER (Strict Symbol Cleaning) ---
 def write_markdown_to_docx(doc, text):
     lines = text.split('\n')
@@ -531,7 +550,6 @@ def write_markdown_to_docx(doc, text):
                 run.bold = True
             else:
                 p.add_run(part.replace('*', '')) # Strip lingering asterisks
-
 def create_master_doc(results, session_name):
     doc = Document()
     doc.add_heading(f"Lab Report Grades: {session_name}", 0)
