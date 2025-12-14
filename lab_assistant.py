@@ -94,13 +94,13 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 10. REFERENCES (10 pts):
 - Criteria: Sources listed and cited.
-- **AUTOMATIC SCORING LOGIC (The "9-Point Floor"):**
-  * **CHECK:** Does the student have **3+ credible sources**?
-  * **IF YES:** The score MUST be between 9.0 and 10.0.
-    * **10/10:** Perfect or near-perfect APA formatting.
-    * **9.5/10:** Minor APA formatting issues (italics, punctuation, capitalization).
-    * **9.0/10:** Significant APA formatting issues (but sources are present and resemble APA).
-  * **IF NO:** (Fewer than 3 sources) -> Grade normally (usually 7-8 or lower).
+- **SIMPLIFIED SCORING LOGIC:**
+  * **Check Count:** Are there 3+ credible sources?
+  * **IF YES (3+ Sources Found):**
+    * **9.0/10:** Sources are present in APA or MLA format, even if there are formatting errors.
+    * **9.5/10:** Sources are present with only a few minor formatting errors.
+    * **10/10:** Perfect formatting.
+  * **IF NO (< 3 Sources):** Score normally based on quality (usually 7-8 or lower).
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -145,14 +145,13 @@ Your goal is to grade student lab reports according to the specific rules below.
     * Add **up to 2 points** for explaining *impact* (1 pt for weak explanation).
     * Add **up to 2 points** for explaining *improvements* (1 pt for weak explanation).
 
-7.  **REFERENCES (Section 10) - THE 3+ SOURCE RULE:**
-    * **STEP 1:** Count the credible sources (websites, journals, books).
-    * **STEP 2 (If < 3 sources):** Score normally (usually 7-8 or lower).
-    * **STEP 3 (If 3+ sources present):** You MUST score this section **9.0 or higher**.
-        * **10/10:** Formatting is perfect.
-        * **9.5/10:** Formatting has minor errors (punctuation, italics).
-        * **9.0/10:** Formatting has significant errors, but it still resembles APA style.
-    * **CRITICAL:** Do NOT give 8.5 or lower if there are 3+ sources. The minimum is 9.0.
+7.  **REFERENCES (Section 10) - SIMPLIFIED RULE:**
+    * **Step 1:** Are there at least 3 credible sources?
+    * **Step 2 (If Yes):**
+        * Score **9.0** if they are formatted (APA/MLA), even with multiple errors.
+        * Score **9.5** if they are formatted with only "a few" minor errors.
+        * Score **10** if perfect.
+    * **Step 3 (If No):** Score normally (usually lower than 8).
 
 ### 📝 FEEDBACK INSTRUCTIONS (SUMMARY STYLE):
 1.  **Summarize Evidence:** Do NOT quote the student directly. Instead, summarize what they did in your own words.
@@ -371,7 +370,7 @@ def grade_submission(file):
                     f"Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
                     f"⚠️ CRITICAL INSTRUCTIONS:\n"
                     f"1. For VARIABLES: Look for tables with 'Independent,' 'Dependent,' 'Control' labels. If found, score 9-10.\n"
-                    f"2. For REFERENCES: If 3+ credible sources are present, the score MUST be between 9.0 and 10.0, regardless of formatting.\n\n"
+                    f"2. For REFERENCES: If 3+ credible sources are present, score MUST be at least 9.0/10.\n\n"
                     f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
                     f"STUDENT TEXT:\n{text_content}"
                 )
