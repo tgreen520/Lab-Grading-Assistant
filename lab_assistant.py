@@ -68,11 +68,12 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 
 7. DATA ANALYSIS (10 pts) [GRAPH & CALCULATION CRITICAL]:
 - Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
-- **GRAPH CHECKLIST (CRITICAL):**
-  * **Format:** Must be a Scatterplot (not line graph/bar chart) with a Trendline.
-  * **Labels:** Axis labels with Units.
-  * **Stats:** R² value AND Trendline Equation must be displayed.
-  * **Logic:** Trendline type must be appropriate (e.g., don't force linear fit on obviously curved data).
+- **MANDATORY GRAPH CHECKLIST:**
+  * **Type:** Must be a Scatterplot with a Trendline.
+  * **Equation:** Trendline Equation MUST be listed on graph.
+  * **Stats:** R² value MUST be listed on graph.
+  * **Axes:** Must have Labels and Units.
+  * **Fit:** Trendline type must be appropriate (e.g., Linear vs. Polynomial).
 - **SIG FIGS:** Grade the FINAL answer only.
 - **EXCEPTION:** Empirical/Molecular Formula answers must be whole numbers (1 sig fig).
 - DEDUCTION: -0.5 for partial effort, -1.0 for zero attention.
@@ -98,11 +99,6 @@ GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to f
 SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader. 
 Your goal is to grade student lab reports according to the specific rules below.
 
-### 📝 FEEDBACK INSTRUCTIONS (SPECIFIC & EVIDENCE-BASED):
-**CRITICAL:** You must PROVE your score by citing specific evidence.
-1. **QUOTE THE STUDENT:** "In Table 1, you wrote '5g' instead of '5.00g'."
-2. **NAME THE DETAILS:** "You identified Temperature and Volume as controls."
-
 ### 🧠 SCORING ALGORITHMS (STRICT ENFORCEMENT):
 
 1.  **FORMATTING (Section 1) - TIERED DEDUCTION:**
@@ -110,25 +106,16 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **1-2 errors:** Deduct **0.5 pts**.
     * **3+ errors:** Deduct **1.0 pt**.
 
-2.  **VARIABLES (Section 4):**
-    * **MANDATORY:** Scan for tables. If 1 IV + 1 DV + 3+ Controls found -> **9-10/10**.
+2.  **DATA ANALYSIS (Section 7) - GRAPH AUDIT:**
+    * You MUST check the graph for: Scatterplot format, Trendline Equation, R² Value, Axis Units.
+    * If ANY of these are missing, deduct points.
 
-3.  **DATA ANALYSIS (Section 7) - GRAPH AUDIT:**
-    * You MUST critique the graph specifically on these points:
-      1. Is it a **Scatterplot** with a **Trendline**?
-      2. Are **Axis Labels** and **Units** present?
-      3. Is the **Trendline Equation** visible?
-      4. Is the **R² Value** visible?
-      5. Is the trendline type (Linear/Exp/Poly) appropriate for the data?
-    * **Empirical Formula Exception:** Rounding to whole numbers is CORRECT.
-
-4.  **CONCLUSION (Section 8) - STATISTICAL CHECK:**
+3.  **CONCLUSION (Section 8) - STATISTICAL CHECK:**
     * The student MUST mention the **R² value** (or correlation coefficient).
     * They MUST explain **what it implies** (e.g., "R² of 0.99 shows a strong linear correlation").
-    * If missing -> Deduct points.
 
-5.  **REFERENCES (Section 10) - THE 3+ SOURCE MANDATE:**
-    * If Count >= 3: **MINIMUM SCORE is 9.0**.
+4.  **REFERENCES (Section 10):**
+    * If 3+ Sources -> Minimum Score 9.0.
 
 ### OUTPUT FORMAT:
 Please strictly use the following format.
@@ -144,7 +131,7 @@ STUDENT: [Filename]
 
 **1. FORMATTING: [Score]/10**
 * **✅ Strengths:** [Quote specific good usage]
-* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (1-2 = -0.5, 3+ = -1.0)]
+* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (1-2 errors = -0.5 pts, 3+ errors = -1.0 pt)]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Quote objective/theory]
@@ -168,11 +155,18 @@ STUDENT: [Filename]
 
 **7. DATA ANALYSIS: [Score]/10**
 * **✅ Strengths:** [Reference calculation]
-* **⚠️ Improvements:** [**GRAPH CHECK:** Comment specifically on: Scatterplot? Trendline? Equation? R²? Axis Units?]
+* **⚠️ Improvements:** * **GRAPH AUDIT:**
+    * Scatterplot used? [Yes/No]
+    * Trendline Equation shown? [Yes/No]
+    * R² Value shown? [Yes/No]
+    * Axis Labels & Units correct? [Yes/No]
+    * Trendline type appropriate? [Yes/No]
+  * [Other calculation comments]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used]
-* **⚠️ Improvements:** [**STAT CHECK:** Did they discuss R/R² implications? Did they compare to literature?]
+* **⚠️ Improvements:** * **STATISTICAL CHECK:** Did they discuss R² implications? [Yes/No - explain]
+  * [Other literature comments]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..."]
@@ -342,6 +336,30 @@ def grade_submission(file):
                     f"Please grade this lab report based on the Pre-IB rubric below.\n"
                     f"Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
                     f"⚠️ CRITICAL INSTRUCTIONS:\n"
+                    f"1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
+                    f"2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
+                    f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
+                    f"4. **FORMATTING:** Count subscript errors. 1-2 errors = -0.5 pts. 3+ errors = -1.0 pt.\n"
+                    f"5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. \n"
+                    f"6. **CONCLUSION:** Check for discussion of R² implications.\n"
+                )
+            }
+        ]
+        images = extract_images_from_docx(file)
+        if images:
+            user_message.extend(images)
+    else:
+        base64_data = encode_file(file)
+        if not base64_data: return "Error processing file."
+        media_type = get_media_type(file.name)
+        
+        user_message = [
+            {
+                "type": "text",
+                "text": (
+                    f"Please grade this lab report based on the Pre-IB rubric below.\n\n"
+                    f"--- RUBRIC START ---\n{PRE_IB_RUBRIC}\n--- RUBRIC END ---\n\n"
+                    f"INSTRUCTIONS:\n"
                     f"1. **BE SPECIFIC:** You MUST quote text, data, and variables from the report to justify your score. No generic feedback.\n"
                     f"2. **VARIABLES:** List the exact variables found (IV, DV, Controls). If found, score 9-10.\n"
                     f"3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
