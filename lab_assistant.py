@@ -38,6 +38,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - OBJECTIVE: Must be explicit. If missing, -1.0 pt.
 - EQUATION: Balanced chemical equation required. If missing, -1.0 pt.
 - THEORY RELEVANCE: Theory must thoroughly relate to the lab objective. If unrelated/weak, -1.0 pt.
+- FORMATTING: Do not deduct for formatting errors in the introduction. 
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
@@ -66,11 +67,12 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - OUTLIERS/OMISSIONS: Must address data outliers or data omissions. (No mention: -1.0. Mentioned but vague: -0.5).
 - IV/DV RELATIONSHIP: Must explain graph trend. (If poor: -1.0).
 - THEORY: Connect to chemical theory. (If missing: -1.0).
+- HYPOTHESIS: Connect data to hypothesis. (If missing: -1.0. Mentioned but vague: -0.5)
 - QUANTITATIVE SUPPORT: Must cite specific numbers. (If missing: -2.0).
 - QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5).
 - STATISTICS (R vs R²):
   * R (Correlation): Must explain Strength & Direction. (If missing: -1.0).
-  * R² (Fit): Must explain Fit/Variability. (If poor/missing: -0.5).
+  * R² (Fit): Must explain Fit/Variability. (If missing: -1. If poor: -0.5).
 - FOCUS: If conclusion is overly repetitive or lacks focus, deduct -0.5 MAX.
 - NOTE: Do NOT deduct for citations here. Do NOT deduct for "Data Reliability" separately.
 
@@ -465,7 +467,7 @@ def grade_submission(file, model_id):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5), Repetitiveness (-0.5).\n"
+            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), Relationship to hypothesis (-1.0 if missing, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0), Repetitiveness (-0.5).\n"
             "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
