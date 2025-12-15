@@ -81,6 +81,9 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 10. REFERENCES (10 pts):
 - Criteria: 3+ credible sources = 9.0 min score.
+- If only one source given, deduct 5.0.
+- If only 2 sources given, deduct 3.0. 
+- If errors exist in APA formatting, deduct 0.5. 
 """
 
 # --- 4. SYSTEM PROMPT ---
