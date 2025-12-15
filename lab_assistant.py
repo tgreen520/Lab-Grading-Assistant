@@ -50,14 +50,15 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - MEASUREMENT: Specific description of how DV is measured. (Missing: -1.0, Vague: -0.5).
 
 4. VARIABLES (10 pts):
-- Criteria: IV, DV, 3+ Controls.
-- SCORING: 
-  * 10/10: All defined + explanations.
-  * 9.5/10: DV measurement vague (-0.5).
-  * 9.0/10: Explanations missing (-1.0).
-  * Control variables missing (-4.0)
-  * Control variables not justified (-1.0)
-  * Description of control variables vague (-1.0)
+- Criteria: IV, DV, 3+ Controls with thorough explanations.
+- DEDUCTIONS:
+  * Control variables missing (zero included): -4.0
+  * 1-2 control variables present: -1.0 
+  * Control variables not justified: -1.0
+  * Description of control variables vague: -1.0
+  * Independent variable not thoroughly explained: -1.0
+  * Dependent variable not thoroughly explained: -1.0
+  * DV measurement vague: -0.5
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, quantities, safety.
@@ -153,16 +154,25 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Units Check:** Missing -> -1.0. Incomplete -> -0.5.
     * **Measurement Check:** Missing -> -1.0. Vague -> -0.5.
 
-4.  **DATA ANALYSIS (Section 7):**
+4.  **VARIABLES (Section 4) - ENHANCED SCORING:**
+    * **Start at 10.0 Points.**
+    * **Control Variables Check:** No controls listed? -> -4.0. 1-2 controls listed-> -1.0
+    * **Control Justification:** Controls not justified (no explanation of why they need to be controlled)? -> -1.0.
+    * **Control Description Quality:** Control variable descriptions vague or unclear? -> -1.0.
+    * **Independent Variable Explanation:** IV not thoroughly explained (lacks detail on what it is and how it's changed)? -> -1.0.
+    * **Dependent Variable Explanation:** DV not thoroughly explained (lacks detail on what it is and what it measures)? -> -1.0.
+    * **DV Measurement Specificity:** Method for measuring DV is vague? -> -0.5.
+
+5.  **DATA ANALYSIS (Section 7):**
     * **Trendline Equation:** Not shown on graph? -> -1.0.
     * **R² Value:** Not shown on graph? -> -1.0.
     * **Calculations:** Example calculations unclear? -> -1.0.
     * **Steps:** Calculation steps not clearly explained OR labeled? -> -0.5.
 
-5.  **PROCEDURES (Section 5):**
+6.  **PROCEDURES (Section 5):**
     * **Diagram Check:** Diagram of experimental setup or photograph missing? -> -0.5.
 
-6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+7.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
     * **IMPACT:** All errors have impact? +2. Some? +1 (-1.0 deduction). None? 0 (-2.0 deduction).
     * **IMPROVEMENTS:** Specific equipment? +2. Vague? +1.5 (-0.5 deduction). Generic? 0 (-2.0 deduction).
@@ -215,8 +225,15 @@ STUDENT: [Filename]
 * "DV Measurement Description: [Specific/Vague/Missing]" (-1.0 if missing, -0.5 if vague).]
 
 **4. VARIABLES: [Score]/10**
-* **✅ Strengths:** [**LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]" and comment on clarity.]
-* **⚠️ Improvements:** [If DV measurement is vague, state: "The method for measuring the DV was vague (-0.5 pts)." Suggest specific improvement.]
+* **✅ Strengths:** [**DETAILED LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]" and comment on explanation quality.]
+* **⚠️ Improvements:** [**CRITICAL CHECKS:**
+* "Control Variables: [Number found]. If none listed, deduct -4.0 pts. If 1-2 controls listed-> -1.0"
+* "Control Justification: [Present/Missing]. If not justified (no explanation of why they need to be controlled), deduct -1.0 pt."
+* "Control Description Quality: [Clear/Vague]. If vague or unclear, deduct -1.0 pt."
+* "Independent Variable Explanation: [Thorough/Not Thorough]. If IV not thoroughly explained (lacks detail on what it is and how it's changed), deduct -1.0 pt."
+* "Dependent Variable Explanation: [Thorough/Not Thorough]. If DV not thoroughly explained (lacks detail on what it is and what it measures), deduct -1.0 pt."
+* "DV Measurement Method: [Specific/Vague]. If vague, deduct -0.5 pt."
+* Suggest specific improvements for any deficiencies.]
 
 **5. PROCEDURES: [Score]/10**
 * **✅ Strengths:** [Comment on reproducibility and safety details]
@@ -477,16 +494,23 @@ def grade_submission(file, model_id):
             "Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
             "⚠️ CRITICAL INSTRUCTIONS:\n"
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
-            "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
+            "2. **VARIABLES - ENHANCED SCORING:** \n"
+            "    * List the exact variables found (IV, DV, Controls).\n"
+            "    * Check for at least 3 control variables (-4.0 if none listed. -1.0 if 1-2 variables listed).\n"
+            "    * Check if controls are justified with explanation of why they need to be controlled (-1.0 if not justified).\n"
+            "    * Check if control descriptions are clear and specific (-1.0 if vague).\n"
+            "    * Check if IV is thoroughly explained with detail on what it is and how it's changed (-1.0 if not thorough).\n"
+            "    * Check if DV is thoroughly explained with detail on what it is and what it measures (-1.0 if not thorough).\n"
+            "    * Check if DV measurement method is specific (-0.5 if vague).\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
-            "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
-            "6. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
-            "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
-            "9. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
-            "10. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "11. **INTRODUCTION - ENHANCED CHEMICAL THEORY GRADING:** \n"
+            "5. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
+            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
+            "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
+            "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
+            "9. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
+            "10. **INTRODUCTION - ENHANCED CHEMICAL THEORY GRADING:** \n"
+            "10. **INTRODUCTION - ENHANCED CHEMICAL THEORY GRADING:** \n"
             "    * Check for Chemical Equation (-1.0 if missing).\n"
             "    * Check for Objective (-1.0 if missing, -0.5 if vague).\n"
             "    * **CHEMICAL THEORY ASSESSMENT (TIERED):**\n"
@@ -495,10 +519,10 @@ def grade_submission(file, model_id):
             "      - Present but vague/superficial (mentions concepts without explaining): -1.0 point\n"
             "    * Chemical theory must thoroughly explain relevant concepts (reaction mechanisms, bonding, thermodynamics, kinetics, etc.) and meaningfully connect to the lab objective.\n"
             "    * DO NOT penalize for inconsistent units or citation context.\n"
-            "12. **PROCEDURES:** Check if a diagram or photograph of the experimental setup is included (-0.5 if missing).\n"
-            "13. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
-            "14. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
-            "15. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n\n"
+            "11. **PROCEDURES:** Check if a diagram or photograph of the experimental setup is included (-0.5 if missing).\n"
+            "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
+            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
+            "14. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -522,7 +546,14 @@ def grade_submission(file, model_id):
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "INSTRUCTIONS:\n"
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
-            "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
+            "2. **VARIABLES - ENHANCED SCORING:** \n"
+            "    * List the exact variables found (IV, DV, Controls).\n"
+            "    * Check for at least 3 control variables (-4.0 if none listed. -1.0 if 1-2 listed).\n"
+            "    * Check if controls are justified with explanation of why they need to be controlled (-1.0 if not justified).\n"
+            "    * Check if control descriptions are clear and specific (-1.0 if vague).\n"
+            "    * Check if IV is thoroughly explained with detail on what it is and how it's changed (-1.0 if not thorough).\n"
+            "    * Check if DV is thoroughly explained with detail on what it is and what it measures (-1.0 if not thorough).\n"
+            "    * Check if DV measurement method is specific (-0.5 if vague).\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
@@ -880,7 +911,10 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     progress = st.progress(0)
     status_text = st.empty()
     live_results_table = st.empty()
-    live_feedback_display = st.empty()  # NEW: Live feedback viewer
+    
+    # NEW: Container for cumulative feedback display
+    st.subheader("📋 Live Grading Feedback")
+    feedback_container = st.container()
     
     # Initialize Session State list if not present
     if 'current_results' not in st.session_state:
@@ -930,9 +964,13 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             df_live = pd.DataFrame(st.session_state.current_results)
             live_results_table.dataframe(df_live[["Filename", "Score"]], use_container_width=True)
             
-            # 6. NEW: LIVE FEEDBACK DISPLAY
-            with live_feedback_display.expander(f"📄 Latest: {file.name} (Score: {score}/100)", expanded=False):
-                st.markdown(feedback)
+            # 6. NEW: CUMULATIVE FEEDBACK DISPLAY (Shows all graded reports)
+            with feedback_container:
+                for idx, item in enumerate(st.session_state.current_results):
+                    # Start expanded for most recent, collapsed for older ones
+                    is_most_recent = (idx == len(st.session_state.current_results) - 1)
+                    with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=is_most_recent):
+                        st.markdown(item['Feedback'])
             
         except Exception as e:
             st.error(f"❌ Error grading {file.name}: {e}")
