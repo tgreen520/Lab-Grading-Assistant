@@ -35,11 +35,10 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
-- OBJECTIVE: Must be explicit. If missing, -1.0 pt. If vague, -0.5 pt.
-- EQUATION: Balanced chemical equation required. If missing, -1.0 pt.
-- THEORY RELEVANCE: Theory must thoroughly relate to the lab objective. If unrelated/weak, -1.0 pt.
-- THOROUGHNESS: Background info must be detailed. If lack of thoroughness/brief, -0.5 pt. If missing, -1.0 pt.
-- NOTE: Do NOT deduct for inconsistent temperature units (F vs C).
+- OBJECTIVE: Must be explicit. (Missing: -1.0. Present but Vague/Implicit: -0.5).
+- EQUATION: Balanced chemical equation required. (Missing: -1.0).
+- THEORY/BACKGROUND: Must be thorough. (Irrelevant/Missing: -1.0. Brief/Lacks Detail: -0.5).
+- RESTRICTIONS: Do NOT deduct for "citation context" explanation. Do NOT deduct for inconsistent temperature units.
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
@@ -105,9 +104,9 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Decimal Scores are MANDATORY.**
     * If you deduct 0.5 points, the score is **9.5**. 
     * **DO NOT** round 9.5 down to 9.0.
+    * **SILENT CALCULATION:** Perform the math silently. Do NOT output your internal monologue (e.g., do NOT write "Start at 10, subtract 1..."). Just output the final score.
 
 2.  **INTRODUCTION (Section 2) - DEDUCTION PROTOCOL:**
-    * **Start at 10.0 Points.**
     * **Objective:**
         * If **Missing** -> Subtract 1.0.
         * If **Present but Vague/Not Explicit** -> Subtract 0.5.
@@ -120,7 +119,6 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **RESTRICTIONS (Do NOT Deduct):**
         * Do NOT deduct for "citation context" explanation.
         * Do NOT deduct for inconsistent temperature units.
-    * **MATH ENFORCEMENT:** Final Score = 10.0 - (Sum of above deductions).
 
 3.  **HYPOTHESIS (Section 3):**
     * **Units Check:** Are units provided for BOTH IV and DV? (No units = -1.0. Partial units = -0.5).
@@ -130,7 +128,6 @@ Your goal is to grade student lab reports according to the specific rules below.
     * Example calculations must be detailed and easy to follow. If unclear/messy -> **Deduct 1.0 point**.
 
 5.  **CONCLUSION (Section 8) - STRICT MATH PROTOCOL:**
-    * **Start at 10.0 Points. Subtract ONLY the following if applicable:**
     * **Hypothesis Support:** Not stated? -> Subtract 1.0.
     * **Outliers/Omissions:**
         * No mention at all? -> Subtract 1.0.
@@ -149,7 +146,7 @@ Your goal is to grade student lab reports according to the specific rules below.
         * NO deductions for Citations.
         * NO deductions for "Internal Inconsistency".
         * NO deductions for "Data Reliability".
-    * **FINAL CALCULATION:** 10.0 - (Sum of above deductions). Example: If you have -1.0 (R) and -0.5 (Lit), Score MUST be 8.5.
+    * **MATH INSTRUCTION:** Calculate the score internally (10 - deductions). Do NOT write out the addition/subtraction.
 
 6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **COUNTING RULE:** Count the errors listed. If the student lists 3 errors, they MUST explain the impact for all 3.
@@ -173,6 +170,7 @@ Your goal is to grade student lab reports according to the specific rules below.
 1. **CLEAN OUTPUT:** When quoting student text in your feedback, **REMOVE** the `<sub>` and `<sup>` tags. Write "H2O" instead of "H<sub>2</sub>O".
 2. **AVOID ROBOTIC CHECKLISTS:** Do not use "[Yes/No]".
 3. **EXPLAIN WHY:** Write 2-3 sentences for each section.
+4. **NO SCRATCHPAD:** Do not print your scoring calculations.
 
 ### OUTPUT FORMAT:
 Please strictly use the following format. Do not use horizontal rules (---) between sections.
@@ -460,7 +458,9 @@ def grade_submission(file, model_id):
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n\n"
+            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
+            "12. **SILENT MATH:** Calculate final section scores internally. Do not output the math equations.\n"
+            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -493,6 +493,8 @@ def grade_submission(file, model_id):
             "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
             "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
+            "11. **SILENT MATH:** Calculate final section scores internally. Do not output the math equations.\n"
+            "12. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
         )
         
         user_message = [
@@ -514,7 +516,7 @@ def grade_submission(file, model_id):
             # Temperature=0 for Maximum Consistency
             response = client.messages.create(
                 model=model_id, # Uses the ID passed from Sidebar
-                max_tokens=3500,
+                max_tokens=4096, # MAX TOKEN LIMIT for Sonnet 3.5
                 temperature=0.0,
                 system=SYSTEM_PROMPT,
                 messages=[{"role": "user", "content": user_message}]
