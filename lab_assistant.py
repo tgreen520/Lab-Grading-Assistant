@@ -29,84 +29,54 @@ else:
 # --- 3. HARDCODED RUBRIC ---
 PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
-GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to follow the rubric. Recognize effort.
-
 1. FORMATTING (10 pts):
-- Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly IN THE BODY TEXT.
-- DEDUCTIONS (TIERED): 
-  * **SUPERSCRIPT/SUBSCRIPT ERRORS:** Count errors in paragraphs/body text (Ignore graphs/tables).
-    * **1 or 2 errors:** **-0.5 Points** (resulting score: 9.5).
-    * **3 or more errors:** **-1.0 Point** (resulting score: 9.0).
-  * Consistent use of "I/We": Deduct heavily.
-  * NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing).
+- Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly.
+- DEDUCTIONS: 1-2 subscript errors = -0.5 pts. 3+ errors = -1.0 pt.
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
-- **OBJECTIVE:** Specific lab objectives must be explicitly stated.
-  * **Penalty:** If missing or unclear, **-1.0 point**.
-- PARTIAL CREDIT: Award points proportionally.
+- OBJECTIVE: Must be explicit. If missing, -1.0 pt.
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
 
 4. VARIABLES (10 pts):
-- Criteria: IV (units/range), DV (method), 3+ Controlled Variables.
-- **SCORING TIERS:**
-  * **10/10:** IV + DV + 3+ Control Variables with explanations.
-  * **9.5/10:** Variables listed, but description of **how to measure DV** is vague. (Deduct 0.5).
-  * **9.0/10:** Variables listed, but explanations missing for multiple variables. (Deduct 1.0).
+- Criteria: IV, DV, 3+ Controls.
+- SCORING: 
+  * 10/10: All defined + explanations.
+  * 9.5/10: DV measurement vague (-0.5).
+  * 9.0/10: Explanations missing (-1.0).
 
 5. PROCEDURES (10 pts):
-- Criteria: Numbered steps, specific quantities, safety.
-- SCORING RULE: A missing diagram is a MINOR deduction (-0.5 points).
+- Criteria: Numbered steps, quantities, safety. Diagram missing = -0.5.
 
 6. RAW DATA (10 pts):
-- Criteria: Qualitative observations, clear tables, units, consistent significant figures.
-- FORMATTING: Do NOT deduct for table aesthetics. Focus on data clarity.
+- Criteria: Qualitative observations, tables, units, sig figs.
 
-7. DATA ANALYSIS (10 pts) [GRAPH & CALCULATION CRITICAL]:
-- Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
-- **UNCERTAINTY ANALYSIS:** NOT REQUIRED. Do NOT deduct for missing error bars/propagation.
-- **INTERMEDIATE PRECISION:** Excessive precision (extra digits) in intermediate steps is ALLOWED. Only penalize significant figures in the **FINAL RESULT**.
-- **MANDATORY GRAPH CHECKLIST:**
-  * **Format:** Must be a Scatterplot with a Trendline.
-  * **Labels:** Axis labels with Units MUST be present.
-  * **Stats:** R² value AND Trendline Equation MUST be listed on the graph.
-  * **Logic:** Trendline type must be appropriate (e.g., don't force linear fit on curved data).
-- DEDUCTION: -0.5 for partial effort, -1.0 for zero attention.
+7. DATA ANALYSIS (10 pts):
+- Criteria: Calculation shown, Graph (Scatterplot, Trendline, Equation, R^2).
+- NOTE: Intermediate precision allowed. Check final answer sig figs.
 
 8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
-- **IV/DV RELATIONSHIP:** Must explain the specific relationship (trend) shown by the graph.
-  * **ACCEPTED TERMINOLOGY:** "Proportional" is accepted for positive trends. "Inverse" is accepted for negative trends.
-  * **Penalty:** If not explained thoroughly, **-1.0 point**.
-- **THEORY CONNECTION:** Must connect results to Chemical Theory.
-  * **Penalty:** If missing, **-2.0 points**.
-- **QUANTITATIVE SUPPORT:** Must support conclusion with specific numbers.
-  * **Penalty:** If missing, **-2.0 points**.
-- **QUALITATIVE SUPPORT:** Must support conclusion with observations.
-  * **Penalty:** If missing, **-0.5 points**.
-- **STATISTICS (R vs R²):**
-  * **R (Correlation Coefficient):** Must explain strength and DIRECTION. **Penalty:** If missing, **-1.0 point**.
-  * **R² (Coefficient of Determination):** Must explain fit/variability. **Penalty:** If explained poorly, **-0.5 points**.
-  * **NOTE:** If R is missing but R² is explained well, DO NOT deduct for R². Total stats deduction should be -1.0.
+- IV/DV RELATIONSHIP: Must explain graph trend. (If poor: -1.0)
+- THEORY: Connect to chemical theory. (If missing: -2.0)
+- QUANTITATIVE SUPPORT: Must cite specific numbers. (If missing: -2.0)
+- QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5)
+- STATISTICS: Explain R (Correlation) and R^2 (Fit). (If R missing: -1.0. If R^2 weak: -0.5).
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
-- **BASE SCORE:** Start at 0. Add points ONLY if specific criteria are met.
-- **5 POINTS:** Lists at least 4 distinct sources of error.
-- **+1 POINT:** Correctly identifies Systematic vs. Random errors.
-- **+2 POINTS (IMPACT):**
-  * **2 Points:** Specific directional impact ("caused mass to increase") described for **100% of listed errors**.
-  * **1 Point (Partial Deduction):** Directional impact described for **SOME** errors, or if even ONE is missing/vague. (Deduct 1.0).
-  * **0 Points (Full Deduction):** No directional impact described for ANY error. (Deduct 2.0).
-- **+2 POINTS (IMPROVEMENT):** Must suggest **SPECIFIC** equipment or procedural changes.
-  * **2 Points:** Specific improvements for all errors.
-  * **1.5 Points (Deduct 0.5):** Improvements listed but slightly vague (e.g. "use more precise equipment" without naming it).
-  * **0 Points (Full Deduction):** No improvements or completely generic ("be more careful").
+- REQUIREMENT: List errors + Specific Directional Impact + Specific Improvement.
+- IMPACT SCORING:
+  * Impact defined for 100% of errors = 2 pts.
+  * Impact defined for SOME (not all) errors = 1 pt (Deduct 1.0).
+  * No impact defined = 0 pts (Deduct 2.0).
+- IMPROVEMENT SCORING:
+  * Specific equipment named = 2 pts.
+  * Vague ("use better scale") = 1.5 pts (Deduct 0.5).
+  * Generic ("be careful") = 0 pts (Deduct 2.0).
 
 10. REFERENCES (10 pts):
-- Criteria: Sources listed and cited.
-- **ABSOLUTE SCORING LOGIC (The "9-Point Floor"):**
-  * **If 3+ credible sources found:** Score **MUST** be 9.0, 9.5, or 10.0.
+- Criteria: 3+ credible sources = 9.0 min score.
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -123,24 +93,19 @@ Your goal is to grade student lab reports according to the specific rules below.
 2.  **VARIABLES (Section 4) - VAGUENESS CHECK:**
     * Check the **Dependent Variable (DV)** description.
     * If the method of measurement is **vague** (e.g., "we measured time" instead of "we used a stopwatch to measure time until color change"), **Deduct 0.5 points** (Score 9.5).
-    * Do NOT deduct 1.0 point unless multiple variables are undefined.
 
-3.  **CONCLUSION (Section 8) - STATISTICAL & TERMINOLOGY INTELLIGENCE:**
-    * **IV/DV Trend:** * **ALLOW SYNONYMS:** "Proportional" = Positive Relationship. "Inverse" = Negative Relationship. 
-      * **Do NOT deduct** if these terms are used.
-    * **R² Check:** Look for keywords: "fit," "variability," "scatter," "trendline." If present, give credit for R² explanation.
-    * **R Check:** Look for keywords: "correlation," "strength," "positive/negative."
-    * **Scoring:**
-      * Missing R only = -1.0 point.
-      * Missing R AND R² explanation = -1.5 points.
-      * **Do not penalize R² explanation if it is correct, even if R is missing.**
+3.  **CONCLUSION (Section 8) - STRICT DEDUCTIONS:**
+    * **Quantitative Data:** Did they quote specific numbers from their data? If NO, **Deduct 2.0 points**.
+    * **IV/DV Trend:** Did they explain the relationship? If NO, **Deduct 1.0 point**. (Accept "Proportional" or "Inverse").
+    * **Theory:** Did they connect to chemical theory? If NO, **Deduct 1.0 point**.
+    * **Statistics:** If R value explanation is missing, **Deduct 1.0 point**.
 
 4.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
-    * **IMPACT (2 pts):**
+    * **IMPACT (2 pts available):**
       * Impact explained for **100%** of errors? -> **+2 Points.**
       * Impact explained for **SOME** errors (even if only 1 is missing)? -> **+1 Point (Deduct 1.0).**
       * Impact explained for **NONE**? -> **+0 Points (Deduct 2.0).**
-    * **IMPROVEMENTS (2 pts):**
+    * **IMPROVEMENTS (2 pts available):**
       * Specific equipment/method named? -> **+2 Points.**
       * Vague suggestions ("use better tools")? -> **+1.5 Points (Deduct 0.5).**
       * No suggestions/Generic ("be careful")? -> **+0 Points (Deduct 2.0).**
@@ -524,7 +489,7 @@ def parse_score(text):
         print(f"Error parsing score: {e}")
     return "N/A"
 
-# --- WORD FORMATTER (Strict Symbol Cleaning) ---
+# --- WORD FORMATTER (Strict Symbol Cleaning & Level 2 Header) ---
 def write_markdown_to_docx(doc, text):
     lines = text.split('\n')
     for line in lines:
@@ -535,7 +500,7 @@ def write_markdown_to_docx(doc, text):
         # 1. Handle Score Header & Student Name (Larger - Level 2)
         if line.startswith('# ') or line.startswith('STUDENT:'): 
             clean = line.replace('# ', '').replace('*', '').strip()
-            # Changed from Level 0 (Huge) to Level 2 (Large/Bold)
+            # Changed from Level 4 (Small) to Level 2 (Large)
             doc.add_heading(clean, level=2) 
             continue
         
