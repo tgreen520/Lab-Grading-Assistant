@@ -64,7 +64,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - Criteria: Calculation shown, Graph (Scatterplot, Trendline, Equation, R^2).
 - GRAPH EQUATION: Linear equation must be displayed on graph. (Missing: -1.0).
 - GRAPH R²: R² value must be displayed on graph. (Missing: -1.0).
-- CALCULATIONS: Must be detailed and clear. (Unclear: -1.0).
+- CALCULATIONS: Must be detailed and clear. (Missing:-1.0, unclear: 0.5).
 - CALCULATION STEPS: All steps must be clearly explained OR labeled for clarity. (Not done: -0.5).
 - NOTE: Intermediate precision allowed. Check final answer sig figs.
 
