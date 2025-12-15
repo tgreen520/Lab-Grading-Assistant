@@ -37,6 +37,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - Criteria: Clear objective, background theory, balanced equations.
 - OBJECTIVE: Must be explicit. If missing, -1.0 pt.
 - EQUATION: Balanced chemical equation required. If missing, -1.0 pt.
+- THEORY RELEVANCE: Theory must thoroughly relate to the lab objective. If unrelated/weak, -1.0 pt.
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
@@ -71,7 +72,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
   * R (Correlation): Must explain Strength & Direction. (If missing: -1.0).
   * R² (Fit): Must explain Fit/Variability. (If poor/missing: -0.5).
 - FOCUS: If conclusion is overly repetitive or lacks focus, deduct -0.5 MAX.
-- NOTE: Do NOT deduct for citations here (checked in References). Do NOT deduct for "Data Reliability" separately if R^2 is already penalized.
+- NOTE: Do NOT deduct for citations here. Do NOT deduct for "Data Reliability" separately.
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
 - REQUIREMENT: List errors + Specific Directional Impact + Specific Improvement.
@@ -105,6 +106,7 @@ Your goal is to grade student lab reports according to the specific rules below.
 2.  **INTRODUCTION (Section 2):**
     * **Objective:** If missing -> **Deduct 1.0 point**.
     * **Chemical Equation:** If missing -> **Deduct 1.0 point**.
+    * **Theory Relevance:** Does the theory thoroughly relate to the lab objective? If NO -> **Deduct 1.0 point**.
 
 3.  **HYPOTHESIS (Section 3):**
     * **Units Check:** Are units provided for BOTH IV and DV? (No units = -1.0. Partial units = -0.5).
@@ -126,6 +128,7 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Focus/Clarity:** If the conclusion is excessively repetitive or unfocused -> **Deduct 0.5 points MAX**.
     * **RESTRICTIONS:** * **DO NOT** deduct for Citations in this section.
       * **DO NOT** deduct for "Data Reliability" as a separate category (this is covered by R/R² penalties).
+    * **MATH CHECK:** Ensure the sum of your deductions matches the final score calculation perfectly. Do not make addition errors.
 
 6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **COUNTING RULE:** Count the errors listed. If the student lists 3 errors, they MUST explain the impact for all 3.
@@ -168,7 +171,7 @@ STUDENT: [Filename]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No). * "Chemical Equation present?" (-1.0 if No).]
+* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No). * "Chemical Equation present?" (-1.0 if No). * "Theory relates to objective?" (-1.0 if No).]
 
 **3. HYPOTHESIS: [Score]/10**
 * **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
@@ -434,7 +437,7 @@ def grade_submission(file, model_id):
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing).\n\n"
+            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing). Check Theory Relevance (-1.0 if irrelevant).\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -466,7 +469,7 @@ def grade_submission(file, model_id):
             "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing).\n"
+            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing). Check Theory Relevance (-1.0 if irrelevant).\n"
         )
         
         user_message = [
