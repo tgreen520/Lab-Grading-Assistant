@@ -54,7 +54,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
   * 9.0/10: Explanations missing (-1.0).
 
 5. PROCEDURES (10 pts):
-- Criteria: Numbered steps, quantities, safety. Diagram missing = -0.5.
+- Criteria: Numbered steps, quantities, safety, disposal. Diagram missing = -0.5.
 
 6. RAW DATA (10 pts):
 - Criteria: Qualitative observations, tables, units, sig figs.
@@ -181,7 +181,7 @@ STUDENT: [Filename]
 
 **3. HYPOTHESIS: [Score]/10**
 * **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:**
+* **⚠️ Improvements:** [**CRITICAL CHECKS:**]
 * "Justification: [Present/Missing/Vague]" (-2.0 if missing, -1.0 if vague/incomplete).
 * "Units for IV/DV: [Present/Missing]" (-1.0 if missing, -0.5 if partial).
 * "DV Measurement Description: [Specific/Vague/Missing]" (-1.0 if missing, -0.5 if vague).]
@@ -192,7 +192,7 @@ STUDENT: [Filename]
 
 **5. PROCEDURES: [Score]/10**
 * **✅ Strengths:** [Comment on reproducibility and safety details]
-* **⚠️ Improvements:** [Identify exactly which step is vague and how to fix it]
+* **⚠️ Improvements:** [Identify exactly which step is vague and how to fix it. -0.5 if diagram of experimental setup missing.]
 
 **6. RAW DATA: [Score]/10**
 * **✅ Strengths:** [Comment on data organization and unit clarity]
