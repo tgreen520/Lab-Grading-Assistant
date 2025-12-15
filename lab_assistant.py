@@ -39,6 +39,8 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
+- UNITS: Must include units for BOTH IV and DV. (Missing: -1.0, Incomplete: -0.5).
+- MEASUREMENT: Specific description of how DV is measured. (Missing: -1.0, Vague: -0.5).
 
 4. VARIABLES (10 pts):
 - Criteria: IV, DV, 3+ Controls.
@@ -55,13 +57,15 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 7. DATA ANALYSIS (10 pts):
 - Criteria: Calculation shown, Graph (Scatterplot, Trendline, Equation, R^2).
+- CALCULATIONS: Must be detailed and clear. (Unclear: -1.0).
 - NOTE: Intermediate precision allowed. Check final answer sig figs.
 
 8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
-- IV/DV RELATIONSHIP: Must explain graph trend. (If poor: -1.0)
-- THEORY: Connect to chemical theory. (If missing: -2.0)
-- QUANTITATIVE SUPPORT: Must cite specific numbers. (If missing: -2.0)
-- QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5)
+- OUTLIERS: Significant outliers must be addressed. (Not addressed: -1.0).
+- IV/DV RELATIONSHIP: Must explain graph trend. (If poor: -1.0).
+- THEORY: Connect to chemical theory. (If missing: -1.0).
+- QUANTITATIVE SUPPORT: Must cite specific numbers. (If missing: -2.0).
+- QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5).
 - STATISTICS: Explain R (Correlation) and R^2 (Fit). (If R missing: -1.0. If R^2 weak: -0.5).
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
@@ -90,25 +94,30 @@ Your goal is to grade student lab reports according to the specific rules below.
     * If you deduct 0.5 points, the score is **9.5**. 
     * **DO NOT** round 9.5 down to 9.0.
 
-2.  **VARIABLES (Section 4) - VAGUENESS CHECK:**
-    * Check the **Dependent Variable (DV)** description.
-    * If the method of measurement is **vague** (e.g., "we measured time" instead of "we used a stopwatch to measure time until color change"), **Deduct 0.5 points** (Score 9.5).
+2.  **HYPOTHESIS (Section 3) - NEW RULES:**
+    * **Units Check:** Are units provided for BOTH IV and DV? (No units = -1.0. Partial units = -0.5).
+    * **Measurement Check:** Is the method for measuring the DV specific? (Missing = -1.0. Vague = -0.5).
 
-3.  **CONCLUSION (Section 8) - STRICT DEDUCTIONS:**
-    * **Quantitative Data:** Did they quote specific numbers from their data? If NO, **Deduct 2.0 points**.
-    * **IV/DV Trend:** Did they explain the relationship? If NO, **Deduct 1.0 point**. (Accept "Proportional" or "Inverse").
+3.  **DATA ANALYSIS (Section 7) - CALCULATION CHECK:**
+    * Example calculations must be detailed and easy to follow. If unclear/messy -> **Deduct 1.0 point**.
+
+4.  **CONCLUSION (Section 8) - STRICT DEDUCTIONS:**
+    * **Outliers:** Did they address outliers? If NO, **Deduct 1.0 point**.
+    * **Quantitative Data:** Did they quote specific numbers? If NO, **Deduct 2.0 points**.
+    * **IV/DV Trend:** Did they explain the relationship? If NO, **Deduct 1.0 point**.
     * **Theory:** Did they connect to chemical theory? If NO, **Deduct 1.0 point**.
     * **Statistics:** If R value explanation is missing, **Deduct 1.0 point**.
 
-4.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+5.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+    * **COUNTING RULE:** Count the errors listed. If the student lists 3 errors, they MUST explain the impact for all 3.
     * **IMPACT (2 pts available):**
       * Impact explained for **100%** of errors? -> **+2 Points.**
-      * Impact explained for **SOME** errors (even if only 1 is missing)? -> **+1 Point (Deduct 1.0).**
-      * Impact explained for **NONE**? -> **+0 Points (Deduct 2.0).**
+      * Impact explained for **SOME** errors (if even 1 is missing)? -> **+1 Point (DEDUCT 1.0).**
+      * Impact explained for **NONE**? -> **+0 Points (DEDUCT 2.0).**
     * **IMPROVEMENTS (2 pts available):**
       * Specific equipment/method named? -> **+2 Points.**
-      * Vague suggestions ("use better tools")? -> **+1.5 Points (Deduct 0.5).**
-      * No suggestions/Generic ("be careful")? -> **+0 Points (Deduct 2.0).**
+      * Vague suggestions ("use better tools")? -> **+1.5 Points (DEDUCT 0.5).**
+      * No suggestions/Generic ("be careful")? -> **+0 Points (DEDUCT 2.0).**
 
 ### 📝 FEEDBACK STYLE INSTRUCTIONS:
 1. **CLEAN OUTPUT:** When quoting student text in your feedback, **REMOVE** the `<sub>` and `<sup>` tags. Write "H2O" instead of "H<sub>2</sub>O".
@@ -137,7 +146,8 @@ STUDENT: [Filename]
 
 **3. HYPOTHESIS: [Score]/10**
 * **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
-* **⚠️ Improvements:** [Explain specifically where the justification falls short]
+* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Units for IV/DV: [Present/Missing]" (-1.0 if missing, -0.5 if partial).
+* "DV Measurement Description: [Specific/Vague/Missing]" (-1.0 if missing, -0.5 if vague).]
 
 **4. VARIABLES: [Score]/10**
 * **✅ Strengths:** [**LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]" and comment on clarity.]
@@ -153,16 +163,18 @@ STUDENT: [Filename]
 
 **7. DATA ANALYSIS: [Score]/10**
 * **✅ Strengths:** [Summarize the calculation process. If Graph is perfect, mention that the scatterplot, equation, and labels are all correct here.]
-* **⚠️ Improvements:** [**GRAPH AUDIT:** Write a natural summary of what is missing. Example: "The graph includes a trendline but is missing the equation and R² value. Additionally, the y-axis lacks units."]
+* **⚠️ Improvements:** [**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts).
+**GRAPH AUDIT:** Write a natural summary of what is missing. Example: "The graph includes a trendline but is missing the equation and R² value. Additionally, the y-axis lacks units."]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used to support the claim]
 * **⚠️ Improvements:** [**CRITICAL CHECKS:** Summarize missing elements naturally. Ensure you comment on:
-  1. IV/DV Relationship (-1) **(Note: "Proportional" and "Inverse" are ACCEPTED)**
-  2. Chemical Theory (-1)
-  3. Quantitative Support (-2)
-  4. Qualitative Support (-0.5)
-  5. **R and R² Explanation** (-1.0 if R missing, -0.5 if R² explained poorly)]
+  1. **Outliers** (-1.0 if not addressed)
+  2. IV/DV Relationship (-1.0)
+  3. Chemical Theory (-1.0)
+  4. Quantitative Support (-2.0)
+  5. Qualitative Support (-0.5)
+  6. **R and R² Explanation** (-1.0 if R missing, -0.5 if R² explained poorly)]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
@@ -335,7 +347,6 @@ def parse_feedback_for_csv(text):
     data = {}
     
     # 1. Clean Textual Decorators
-    # Removes bold asterisks and headers to make regex cleaner
     clean_text = re.sub(r'[*#]', '', text) 
     
     # 2. Extract Overall Summary
@@ -360,7 +371,6 @@ def parse_feedback_for_csv(text):
         data[f"{col_name} Score"] = score
         
         # AGGRESSIVE CLEANING for CSV:
-        # Replaces all whitespace (newlines, tabs) with a single space to prevent broken CSVs
         cleaned_feedback = re.sub(r'[\r\n]+', ' ', content.strip())
         data[f"{col_name} Feedback"] = cleaned_feedback
 
@@ -393,9 +403,10 @@ def grade_submission(file, model_id):
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
             "6. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "7. **CONCLUSION:** Check for IV/DV trend (-1), Theory (-1), Quant Data (-2), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
-            "8. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n"
-            "9. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n\n"
+            "7. **CONCLUSION:** Check for Outliers (-1.0), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
+            "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
+            "9. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
+            "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -423,9 +434,10 @@ def grade_submission(file, model_id):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for IV/DV trend (-1), Theory (-1), Quant Data (-2), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
-            "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n"
+            "6. **CONCLUSION:** Check for Outliers (-1.0), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
+            "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
+            "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
         )
         
         user_message = [
@@ -489,7 +501,7 @@ def parse_score(text):
         print(f"Error parsing score: {e}")
     return "N/A"
 
-# --- WORD FORMATTER (Strict Symbol Cleaning & Level 2 Header) ---
+# --- WORD FORMATTER (Strict Symbol Cleaning) ---
 def write_markdown_to_docx(doc, text):
     lines = text.split('\n')
     for line in lines:
@@ -685,29 +697,57 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     
     st.write("---")
     progress = st.progress(0)
-    status = st.empty()
+    status_text = st.empty()
+    live_results_table = st.empty()
     
-    new_results = []
+    # Initialize Session State list if not present
+    if 'current_results' not in st.session_state:
+        st.session_state.current_results = []
+    
+    # Create a set of already graded filenames for quick lookup
+    existing_filenames = {item['Filename'] for item in st.session_state.current_results}
     
     for i, file in enumerate(processed_files):
-        status.markdown(f"**Grading:** `{file.name}`...")
-        
-        # POLITE DELAY to avoid 529s on loop
-        time.sleep(2) 
+        # 1. SMART RESUME CHECK: Skip if already graded
+        if file.name in existing_filenames:
+            status_text.info(f"⏩ Skipping **{file.name}** (Already Graded)")
+            time.sleep(0.5) # Brief pause for visual feedback
+            progress.progress((i + 1) / len(processed_files))
+            continue
 
-        feedback = grade_submission(file, user_model_id) # PASSING USER MODEL ID
-        score = parse_score(feedback)
+        # 2. GRADING LOGIC
+        status_text.markdown(f"**Grading:** `{file.name}`...")
         
-        new_results.append({
-            "Filename": file.name,
-            "Score": score,
-            "Feedback": feedback
-        })
+        try:
+            # Polite delay to prevent API overloading
+            time.sleep(2) 
+            
+            feedback = grade_submission(file, user_model_id) # PASSING USER MODEL ID
+            score = parse_score(feedback)
+            
+            # 3. IMMEDIATE SAVE
+            new_entry = {
+                "Filename": file.name,
+                "Score": score,
+                "Feedback": feedback
+            }
+            
+            st.session_state.current_results.append(new_entry)
+            
+            # Update the existing set so duplicates within the same batch run are also caught (unlikely but safe)
+            existing_filenames.add(file.name)
+            
+            # 4. LIVE TABLE UPDATE
+            df_live = pd.DataFrame(st.session_state.current_results)
+            live_results_table.dataframe(df_live[["Filename", "Score"]], use_container_width=True)
+            
+        except Exception as e:
+            st.error(f"❌ Error grading {file.name}: {e}")
+            
         progress.progress((i + 1) / len(processed_files))
         
 
-    st.session_state.current_results = new_results
-    status.success("✅ Grading Complete! Scrolling down...")
+    status_text.success("✅ Grading Complete! Scrolling down...")
     progress.empty()
 
 # --- 8. PERSISTENT DISPLAY ---
