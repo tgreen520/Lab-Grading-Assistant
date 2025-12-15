@@ -186,7 +186,7 @@ STUDENT: [Filename]
 
 **1. FORMATTING: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of tone/voice quality]
-* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (If X=1 or 2, Score **MUST** be 9.5. If X>=3, Score is 9.0 or lower). *"First person voice used?" (-1.0 if Yes).]
+* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (If X=1 or 2, Score **MUST** be 9.5. If X>=3, Score is 9.0 or lower). "First person voice used? This includes "I", "we" or "my"" (-1.0 if Yes).]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
