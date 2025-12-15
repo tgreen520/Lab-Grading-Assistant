@@ -31,7 +31,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 1. FORMATTING (10 pts):
 - Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly.
-- DEDUCTIONS: 1-2 subscript errors = -0.5 pts. 3+ errors = -1.0 pt. First-person voice = -1.0.
+- DEDUCTIONS: 1-2 subscript errors = -0.5 pts. 3+ errors = -1.0 pt. First-person voice (including "I", "we", or "my") = -1.0.
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
