@@ -34,10 +34,13 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - DEDUCTIONS: 1-2 subscript errors = -0.5 pts. 3+ errors = -1.0 pt. First-person voice (including "I", "we", or "my") = -1.0.
 
 2. INTRODUCTION (10 pts):
-- Criteria: Clear objective, background theory, balanced equations.
+- Criteria: Clear objective, background theory with thorough chemical explanation, balanced equations.
 - OBJECTIVE: Must be explicit. (Missing: -1.0. Present but Vague/Implicit: -0.5).
 - EQUATION: Balanced chemical equation required. (Missing: -1.0).
-- THEORY/BACKGROUND: Must be thorough and connected to objective. (Irrelevant/Missing: -1.0. Brief/Not thoroughly connected: -0.5).
+- CHEMICAL THEORY/BACKGROUND: Must be thorough, chemically detailed, and connected to objective.
+  * Missing or minimal chemical theory: -3.0
+  * Present but not thoroughly discussed: -2.0
+  * Present but vague or superficial: -1.0
 - NOTE: Do NOT deduct for inconsistent temperature units or citation context.
 
 3. HYPOTHESIS (10 pts):
@@ -119,11 +122,15 @@ Your goal is to grade student lab reports according to the specific rules below.
 2. The user will NOT see this block (it is filtered out).
 3. Do NOT include any math or deduction logic in the "OUTPUT FORMAT" sections. Only the final feedback text.
 
-1.  **INTRODUCTION (Section 2) - DEDUCTION PROTOCOL:**
+1.  **INTRODUCTION (Section 2) - ENHANCED CHEMICAL THEORY PROTOCOL:**
     * **Start at 10.0 Points.**
     * **Objective:** If Missing -> -1.0. If Vague/Implicit -> -0.5.
     * **Chemical Equation:** If Missing -> -1.0.
-    * **Background Theory:** If Missing/Irrelevant -> -1.0. If Brief or Not thoroughly connected to objective -> -0.5.
+    * **Chemical Theory/Background - TIERED DEDUCTIONS:**
+        * **Missing or Minimal (barely any chemical explanation):** -3.0 points
+        * **Present but Not Thoroughly Discussed (lacks depth or detail):** -2.0 points
+        * **Present but Vague/Superficial (mentions concepts but doesn't explain them well):** -1.0 point
+    * **Theory Connection to Objective:** The chemical theory must connect meaningfully to the lab's objective. If disconnected or irrelevant, apply the appropriate deduction above.
     * **RESTRICTIONS (Do NOT Deduct):** No deductions for citation context or inconsistent units.
 
 2.  **CONCLUSION (Section 8) - STRICT MATH PROTOCOL:**
@@ -182,7 +189,7 @@ STUDENT: [Filename]
 * [1-2 sentences on quality]
 * [Critique of graphs/images]
 
-**📝 DETAILED RUBRIC BREAKDOWN:**
+**📋 DETAILED RUBRIC BREAKDOWN:**
 
 **1. FORMATTING: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of tone/voice quality]
@@ -190,7 +197,15 @@ STUDENT: [Filename]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No, -0.5 if Vague). * "Chemical Equation present?" (-1.0 if No). * "Background thoroughly explained?" (-2.0 if No, -1.0 if Brief or not connected to objective). NOTE: Do not penalize citation context or unit consistency.]
+* **⚠️ Improvements:** [**CRITICAL CHECKS:** 
+* "Objective explicit?" (-1.0 if No, -0.5 if Vague). 
+* "Chemical Equation present?" (-1.0 if No). 
+* "Chemical Theory Quality Assessment:" 
+  - Missing/Minimal (barely any chemical explanation): -3.0
+  - Present but not thoroughly discussed (lacks depth): -2.0
+  - Present but vague/superficial: -1.0
+* Assess whether the chemical theory thoroughly explains relevant concepts (reaction mechanisms, bonding, energy changes, etc.) and connects meaningfully to the lab objective.
+* NOTE: Do not penalize citation context or unit consistency.]
 
 **3. HYPOTHESIS: [Score]/10**
 * **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
@@ -251,8 +266,13 @@ if 'current_results' not in st.session_state:
     st.session_state.current_results = []
 if 'current_session_name' not in st.session_state:
     st.session_state.current_session_name = "New Grading Session"
+if 'autosave_dir' not in st.session_state:
+    st.session_state.autosave_dir = "autosave_feedback"
 
 client = anthropic.Anthropic(api_key=API_KEY)
+
+# --- CREATE AUTOSAVE DIRECTORY ---
+os.makedirs(st.session_state.autosave_dir, exist_ok=True)
 
 # --- 5. HELPER FUNCTIONS ---
 def encode_file(uploaded_file):
@@ -466,7 +486,15 @@ def grade_submission(file, model_id):
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "10. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check if chemical theory is thorough and connects to lab objective. (-2.0 if minimal or missing. -1.0 if vague). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check if Theory connects to Objective (-0.5 if not thoroughly connected). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
+            "11. **INTRODUCTION - ENHANCED CHEMICAL THEORY GRADING:** \n"
+            "    * Check for Chemical Equation (-1.0 if missing).\n"
+            "    * Check for Objective (-1.0 if missing, -0.5 if vague).\n"
+            "    * **CHEMICAL THEORY ASSESSMENT (TIERED):**\n"
+            "      - Missing/Minimal (barely any chemical explanation): -3.0 points\n"
+            "      - Present but not thoroughly discussed (lacks depth/detail): -2.0 points\n"
+            "      - Present but vague/superficial (mentions concepts without explaining): -1.0 point\n"
+            "    * Chemical theory must thoroughly explain relevant concepts (reaction mechanisms, bonding, thermodynamics, kinetics, etc.) and meaningfully connect to the lab objective.\n"
+            "    * DO NOT penalize for inconsistent units or citation context.\n"
             "12. **PROCEDURES:** Check if a diagram or photograph of the experimental setup is included (-0.5 if missing).\n"
             "13. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
             "14. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
@@ -502,7 +530,15 @@ def grade_submission(file, model_id):
             "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check if chemical theory is thorough and connects to lab objective. (-2.0 if minimal or missing. -1.0 if vague). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check if Theory connects to Objective (-0.5 if not thoroughly connected). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
+            "10. **INTRODUCTION - ENHANCED CHEMICAL THEORY GRADING:** \n"
+            "    * Check for Chemical Equation (-1.0 if missing).\n"
+            "    * Check for Objective (-1.0 if missing, -0.5 if vague).\n"
+            "    * **CHEMICAL THEORY ASSESSMENT (TIERED):**\n"
+            "      - Missing/Minimal (barely any chemical explanation): -3.0 points\n"
+            "      - Present but not thoroughly discussed (lacks depth/detail): -2.0 points\n"
+            "      - Present but vague/superficial (mentions concepts without explaining): -1.0 point\n"
+            "    * Chemical theory must thoroughly explain relevant concepts (reaction mechanisms, bonding, thermodynamics, kinetics, etc.) and meaningfully connect to the lab objective.\n"
+            "    * DO NOT penalize for inconsistent units or citation context.\n"
             "11. **PROCEDURES:** Check if a diagram of the experimental setup is included (-0.5 if missing).\n"
             "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
             "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
@@ -648,6 +684,44 @@ def create_zip_bundle(results):
             z.writestr(safe_name, doc_buffer.getvalue())
     return zip_buffer.getvalue()
 
+# --- NEW: AUTOSAVE INDIVIDUAL REPORT ---
+def autosave_report(item, autosave_dir):
+    """Save individual report as Word doc and append to CSV immediately after grading."""
+    try:
+        # 1. Save Word Document
+        doc = Document()
+        write_markdown_to_docx(doc, item['Feedback'])
+        safe_filename = os.path.splitext(item['Filename'])[0] + "_Feedback.docx"
+        doc_path = os.path.join(autosave_dir, safe_filename)
+        doc.save(doc_path)
+        
+        # 2. Append to CSV (or create if doesn't exist)
+        csv_path = os.path.join(autosave_dir, "gradebook.csv")
+        
+        # Parse feedback into row data
+        row_data = {
+            "Filename": item['Filename'],
+            "Overall Score": item['Score']
+        }
+        feedback_data = parse_feedback_for_csv(item['Feedback'])
+        row_data.update(feedback_data)
+        
+        # Check if CSV exists
+        if os.path.exists(csv_path):
+            existing_df = pd.read_csv(csv_path)
+            # Remove duplicate if re-grading same file
+            existing_df = existing_df[existing_df['Filename'] != item['Filename']]
+            new_df = pd.concat([existing_df, pd.DataFrame([row_data])], ignore_index=True)
+        else:
+            new_df = pd.DataFrame([row_data])
+        
+        new_df.to_csv(csv_path, index=False, encoding='utf-8-sig')
+        
+        return True
+    except Exception as e:
+        print(f"Autosave failed for {item['Filename']}: {e}")
+        return False
+
 def display_results_ui():
     if not st.session_state.current_results:
         return
@@ -692,6 +766,40 @@ def display_results_ui():
     with col3:
         st.download_button("📊 Detailed CSV Export", csv_data, f'{st.session_state.current_session_name}_Detailed.csv', "text/csv", use_container_width=True)
         st.caption("Includes separate columns for every section score and comment.")
+
+    # --- NEW: AUTOSAVE FOLDER ACCESS ---
+    st.divider()
+    st.info("💾 **Auto-saved files:** Individual feedback documents and gradebook are being saved to the `autosave_feedback` folder as grading progresses.")
+    
+    autosave_path = st.session_state.autosave_dir
+    if os.path.exists(autosave_path):
+        csv_autosave = os.path.join(autosave_path, "gradebook.csv")
+        if os.path.exists(csv_autosave):
+            with open(csv_autosave, 'rb') as f:
+                st.download_button(
+                    "📥 Download Auto-saved Gradebook (CSV)",
+                    f.read(),
+                    "autosaved_gradebook.csv",
+                    "text/csv",
+                    use_container_width=True
+                )
+        
+        # Create zip of all autosaved Word docs
+        autosave_files = [f for f in os.listdir(autosave_path) if f.endswith('.docx')]
+        if autosave_files:
+            zip_autosave = BytesIO()
+            with zipfile.ZipFile(zip_autosave, 'w', zipfile.ZIP_DEFLATED) as z:
+                for filename in autosave_files:
+                    file_path = os.path.join(autosave_path, filename)
+                    z.write(file_path, filename)
+            
+            st.download_button(
+                "📥 Download All Auto-saved Word Docs (.zip)",
+                zip_autosave.getvalue(),
+                "autosaved_feedback.zip",
+                "application/zip",
+                use_container_width=True
+            )
 
     tab1, tab2 = st.tabs(["📊 Gradebook View", "📝 Detailed Feedback"])
     with tab1:
@@ -772,6 +880,7 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     progress = st.progress(0)
     status_text = st.empty()
     live_results_table = st.empty()
+    live_feedback_display = st.empty()  # NEW: Live feedback viewer
     
     # Initialize Session State list if not present
     if 'current_results' not in st.session_state:
@@ -783,13 +892,13 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     for i, file in enumerate(processed_files):
         # 1. SMART RESUME CHECK: Skip if already graded
         if file.name in existing_filenames:
-            status_text.info(f"⏩ Skipping **{file.name}** (Already Graded)")
+            status_text.info(f"↩ Skipping **{file.name}** (Already Graded)")
             time.sleep(0.5) # Brief pause for visual feedback
             progress.progress((i + 1) / len(processed_files))
             continue
 
         # 2. GRADING LOGIC
-        status_text.markdown(f"**Grading:** `{file.name}`...")
+        status_text.markdown(f"**Grading:** `{file.name}` ({i+1}/{len(processed_files)})...")
         
         try:
             # Polite delay to prevent API overloading
@@ -798,7 +907,7 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             feedback = grade_submission(file, user_model_id) # PASSING USER MODEL ID
             score = parse_score(feedback)
             
-            # 3. IMMEDIATE SAVE
+            # 3. IMMEDIATE SAVE TO SESSION STATE
             new_entry = {
                 "Filename": file.name,
                 "Score": score,
@@ -807,12 +916,23 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             
             st.session_state.current_results.append(new_entry)
             
-            # Update the existing set so duplicates within the same batch run are also caught (unlikely but safe)
+            # 4. AUTOSAVE TO DISK (NEW - CRITICAL FOR RECOVERY)
+            autosave_success = autosave_report(new_entry, st.session_state.autosave_dir)
+            if autosave_success:
+                status_text.success(f"✅ **{file.name}** graded & auto-saved! (Score: {score}/100)")
+            else:
+                status_text.warning(f"⚠️ **{file.name}** graded but autosave failed (Score: {score}/100)")
+            
+            # Update the existing set so duplicates within the same batch run are also caught
             existing_filenames.add(file.name)
             
-            # 4. LIVE TABLE UPDATE
+            # 5. LIVE TABLE UPDATE
             df_live = pd.DataFrame(st.session_state.current_results)
             live_results_table.dataframe(df_live[["Filename", "Score"]], use_container_width=True)
+            
+            # 6. NEW: LIVE FEEDBACK DISPLAY
+            with live_feedback_display.expander(f"📄 Latest: {file.name} (Score: {score}/100)", expanded=False):
+                st.markdown(feedback)
             
         except Exception as e:
             st.error(f"❌ Error grading {file.name}: {e}")
@@ -820,8 +940,11 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
         progress.progress((i + 1) / len(processed_files))
         
 
-    status_text.success("✅ Grading Complete! Scrolling down...")
+    status_text.success("✅ Grading Complete! All reports auto-saved.")
     progress.empty()
+    
+    # Show message about autosave location
+    st.info(f"💾 **Backup Location:** All feedback has been saved to `{st.session_state.autosave_dir}/` folder. You can download individual files or the full gradebook below.")
 
 # --- 8. PERSISTENT DISPLAY ---
 if st.session_state.current_results:
