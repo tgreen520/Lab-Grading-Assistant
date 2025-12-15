@@ -36,6 +36,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
 - OBJECTIVE: Must be explicit. If missing, -1.0 pt.
+- EQUATION: Balanced chemical equation required. If missing, -1.0 pt.
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
@@ -61,12 +62,14 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - NOTE: Intermediate precision allowed. Check final answer sig figs.
 
 8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
-- OUTLIERS/OMISSIONS: Must address data outliers OR data omissions. (No mention: -1.0. Mentioned but not discussed thoroughly: -0.5).
-- IV/DV RELATIONSHIP: Did they explain the relationship? If NO, **Deduct 1.0 point**. (Accept "Proportional" or "Inverse").
-- THEORY: Did they connect to chemical theory? If NO, **Deduct 1.0 point**.
+- OUTLIERS/OMISSIONS: Must address data outliers or data omissions. (No mention: -1.0. Mentioned but vague: -0.5).
+- IV/DV RELATIONSHIP: Must explain graph trend. (If poor: -1.0).
+- THEORY: Connect to chemical theory. (If missing: -1.0).
 - QUANTITATIVE SUPPORT: Must cite specific numbers. (If missing: -2.0).
 - QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5).
-- STATISTICS: Explain R (Correlation) and R^2 (Fit). (If R value explanation is missing: -1.0. If R^2 weak: -0.5).
+- STATISTICS (R vs R²):
+  * R (Correlation): Must explain Strength & Direction. (If missing: -1.0).
+  * R² (Fit): Must explain Fit/Variability. (If poor/missing: -0.5).
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
 - REQUIREMENT: List errors + Specific Directional Impact + Specific Improvement.
@@ -80,10 +83,10 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
   * Generic ("be careful") = 0 pts (Deduct 2.0).
 
 10. REFERENCES (10 pts):
-- Criteria: 3+ credible sources = 9.0 min score.
-- If only one source given, deduct 5.0.
-- If only 2 sources given, deduct 3.0. 
-- If errors exist in APA formatting, deduct 0.5. 
+- 1 Reference only: -5.0 pts (Score 5.0).
+- 2 References only: -3.0 pts (Score 7.0).
+- 3+ References: Base score 10.0.
+- FORMATTING: If APA attempted but incorrect, deduct 0.5 pts.
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -97,23 +100,29 @@ Your goal is to grade student lab reports according to the specific rules below.
     * If you deduct 0.5 points, the score is **9.5**. 
     * **DO NOT** round 9.5 down to 9.0.
 
-2.  **HYPOTHESIS (Section 3) - NEW RULES:**
+2.  **INTRODUCTION (Section 2):**
+    * **Objective:** If missing -> **Deduct 1.0 point**.
+    * **Chemical Equation:** If missing -> **Deduct 1.0 point**.
+
+3.  **HYPOTHESIS (Section 3):**
     * **Units Check:** Are units provided for BOTH IV and DV? (No units = -1.0. Partial units = -0.5).
     * **Measurement Check:** Is the method for measuring the DV specific? (Missing = -1.0. Vague = -0.5).
 
-3.  **DATA ANALYSIS (Section 7) - CALCULATION CHECK:**
+4.  **DATA ANALYSIS (Section 7):**
     * Example calculations must be detailed and easy to follow. If unclear/messy -> **Deduct 1.0 point**.
 
-4.  **CONCLUSION (Section 8) - STRICT DEDUCTIONS:**
+5.  **CONCLUSION (Section 8) - STRICT DEDUCTIONS:**
     * **Outliers/Omissions:** Check for keywords "outlier" OR "omission" OR "omitted".
       * If **No mention** at all -> **Deduct 1.0 point**.
       * If **Mentioned** (e.g., "we omitted point 3") but explanation is weak/not thorough -> **Deduct 0.5 points**.
-    * **Quantitative Data:** Did they quote specific numbers? If NO, **Deduct 2.0 points**.
-    * **IV/DV Trend:** Did they explain the relationship? If NO, **Deduct 1.0 point**.
-    * **Theory:** Did they connect to chemical theory? If NO, **Deduct 1.0 point**.
-    * **Statistics:** If R value explanation is missing, **Deduct 1.0 point**.
+    * **IV/DV Trend:** "Proportional" and "Inverse" are ACCEPTED synonyms. If logic missing -> **Deduct 1.0 point**.
+    * **Quantitative Data:** Specific numbers quoted? If NO -> **Deduct 2.0 points**.
+    * **Theory:** Chemical theory connection? If NO -> **Deduct 1.0 point**.
+    * **Statistics (R vs R²):**
+      * **R (Correlation):** Look for keywords: "strength", "direction", "strong/weak positive/negative". If missing -> **Deduct 1.0 point**.
+      * **R² (Fit):** Look for keywords: "fit", "variability", "scatter", "reliability". If explained poorly or missing -> **Deduct 0.5 points**.
 
-5.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **COUNTING RULE:** Count the errors listed. If the student lists 3 errors, they MUST explain the impact for all 3.
     * **IMPACT (2 pts available):**
       * Impact explained for **100%** of errors? -> **+2 Points.**
@@ -123,6 +132,13 @@ Your goal is to grade student lab reports according to the specific rules below.
       * Specific equipment/method named? -> **+2 Points.**
       * Vague suggestions ("use better tools")? -> **+1.5 Points (DEDUCT 0.5).**
       * No suggestions/Generic ("be careful")? -> **+0 Points (DEDUCT 2.0).**
+
+7.  **REFERENCES (Section 10) - QUANTITY CHECK:**
+    * Count the references first.
+    * **1 Reference:** Maximum Score = 5.0.
+    * **2 References:** Maximum Score = 7.0.
+    * **3+ References:** Maximum Score = 10.0.
+    * **Formatting:** If APA style is attempted but contains errors, **Deduct 0.5 points** from the max score determined above.
 
 ### 📝 FEEDBACK STYLE INSTRUCTIONS:
 1. **CLEAN OUTPUT:** When quoting student text in your feedback, **REMOVE** the `<sub>` and `<sup>` tags. Write "H2O" instead of "H<sub>2</sub>O".
@@ -147,7 +163,7 @@ STUDENT: [Filename]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
-* **⚠️ Improvements:** [**OBJECTIVE CHECK:** "Objective explicit? [Yes/No]" (-1 pt if No). Also explain missing equations/theory.]
+* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No). * "Chemical Equation present?" (-1.0 if No).]
 
 **3. HYPOTHESIS: [Score]/10**
 * **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
@@ -187,8 +203,8 @@ STUDENT: [Filename]
   * "Improvements were listed but were slightly vague (e.g., did not name specific equipment). (-0.5 pt)" ]
 
 **10. REFERENCES: [Score]/10**
-* **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources." Comment on quality.]
-* **⚠️ Improvements:** [Specific formatting error explanation]
+* **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources."]
+* **⚠️ Improvements:** [**QUANTITY CHECK:** "Only found [X] sources." (If 1 source -> Score 5.0. If 2 sources -> Score 7.0). **FORMATTING:** "APA Formatting Check: [Correct/Incorrect]" (-0.5 if incorrect).]
 
 **💡 TOP 3 ACTIONABLE STEPS FOR NEXT TIME:**
 1. [Step 1 - Specific]
@@ -376,6 +392,7 @@ def parse_feedback_for_csv(text):
         data[f"{col_name} Score"] = score
         
         # AGGRESSIVE CLEANING for CSV:
+        # Replaces all whitespace (newlines, tabs) with a single space to prevent broken CSVs
         cleaned_feedback = re.sub(r'[\r\n]+', ' ', content.strip())
         data[f"{col_name} Feedback"] = cleaned_feedback
 
@@ -411,7 +428,8 @@ def grade_submission(file, model_id):
             "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
-            "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n\n"
+            "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
+            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing).\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -443,6 +461,7 @@ def grade_submission(file, model_id):
             "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
+            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing).\n"
         )
         
         user_message = [
