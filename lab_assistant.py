@@ -38,7 +38,8 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - OBJECTIVE: Must be explicit. If missing, -1.0 pt.
 - EQUATION: Balanced chemical equation required. If missing, -1.0 pt.
 - THEORY RELEVANCE: Theory must thoroughly relate to the lab objective. If unrelated/weak, -1.0 pt.
-- FORMATTING: Do not deduct for formatting errors in the introduction. 
+- THOROUGHNESS: Background info must be detailed. If lack of thoroughness, -1.0 pt.
+- NOTE: Do NOT deduct for inconsistent temperature units (F vs C).
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
@@ -64,17 +65,17 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - NOTE: Intermediate precision allowed. Check final answer sig figs.
 
 8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
-- OUTLIERS/OMISSIONS: Must address data outliers or data omissions. (No mention: -1.0. Mentioned but vague: -0.5).
+- HYPOTHESIS SUPPORT: Must indicate if data supports hypothesis. (If missing: -1.0).
+- OUTLIERS/OMISSIONS: Must address data outliers or omissions. (No mention: -1.0. Mentioned but vague: -0.5).
 - IV/DV RELATIONSHIP: Must explain graph trend. (If poor: -1.0).
 - THEORY: Connect to chemical theory. (If missing: -1.0).
-- HYPOTHESIS: Connect data to hypothesis. (If missing: -1.0. Mentioned but vague: -0.5)
 - QUANTITATIVE SUPPORT: Must cite specific numbers. (If missing: -2.0).
 - QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5).
+- LITERATURE COMPARISON: If comparison to literature is vague (no specific values), -0.5 pt.
 - STATISTICS (R vs R²):
   * R (Correlation): Must explain Strength & Direction. (If missing: -1.0).
-  * R² (Fit): Must explain Fit/Variability. (If missing: -1. If poor: -0.5).
-- FOCUS: If conclusion is overly repetitive or lacks focus, deduct -0.5 MAX.
-- NOTE: Do NOT deduct for citations here. Do NOT deduct for "Data Reliability" separately.
+  * R² (Fit): Must explain Fit/Variability. (If missing entirely: -1.0. If mentioned but vague: -0.5).
+- NOTE: Do NOT deduct for "Internal Inconsistency" or Citations here.
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
 - REQUIREMENT: List errors + Specific Directional Impact + Specific Improvement.
@@ -109,6 +110,8 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Objective:** If missing -> **Deduct 1.0 point**.
     * **Chemical Equation:** If missing -> **Deduct 1.0 point**.
     * **Theory Relevance:** Does the theory thoroughly relate to the lab objective? If NO -> **Deduct 1.0 point**.
+    * **Thoroughness:** Is the background information thorough? If brief/superficial -> **Deduct 1.0 point**.
+    * **RESTRICTIONS:** Do NOT deduct points for inconsistent temperature units (e.g., Fahrenheit vs Celsius) in the theory section.
 
 3.  **HYPOTHESIS (Section 3):**
     * **Units Check:** Are units provided for BOTH IV and DV? (No units = -1.0. Partial units = -0.5).
@@ -118,19 +121,24 @@ Your goal is to grade student lab reports according to the specific rules below.
     * Example calculations must be detailed and easy to follow. If unclear/messy -> **Deduct 1.0 point**.
 
 5.  **CONCLUSION (Section 8) - STRICT DEDUCTIONS:**
+    * **Hypothesis Support:** Does the conclusion state if data supports the hypothesis? If NO -> **Deduct 1.0 point**.
     * **Outliers/Omissions:** Check for keywords "outlier" OR "omission" OR "omitted".
       * If **No mention** at all -> **Deduct 1.0 point**.
       * If **Mentioned** (e.g., "we omitted point 3") but explanation is weak/not thorough -> **Deduct 0.5 points**.
+    * **Literature Comparison:** If comparing to literature (e.g., "results align with LibreTexts") but **no specific values** are given -> **Deduct 0.5 points** (NOT 1.0).
     * **IV/DV Trend:** "Proportional" and "Inverse" are ACCEPTED synonyms. If logic missing -> **Deduct 1.0 point**.
     * **Quantitative Data:** Specific numbers quoted? If NO -> **Deduct 2.0 points**.
     * **Theory:** Chemical theory connection? If NO -> **Deduct 1.0 point**.
     * **Statistics (R vs R²):**
       * **R (Correlation):** Look for keywords: "strength", "direction", "strong/weak positive/negative". If missing -> **Deduct 1.0 point**.
-      * **R² (Fit):** Look for keywords: "fit", "variability", "scatter", "reliability". If explained poorly or missing -> **Deduct 0.5 points**.
+      * **R² (Fit):** Look for keywords: "fit", "variability", "scatter", "reliability". 
+        * If **MISSING ENTIRELY** -> **Deduct 1.0 point**.
+        * If **Explained poorly** -> **Deduct 0.5 points**.
     * **Focus/Clarity:** If the conclusion is excessively repetitive or unfocused -> **Deduct 0.5 points MAX**.
     * **RESTRICTIONS:** * **DO NOT** deduct for Citations in this section.
-      * **DO NOT** deduct for "Data Reliability" as a separate category (this is covered by R/R² penalties).
-    * **MATH CHECK:** Ensure the sum of your deductions matches the final score calculation perfectly. Do not make addition errors.
+      * **DO NOT** deduct for "Internal Inconsistency" (e.g. typos between sections).
+      * **DO NOT** deduct for "Data Reliability" separately (this is covered by R/R² penalties).
+    * **MATH CHECK:** Start with 10.0 points. Subtract ONLY the specific deductions listed above. The Final Score MUST be exactly 10 minus the sum of deductions. Verify your subtraction.
 
 6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **COUNTING RULE:** Count the errors listed. If the student lists 3 errors, they MUST explain the impact for all 3.
@@ -173,7 +181,7 @@ STUDENT: [Filename]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No). * "Chemical Equation present?" (-1.0 if No). * "Theory relates to objective?" (-1.0 if No).]
+* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No). * "Chemical Equation present?" (-1.0 if No). * "Theory relates to objective?" (-1.0 if No). * "Thoroughness?" (-1.0 if lack of thoroughness).]
 
 **3. HYPOTHESIS: [Score]/10**
 * **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
@@ -200,12 +208,14 @@ STUDENT: [Filename]
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used to support the claim]
 * **⚠️ Improvements:** [**CRITICAL CHECKS:** Summarize missing elements naturally. Ensure you comment on:
-  1. **Outliers/Omissions** (-1.0 if not addressed, -0.5 if vague)
-  2. IV/DV Relationship (-1.0)
-  3. Chemical Theory (-1.0)
-  4. Quantitative Support (-2.0)
-  5. Qualitative Support (-0.5)
-  6. **R and R² Explanation** (-1.0 if R missing, -0.5 if R² explained poorly)]
+  1. **Hypothesis Support** (-1.0 if not stated)
+  2. **Outliers/Omissions** (-1.0 if not addressed, -0.5 if vague)
+  3. IV/DV Relationship (-1.0)
+  4. Chemical Theory (-1.0)
+  5. Quantitative Support (-2.0)
+  6. Qualitative Support (-0.5)
+  7. **Literature Comparison** (-0.5 if vague)
+  8. **R and R² Explanation** (-1.0 if R missing, -1.0 if R² missing, -0.5 if R² vague)]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
@@ -435,11 +445,11 @@ def grade_submission(file, model_id):
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
             "6. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5), Repetitiveness (-0.5).\n"
+            "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing). Check Theory Relevance (-1.0 if irrelevant).\n\n"
+            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if superficial). DO NOT penalize for inconsistent units.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -467,11 +477,11 @@ def grade_submission(file, model_id):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), Relationship to hypothesis (-1.0 if missing, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0), Repetitiveness (-0.5).\n"
+            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
             "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing). Check Theory Relevance (-1.0 if irrelevant).\n"
+            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if superficial). DO NOT penalize for inconsistent units.\n"
         )
         
         user_message = [
