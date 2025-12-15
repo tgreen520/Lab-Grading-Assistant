@@ -1,3 +1,4 @@
+
 import streamlit as st
 import anthropic
 import base64
@@ -54,7 +55,8 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
   * 9.0/10: Explanations missing (-1.0).
 
 5. PROCEDURES (10 pts):
-- Criteria: Numbered steps, quantities, safety. Diagram missing = -0.5.
+- Criteria: Numbered steps, quantities, safety.
+- DIAGRAM: Diagram of experimental setup required. (Missing: -0.5).
 
 6. RAW DATA (10 pts):
 - Criteria: Qualitative observations, tables, units, sig figs.
@@ -142,12 +144,15 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Calculations:** Example calculations unclear? -> -1.0.
     * **Steps:** Calculation steps not clearly explained OR labeled? -> -0.5.
 
-5.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+5.  **PROCEDURES (Section 5):**
+    * **Diagram Check:** Diagram of experimental setup missing? -> -0.5.
+
+6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
     * **IMPACT:** All errors have impact? +2. Some? +1 (-1.0 deduction). None? 0 (-2.0 deduction).
     * **IMPROVEMENTS:** Specific equipment? +2. Vague? +1.5 (-0.5 deduction). Generic? 0 (-2.0 deduction).
 
-6.  **REFERENCES (Section 10) - QUANTITY CHECK:**
+7.  **REFERENCES (Section 10) - QUANTITY CHECK:**
     * 1 Reference: Max Score 5.0.
     * 2 References: Max Score 7.0.
     * 3+ References: Max Score 10.0.
@@ -192,7 +197,7 @@ STUDENT: [Filename]
 
 **5. PROCEDURES: [Score]/10**
 * **✅ Strengths:** [Comment on reproducibility and safety details]
-* **⚠️ Improvements:** [Identify exactly which step is vague and how to fix it]
+* **⚠️ Improvements:** [**DIAGRAM CHECK:** "Diagram of experimental setup included?" (-0.5 if missing). Identify exactly which step is vague and how to fix it.]
 
 **6. RAW DATA: [Score]/10**
 * **✅ Strengths:** [Comment on data organization and unit clarity]
@@ -454,9 +459,10 @@ def grade_submission(file, model_id):
             "9. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "10. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
             "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check if Theory connects to Objective (-0.5 if not thoroughly connected). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
-            "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
-            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
-            "14. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n\n"
+            "12. **PROCEDURES:** Check if a diagram of the experimental setup is included (-0.5 if missing).\n"
+            "13. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
+            "14. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
+            "15. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -489,9 +495,10 @@ def grade_submission(file, model_id):
             "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
             "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check if Theory connects to Objective (-0.5 if not thoroughly connected). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
-            "11. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
-            "12. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
-            "13. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
+            "11. **PROCEDURES:** Check if a diagram of the experimental setup is included (-0.5 if missing).\n"
+            "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
+            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
+            "14. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
         )
         
         user_message = [
