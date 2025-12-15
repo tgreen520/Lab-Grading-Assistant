@@ -52,8 +52,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 4. VARIABLES (10 pts):
 - Criteria: IV, DV, 3+ Controls with thorough explanations.
 - DEDUCTIONS:
-  * Control variables missing (zero included): -4.0
-  * 1-2 control variables present: -1.0 
+  * Control variables missing (fewer than 3): -4.0
   * Control variables not justified: -1.0
   * Description of control variables vague: -1.0
   * Independent variable not thoroughly explained: -1.0
@@ -156,7 +155,7 @@ Your goal is to grade student lab reports according to the specific rules below.
 
 4.  **VARIABLES (Section 4) - ENHANCED SCORING:**
     * **Start at 10.0 Points.**
-    * **Control Variables Check:** No controls listed? -> -4.0. 1-2 controls listed-> -1.0
+    * **Control Variables Check:** Fewer than 3 controls listed? -> -4.0.
     * **Control Justification:** Controls not justified (no explanation of why they need to be controlled)? -> -1.0.
     * **Control Description Quality:** Control variable descriptions vague or unclear? -> -1.0.
     * **Independent Variable Explanation:** IV not thoroughly explained (lacks detail on what it is and how it's changed)? -> -1.0.
@@ -227,7 +226,7 @@ STUDENT: [Filename]
 **4. VARIABLES: [Score]/10**
 * **✅ Strengths:** [**DETAILED LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]" and comment on explanation quality.]
 * **⚠️ Improvements:** [**CRITICAL CHECKS:**
-* "Control Variables: [Number found]. If none listed, deduct -4.0 pts. If 1-2 controls listed-> -1.0"
+* "Control Variables: [Number found]. If fewer than 3, deduct -4.0 pts."
 * "Control Justification: [Present/Missing]. If not justified (no explanation of why they need to be controlled), deduct -1.0 pt."
 * "Control Description Quality: [Clear/Vague]. If vague or unclear, deduct -1.0 pt."
 * "Independent Variable Explanation: [Thorough/Not Thorough]. If IV not thoroughly explained (lacks detail on what it is and how it's changed), deduct -1.0 pt."
@@ -496,7 +495,7 @@ def grade_submission(file, model_id):
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
             "2. **VARIABLES - ENHANCED SCORING:** \n"
             "    * List the exact variables found (IV, DV, Controls).\n"
-            "    * Check for at least 3 control variables (-4.0 if none listed. -1.0 if 1-2 variables listed).\n"
+            "    * Check for at least 3 control variables (-4.0 if fewer than 3).\n"
             "    * Check if controls are justified with explanation of why they need to be controlled (-1.0 if not justified).\n"
             "    * Check if control descriptions are clear and specific (-1.0 if vague).\n"
             "    * Check if IV is thoroughly explained with detail on what it is and how it's changed (-1.0 if not thorough).\n"
@@ -548,7 +547,7 @@ def grade_submission(file, model_id):
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
             "2. **VARIABLES - ENHANCED SCORING:** \n"
             "    * List the exact variables found (IV, DV, Controls).\n"
-            "    * Check for at least 3 control variables (-4.0 if none listed. -1.0 if 1-2 listed).\n"
+            "    * Check for at least 3 control variables (-4.0 if fewer than 3).\n"
             "    * Check if controls are justified with explanation of why they need to be controlled (-1.0 if not justified).\n"
             "    * Check if control descriptions are clear and specific (-1.0 if vague).\n"
             "    * Check if IV is thoroughly explained with detail on what it is and how it's changed (-1.0 if not thorough).\n"
@@ -912,9 +911,9 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     status_text = st.empty()
     live_results_table = st.empty()
     
-    # NEW: Container for cumulative feedback display
+    # NEW: Placeholder for cumulative feedback display (cleared and rewritten each iteration)
     st.subheader("📋 Live Grading Feedback")
-    feedback_container = st.container()
+    feedback_placeholder = st.empty()
     
     # Initialize Session State list if not present
     if 'current_results' not in st.session_state:
@@ -964,8 +963,9 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             df_live = pd.DataFrame(st.session_state.current_results)
             live_results_table.dataframe(df_live[["Filename", "Score"]], use_container_width=True)
             
-            # 6. NEW: CUMULATIVE FEEDBACK DISPLAY (Shows all graded reports)
-            with feedback_container:
+            # 6. UPDATED: SINGLE COPY CUMULATIVE FEEDBACK DISPLAY
+            # Clear and rewrite the entire feedback section to avoid duplicates
+            with feedback_placeholder.container():
                 for idx, item in enumerate(st.session_state.current_results):
                     # Start expanded for most recent, collapsed for older ones
                     is_most_recent = (idx == len(st.session_state.current_results) - 1)
