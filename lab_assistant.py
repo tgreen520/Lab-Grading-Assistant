@@ -35,10 +35,10 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
-- OBJECTIVE: Must be explicit. If missing, -1.0 pt. If vague, -0.5 pt. 
+- OBJECTIVE: Must be explicit. If missing, -1.0 pt. If vague, -0.5 pt.
 - EQUATION: Balanced chemical equation required. If missing, -1.0 pt.
 - THEORY RELEVANCE: Theory must thoroughly relate to the lab objective. If unrelated/weak, -1.0 pt.
-- THOROUGHNESS: Background info must be detailed. If lack of thoroughness, -1.0 pt.
+- THOROUGHNESS: Background info must be detailed. If lack of thoroughness/brief, -0.5 pt. If missing, -1.0 pt.
 - NOTE: Do NOT deduct for inconsistent temperature units (F vs C).
 
 3. HYPOTHESIS (10 pts):
@@ -106,12 +106,21 @@ Your goal is to grade student lab reports according to the specific rules below.
     * If you deduct 0.5 points, the score is **9.5**. 
     * **DO NOT** round 9.5 down to 9.0.
 
-2.  **INTRODUCTION (Section 2):**
-    * **Objective:** If missing -> **Deduct 1.0 point**. Is the objective thorough? If NO -> **Deduct 0.5 points**.
-    * **Chemical Equation:** If missing -> **Deduct 1.0 point**.
-    * **Theory Relevance:** Does the theory thoroughly relate to the lab objective? If NO -> **Deduct 1.0 point**.
-    * **Thoroughness:** Is the background information thorough? If brief/superficial -> **Deduct 1.0 point**.
-    * **RESTRICTIONS:** Do NOT deduct points for inconsistent temperature units (e.g., Fahrenheit vs Celsius) in the theory section.
+2.  **INTRODUCTION (Section 2) - DEDUCTION PROTOCOL:**
+    * **Start at 10.0 Points.**
+    * **Objective:**
+        * If **Missing** -> Subtract 1.0.
+        * If **Present but Vague/Not Explicit** -> Subtract 0.5.
+    * **Chemical Equation:**
+        * If **Missing** -> Subtract 1.0.
+    * **Theory/Background:**
+        * If **Irrelevant/Missing** -> Subtract 1.0.
+        * If **Mentioned but Brief/Lacks Detail** -> Subtract 0.5.
+    * **Theory Relevance:** If theory does not thoroughly relate to objective -> Subtract 1.0.
+    * **RESTRICTIONS (Do NOT Deduct):**
+        * Do NOT deduct for "citation context" explanation.
+        * Do NOT deduct for inconsistent temperature units.
+    * **MATH ENFORCEMENT:** Final Score = 10.0 - (Sum of above deductions).
 
 3.  **HYPOTHESIS (Section 3):**
     * **Units Check:** Are units provided for BOTH IV and DV? (No units = -1.0. Partial units = -0.5).
@@ -120,29 +129,27 @@ Your goal is to grade student lab reports according to the specific rules below.
 4.  **DATA ANALYSIS (Section 7):**
     * Example calculations must be detailed and easy to follow. If unclear/messy -> **Deduct 1.0 point**.
 
-5.  **CONCLUSION (Section 8) - STRICT DEDUCTIONS:**
-    * **Hypothesis Support:** Does the conclusion state if data supports the hypothesis? If NO -> **Deduct 1.0 point**.
-    * **Outliers/Omissions:** Check for keywords "outlier" OR "omission" OR "omitted".
-      * If **No mention** at all -> **Deduct 1.0 point**.
-      * If **Mentioned** (e.g., "we omitted point 3") but explanation is weak/not thorough -> **Deduct 0.5 points**.
-    * **Literature Comparison:** If comparing to literature (e.g., "results align with LibreTexts") but **no specific values** are given -> **Deduct 0.5 points** (NOT 1.0).
-    * **IV/DV Trend:** "Proportional" and "Inverse" are ACCEPTED synonyms. If logic missing -> **Deduct 1.0 point**.
-    * **Quantitative Data:** Specific numbers quoted? If NO -> **Deduct 2.0 points**.
-    * **Theory:** Chemical theory connection? If NO -> **Deduct 1.0 point**.
-    * **Statistics (R vs R²):**
-      * **R (Correlation):** Look for keywords: "strength", "direction", "strong/weak positive/negative". If missing -> **Deduct 1.0 point**.
-      * **R² (Fit):** Look for keywords: "fit", "variability", "scatter", "reliability". 
-        * If **MISSING ENTIRELY** -> **Deduct 1.0 point**.
-        * If **Explained poorly** -> **Deduct 0.5 points**.
-    * **Focus/Clarity:** If the conclusion is excessively repetitive or unfocused -> **Deduct 0.5 points MAX**.
-    * **RESTRICTIONS:** * **DO NOT** deduct for Citations in this section.
-      * **DO NOT** deduct for "Internal Inconsistency".
-      * **DO NOT** deduct for "Data Reliability" (covered by R/R²).
-    * **MATH ENFORCEMENT PROTOCOL:**
-      1. Start with 10.0.
-      2. Sum ONLY the deductions listed above.
-      3. Final Score = 10.0 - Sum.
-      4. **VERIFY:** If you have deductions of -1.0 and -1.0, the score MUST be 8.0. Do not arbitrarily lower it further.
+5.  **CONCLUSION (Section 8) - STRICT MATH PROTOCOL:**
+    * **Start at 10.0 Points. Subtract ONLY the following if applicable:**
+    * **Hypothesis Support:** Not stated? -> Subtract 1.0.
+    * **Outliers/Omissions:**
+        * No mention at all? -> Subtract 1.0.
+        * Mentioned but vague? -> Subtract 0.5.
+    * **Literature Comparison:**
+        * Vague comparison (no specific values)? -> Subtract 0.5.
+    * **IV/DV Trend:** Missing logic? -> Subtract 1.0.
+    * **Quantitative Data:** No numbers quoted? -> Subtract 2.0.
+    * **Theory:** No connection? -> Subtract 1.0.
+    * **Statistics:**
+        * R (Correlation) missing? -> Subtract 1.0.
+        * R² (Fit) missing entirely? -> Subtract 1.0.
+        * R² (Fit) mentioned but vague? -> Subtract 0.5.
+    * **Focus:** Repetitive/Unfocused? -> Subtract 0.5 (Max).
+    * **RESTRICTIONS (Do NOT Deduct):**
+        * NO deductions for Citations.
+        * NO deductions for "Internal Inconsistency".
+        * NO deductions for "Data Reliability".
+    * **FINAL CALCULATION:** 10.0 - (Sum of above deductions). Example: If you have -1.0 (R) and -0.5 (Lit), Score MUST be 8.5.
 
 6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **COUNTING RULE:** Count the errors listed. If the student lists 3 errors, they MUST explain the impact for all 3.
@@ -185,7 +192,7 @@ STUDENT: [Filename]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No). * "Chemical Equation present?" (-1.0 if No). * "Theory relates to objective?" (-1.0 if No). * "Thoroughness?" (-1.0 if lack of thoroughness).]
+* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No, -0.5 if Vague). * "Chemical Equation present?" (-1.0 if No). * "Background thoroughly explained?" (-1.0 if No, -0.5 if Brief). NOTE: Do not penalize citation context or unit consistency.]
 
 **3. HYPOTHESIS: [Score]/10**
 * **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
@@ -453,7 +460,7 @@ def grade_submission(file, model_id):
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing. -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if superficial). DO NOT penalize for inconsistent units.\n\n"
+            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -485,7 +492,7 @@ def grade_submission(file, model_id):
             "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing. -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if superficial). DO NOT penalize for inconsistent units.\n"
+            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
         )
         
         user_message = [
