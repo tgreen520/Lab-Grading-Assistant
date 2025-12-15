@@ -61,7 +61,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - NOTE: Intermediate precision allowed. Check final answer sig figs.
 
 8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
-- OUTLIERS/OMISSIONS: Must address data outliers. (No mention: -1.0. Mentioned but not discussed thoroughly: -0.5).
+- OUTLIERS/OMISSIONS: Must address data outliers OR data omissions. (No mention: -1.0. Mentioned but not discussed thoroughly: -0.5).
 - IV/DV RELATIONSHIP: Must explain graph trend. (If poor: -1.0).
 - THEORY: Connect to chemical theory. (If missing: -1.0).
 - QUANTITATIVE SUPPORT: Must cite specific numbers. (If missing: -2.0).
@@ -102,9 +102,9 @@ Your goal is to grade student lab reports according to the specific rules below.
     * Example calculations must be detailed and easy to follow. If unclear/messy -> **Deduct 1.0 point**.
 
 4.  **CONCLUSION (Section 8) - STRICT DEDUCTIONS:**
-    * **Outliers/Omissions:** Did they address outliers? 
+    * **Outliers/Omissions:** Check for keywords "outlier" OR "omission" OR "omitted".
       * If **No mention** at all -> **Deduct 1.0 point**.
-      * If **Mentioned but not discussed thoroughly** -> **Deduct 0.5 points**.
+      * If **Mentioned** (e.g., "we omitted point 3") but explanation is weak/not thorough -> **Deduct 0.5 points**.
     * **Quantitative Data:** Did they quote specific numbers? If NO, **Deduct 2.0 points**.
     * **IV/DV Trend:** Did they explain the relationship? If NO, **Deduct 1.0 point**.
     * **Theory:** Did they connect to chemical theory? If NO, **Deduct 1.0 point**.
@@ -171,7 +171,7 @@ STUDENT: [Filename]
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used to support the claim]
 * **⚠️ Improvements:** [**CRITICAL CHECKS:** Summarize missing elements naturally. Ensure you comment on:
-  1. **Outliers** (-1.0 if not addressed, -0.5 if vague)
+  1. **Outliers/Omissions** (-1.0 if not addressed, -0.5 if vague)
   2. IV/DV Relationship (-1.0)
   3. Chemical Theory (-1.0)
   4. Quantitative Support (-2.0)
@@ -349,7 +349,6 @@ def parse_feedback_for_csv(text):
     data = {}
     
     # 1. Clean Textual Decorators
-    # Removes bold asterisks and headers to make regex cleaner
     clean_text = re.sub(r'[*#]', '', text) 
     
     # 2. Extract Overall Summary
@@ -374,7 +373,6 @@ def parse_feedback_for_csv(text):
         data[f"{col_name} Score"] = score
         
         # AGGRESSIVE CLEANING for CSV:
-        # Replaces all whitespace (newlines, tabs) with a single space to prevent broken CSVs
         cleaned_feedback = re.sub(r'[\r\n]+', ' ', content.strip())
         data[f"{col_name} Feedback"] = cleaned_feedback
 
@@ -407,7 +405,7 @@ def grade_submission(file, model_id):
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
             "6. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "7. **CONCLUSION:** Check for Outliers (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
+            "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n\n"
@@ -438,7 +436,7 @@ def grade_submission(file, model_id):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for Outliers (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
+            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
             "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
