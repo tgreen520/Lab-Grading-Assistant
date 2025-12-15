@@ -61,14 +61,12 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - NOTE: Intermediate precision allowed. Check final answer sig figs.
 
 8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
-- OUTLIERS/OMISSIONS: Must address outliers or data omissions. (No mention: -1.0. Mentioned but vague: -0.5).
-- IV/DV RELATIONSHIP: Must explain graph trend. (If poor: -1.0).
-- THEORY: Connect to chemical theory. (If missing: -1.0).
+- OUTLIERS/OMISSIONS: Must address data outliers OR data omissions. (No mention: -1.0. Mentioned but not discussed thoroughly: -0.5).
+- IV/DV RELATIONSHIP: Did they explain the relationship? If NO, **Deduct 1.0 point**. (Accept "Proportional" or "Inverse").
+- THEORY: Did they connect to chemical theory? If NO, **Deduct 1.0 point**.
 - QUANTITATIVE SUPPORT: Must cite specific numbers. (If missing: -2.0).
 - QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5).
-- STATISTICS (R vs R²):
-  * R (Correlation): Must explain Strength & Direction. (If missing: -1.0).
-  * R² (Fit): Must explain Fit/Variability. (If poor/missing: -0.5).
+- STATISTICS: Explain R (Correlation) and R^2 (Fit). (If R value explanation is missing: -1.0. If R^2 weak: -0.5).
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
 - REQUIREMENT: List errors + Specific Directional Impact + Specific Improvement.
@@ -103,17 +101,14 @@ Your goal is to grade student lab reports according to the specific rules below.
 3.  **DATA ANALYSIS (Section 7) - CALCULATION CHECK:**
     * Example calculations must be detailed and easy to follow. If unclear/messy -> **Deduct 1.0 point**.
 
-4.  **CONCLUSION (Section 8) - STATISTICAL & TERMINOLOGY INTELLIGENCE:**
+4.  **CONCLUSION (Section 8) - STRICT DEDUCTIONS:**
     * **Outliers/Omissions:** Check for keywords "outlier" OR "omission" OR "omitted".
       * If **No mention** at all -> **Deduct 1.0 point**.
       * If **Mentioned** (e.g., "we omitted point 3") but explanation is weak/not thorough -> **Deduct 0.5 points**.
-    * **IV/DV Trend:** "Proportional" and "Inverse" are ACCEPTED synonyms. If logic missing -> **Deduct 1.0 point**.
-    * **Quantitative Data:** Specific numbers quoted? If NO -> **Deduct 2.0 points**.
-    * **Theory:** Chemical theory connection? If NO -> **Deduct 1.0 point**.
-    * **Statistics (R vs R²):**
-      * **R (Correlation):** Look for keywords: "strength", "direction", "strong/weak positive/negative". If missing -> **Deduct 1.0 point**.
-      * **R² (Fit):** Look for keywords: "fit", "variability", "scatter", "reliability". If explained poorly or missing -> **Deduct 0.5 points**.
-      * **NOTE:** If R is missing (-1.0) but R² is good, do not deduct the extra 0.5. Total stats penalty should be -1.0 in that case.
+    * **Quantitative Data:** Did they quote specific numbers? If NO, **Deduct 2.0 points**.
+    * **IV/DV Trend:** Did they explain the relationship? If NO, **Deduct 1.0 point**.
+    * **Theory:** Did they connect to chemical theory? If NO, **Deduct 1.0 point**.
+    * **Statistics:** If R value explanation is missing, **Deduct 1.0 point**.
 
 5.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **COUNTING RULE:** Count the errors listed. If the student lists 3 errors, they MUST explain the impact for all 3.
@@ -378,7 +373,6 @@ def parse_feedback_for_csv(text):
         data[f"{col_name} Score"] = score
         
         # AGGRESSIVE CLEANING for CSV:
-        # Replaces all whitespace (newlines, tabs) with a single space to prevent broken CSVs
         cleaned_feedback = re.sub(r'[\r\n]+', ' ', content.strip())
         data[f"{col_name} Feedback"] = cleaned_feedback
 
