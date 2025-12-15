@@ -153,7 +153,7 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Steps:** Calculation steps not clearly explained OR labeled? -> -0.5.
 
 5.  **PROCEDURES (Section 5):**
-    * **Diagram Check:** Diagram of experimental setup missing? -> -0.5.
+    * **Diagram Check:** Diagram of experimental setup or photograph missing? -> -0.5.
 
 6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
@@ -205,7 +205,7 @@ STUDENT: [Filename]
 
 **5. PROCEDURES: [Score]/10**
 * **✅ Strengths:** [Comment on reproducibility and safety details]
-* **⚠️ Improvements:** [**DIAGRAM CHECK:** "Diagram of experimental setup included?" (-0.5 if missing). Identify exactly which step is vague and how to fix it.]
+* **⚠️ Improvements:** [**DIAGRAM CHECK:** "Diagram of experimental setup included? Allow photographs in place of diagrams. Diagrams or photographs can be included in other sections of the lab report" (-0.5 if missing). Identify exactly which step is vague and how to fix it.]
 
 **6. RAW DATA: [Score]/10**
 * **✅ Strengths:** [Comment on data organization and unit clarity]
@@ -467,7 +467,7 @@ def grade_submission(file, model_id):
             "9. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "10. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
             "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check if Theory connects to Objective (-0.5 if not thoroughly connected). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
-            "12. **PROCEDURES:** Check if a diagram of the experimental setup is included (-0.5 if missing).\n"
+            "12. **PROCEDURES:** Check if a diagram or photograph of the experimental setup is included (-0.5 if missing).\n"
             "13. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
             "14. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
             "15. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n\n"
