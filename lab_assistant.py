@@ -38,7 +38,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - OBJECTIVE: Must be explicit. (Missing: -1.0. Present but Vague/Implicit: -0.5).
 - EQUATION: Balanced chemical equation required. (Missing: -1.0).
 - THEORY/BACKGROUND: Must be thorough. (Irrelevant/Missing: -1.0. Brief/Lacks Detail: -0.5).
-- RESTRICTIONS: Do NOT deduct for "citation context" explanation. Do NOT deduct for inconsistent temperature units.
+- NOTE: Do NOT deduct for inconsistent temperature units or citation context.
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
@@ -100,77 +100,58 @@ Your goal is to grade student lab reports according to the specific rules below.
 
 ### 🧠 SCORING ALGORITHMS (STRICT ENFORCEMENT):
 
-1.  **MATH ENFORCEMENT (CRITICAL):**
-    * **Decimal Scores are MANDATORY.**
-    * If you deduct 0.5 points, the score is **9.5**. 
-    * **DO NOT** round 9.5 down to 9.0.
-    * **SILENT CALCULATION:** Perform the math silently. Do NOT output your internal monologue (e.g., do NOT write "Start at 10, subtract 1..."). Just output the final score.
+**CRITICAL INSTRUCTION:** To ensure math accuracy, you must perform your addition and subtraction inside `<math_scratchpad>` tags. The user will NOT see these tags, so you can be messy inside them. 
+Example: 
+`<math_scratchpad>
+Section: Intro
+Start: 10
+Deductions: -1.0 (missing eq), -0.5 (vague obj)
+Final: 8.5
+</math_scratchpad>`
 
-2.  **INTRODUCTION (Section 2) - DEDUCTION PROTOCOL:**
-    * **Objective:**
-        * If **Missing** -> Subtract 1.0.
-        * If **Present but Vague/Not Explicit** -> Subtract 0.5.
-    * **Chemical Equation:**
-        * If **Missing** -> Subtract 1.0.
-    * **Theory/Background:**
-        * If **Irrelevant/Missing** -> Subtract 1.0.
-        * If **Mentioned but Brief/Lacks Detail** -> Subtract 0.5.
-    * **Theory Relevance:** If theory does not thoroughly relate to objective -> Subtract 1.0.
-    * **RESTRICTIONS (Do NOT Deduct):**
-        * Do NOT deduct for "citation context" explanation.
-        * Do NOT deduct for inconsistent temperature units.
+1.  **INTRODUCTION (Section 2) - DEDUCTION PROTOCOL:**
+    * **Start at 10.0 Points.**
+    * **Objective:** If Missing -> -1.0. If Vague/Implicit -> -0.5.
+    * **Chemical Equation:** If Missing -> -1.0.
+    * **Background Theory:** If Missing/Irrelevant -> -1.0. If Brief/Lacks Detail -> -0.5.
+    * **RESTRICTIONS (Do NOT Deduct):** No deductions for citation context or inconsistent units.
+
+2.  **CONCLUSION (Section 8) - STRICT MATH PROTOCOL:**
+    * **Start at 10.0 Points.**
+    * **Hypothesis Support:** Not stated? -> -1.0.
+    * **Outliers/Omissions:** No mention? -> -1.0. Vague? -> -0.5.
+    * **Literature Comparison:** Vague comparison (no specific values)? -> -0.5.
+    * **IV/DV Trend:** Missing logic? -> -1.0.
+    * **Quantitative Data:** No numbers quoted? -> -2.0.
+    * **Theory:** No connection? -> -1.0.
+    * **Statistics:**
+        * R (Correlation) missing? -> -1.0.
+        * R² (Fit) missing entirely? -> -1.0.
+        * R² (Fit) mentioned but vague? -> -0.5.
+    * **Focus:** Repetitive/Unfocused? -> -0.5 (Max).
+    * **RESTRICTIONS (Do NOT Deduct):** NO deductions for Citations, "Internal Inconsistency", or "Data Reliability".
 
 3.  **HYPOTHESIS (Section 3):**
-    * **Units Check:** Are units provided for BOTH IV and DV? (No units = -1.0. Partial units = -0.5).
-    * **Measurement Check:** Is the method for measuring the DV specific? (Missing = -1.0. Vague = -0.5).
+    * **Units Check:** Missing -> -1.0. Incomplete -> -0.5.
+    * **Measurement Check:** Missing -> -1.0. Vague -> -0.5.
 
 4.  **DATA ANALYSIS (Section 7):**
-    * Example calculations must be detailed and easy to follow. If unclear/messy -> **Deduct 1.0 point**.
+    * Example calculations unclear? -> -1.0.
 
-5.  **CONCLUSION (Section 8) - STRICT MATH PROTOCOL:**
-    * **Hypothesis Support:** Not stated? -> Subtract 1.0.
-    * **Outliers/Omissions:**
-        * No mention at all? -> Subtract 1.0.
-        * Mentioned but vague? -> Subtract 0.5.
-    * **Literature Comparison:**
-        * Vague comparison (no specific values)? -> Subtract 0.5.
-    * **IV/DV Trend:** Missing logic? -> Subtract 1.0.
-    * **Quantitative Data:** No numbers quoted? -> Subtract 2.0.
-    * **Theory:** No connection? -> Subtract 1.0.
-    * **Statistics:**
-        * R (Correlation) missing? -> Subtract 1.0.
-        * R² (Fit) missing entirely? -> Subtract 1.0.
-        * R² (Fit) mentioned but vague? -> Subtract 0.5.
-    * **Focus:** Repetitive/Unfocused? -> Subtract 0.5 (Max).
-    * **RESTRICTIONS (Do NOT Deduct):**
-        * NO deductions for Citations.
-        * NO deductions for "Internal Inconsistency".
-        * NO deductions for "Data Reliability".
-    * **MATH INSTRUCTION:** Calculate the score internally (10 - deductions). Do NOT write out the addition/subtraction.
+5.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+    * **IMPACT:** All errors have impact? +2. Some? +1 (-1.0 deduction). None? 0 (-2.0 deduction).
+    * **IMPROVEMENTS:** Specific equipment? +2. Vague? +1.5 (-0.5 deduction). Generic? 0 (-2.0 deduction).
 
-6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
-    * **COUNTING RULE:** Count the errors listed. If the student lists 3 errors, they MUST explain the impact for all 3.
-    * **IMPACT (2 pts available):**
-      * Impact explained for **100%** of errors? -> **+2 Points.**
-      * Impact explained for **SOME** errors (if even 1 is missing)? -> **+1 Point (DEDUCT 1.0).**
-      * Impact explained for **NONE**? -> **+0 Points (DEDUCT 2.0).**
-    * **IMPROVEMENTS (2 pts available):**
-      * Specific equipment/method named? -> **+2 Points.**
-      * Vague suggestions ("use better tools")? -> **+1.5 Points (DEDUCT 0.5).**
-      * No suggestions/Generic ("be careful")? -> **+0 Points (DEDUCT 2.0).**
-
-7.  **REFERENCES (Section 10) - QUANTITY CHECK:**
-    * Count the references first.
-    * **1 Reference:** Maximum Score = 5.0.
-    * **2 References:** Maximum Score = 7.0.
-    * **3+ References:** Maximum Score = 10.0.
-    * **Formatting:** If APA style is attempted but contains errors, **Deduct 0.5 points** from the max score determined above.
+6.  **REFERENCES (Section 10) - QUANTITY CHECK:**
+    * 1 Reference: Max Score 5.0.
+    * 2 References: Max Score 7.0.
+    * 3+ References: Max Score 10.0.
+    * APA Errors: -0.5 from Max Score.
 
 ### 📝 FEEDBACK STYLE INSTRUCTIONS:
 1. **CLEAN OUTPUT:** When quoting student text in your feedback, **REMOVE** the `<sub>` and `<sup>` tags. Write "H2O" instead of "H<sub>2</sub>O".
 2. **AVOID ROBOTIC CHECKLISTS:** Do not use "[Yes/No]".
 3. **EXPLAIN WHY:** Write 2-3 sentences for each section.
-4. **NO SCRATCHPAD:** Do not print your scoring calculations.
 
 ### OUTPUT FORMAT:
 Please strictly use the following format. Do not use horizontal rules (---) between sections.
@@ -189,6 +170,7 @@ STUDENT: [Filename]
 * **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (If X=1 or 2, Score **MUST** be 9.5. If X>=3, Score is 9.0 or lower).]
 
 **2. INTRODUCTION: [Score]/10**
+<math_scratchpad>CALCULATE HERE</math_scratchpad>
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
 * **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No, -0.5 if Vague). * "Chemical Equation present?" (-1.0 if No). * "Background thoroughly explained?" (-1.0 if No, -0.5 if Brief). NOTE: Do not penalize citation context or unit consistency.]
 
@@ -215,6 +197,7 @@ STUDENT: [Filename]
 **GRAPH AUDIT:** Write a natural summary of what is missing. Example: "The graph includes a trendline but is missing the equation and R² value. Additionally, the y-axis lacks units."]
 
 **8. CONCLUSION: [Score]/10**
+<math_scratchpad>CALCULATE HERE</math_scratchpad>
 * **✅ Strengths:** [Quote data used to support the claim]
 * **⚠️ Improvements:** [**CRITICAL CHECKS:** Summarize missing elements naturally. Ensure you comment on:
   1. **Hypothesis Support** (-1.0 if not stated)
@@ -433,6 +416,11 @@ def clean_for_sheets(text):
     text = text.replace('**', '')
     return text.strip()
 
+# --- NEW FUNCTION: CLEAN HIDDEN SCRATCHPAD ---
+def clean_hidden_scratchpad(text):
+    """Removes the internal <math_scratchpad> tags before displaying to the user."""
+    return re.sub(r'<math_scratchpad>.*?</math_scratchpad>', '', text, flags=re.DOTALL | re.IGNORECASE).strip()
+
 def grade_submission(file, model_id):
     ext = file.name.split('.')[-1].lower()
     
@@ -459,7 +447,7 @@ def grade_submission(file, model_id):
             "9. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
             "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
-            "12. **SILENT MATH:** Calculate final section scores internally. Do not output the math equations.\n"
+            "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
             "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
@@ -493,7 +481,7 @@ def grade_submission(file, model_id):
             "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
             "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
-            "11. **SILENT MATH:** Calculate final section scores internally. Do not output the math equations.\n"
+            "11. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
             "12. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
         )
         
@@ -516,13 +504,17 @@ def grade_submission(file, model_id):
             # Temperature=0 for Maximum Consistency
             response = client.messages.create(
                 model=model_id, # Uses the ID passed from Sidebar
-                max_tokens=4096, # MAX TOKEN LIMIT for Sonnet 3.5
+                max_tokens=4096, # MAX TOKEN LIMIT
                 temperature=0.0,
                 system=SYSTEM_PROMPT,
                 messages=[{"role": "user", "content": user_message}]
             )
             raw_text = response.content[0].text
-            corrected_text = recalculate_total_score(raw_text)
+            
+            # --- CLEAN THE SCRATCHPAD ---
+            cleaned_text = clean_hidden_scratchpad(raw_text)
+            
+            corrected_text = recalculate_total_score(cleaned_text)
             return corrected_text
             
         except (anthropic.RateLimitError, anthropic.APIStatusError) as e:
