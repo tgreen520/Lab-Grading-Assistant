@@ -29,84 +29,54 @@ else:
 # --- 3. HARDCODED RUBRIC ---
 PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
-GENERAL PRINCIPLE: Award partial credit when students make genuine attempts to follow the rubric. Recognize effort.
-
 1. FORMATTING (10 pts):
-- Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly IN THE BODY TEXT.
-- DEDUCTIONS (TIERED): 
-  * **SUPERSCRIPT/SUBSCRIPT ERRORS:** Count errors in paragraphs/body text (Ignore graphs/tables).
-    * **1 or 2 errors:** **-0.5 Points** (resulting score: 9.5).
-    * **3 or more errors:** **-1.0 Point** (resulting score: 9.0).
-  * Consistent use of "I/We": Deduct heavily.
-  * NOTE: Do NOT deduct points for minor layout inconsistencies (margins, fonts, spacing).
+- Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly.
+- DEDUCTIONS: 1-2 subscript errors = -0.5 pts. 3+ errors = -1.0 pt.
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
-- **OBJECTIVE:** Specific lab objectives must be explicitly stated.
-  * **Penalty:** If missing or unclear, **-1.0 point**.
-- PARTIAL CREDIT: Award points proportionally.
+- OBJECTIVE: Must be explicit. If missing, -1.0 pt.
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
 
 4. VARIABLES (10 pts):
-- Criteria: IV (units/range), DV (method), 3+ Controlled Variables.
-- **SCORING TIERS:**
-  * **10/10:** IV + DV + 3+ Control Variables with explanations.
-  * **9.5/10:** Variables listed, but description of **how to measure DV** is vague. (Deduct 0.5).
-  * **9.0/10:** Variables listed, but explanations missing for multiple variables. (Deduct 1.0).
+- Criteria: IV, DV, 3+ Controls.
+- SCORING: 
+  * 10/10: All defined + explanations.
+  * 9.5/10: DV measurement vague (-0.5).
+  * 9.0/10: Explanations missing (-1.0).
 
 5. PROCEDURES (10 pts):
-- Criteria: Numbered steps, specific quantities, safety.
-- SCORING RULE: A missing diagram is a MINOR deduction (-0.5 points).
+- Criteria: Numbered steps, quantities, safety. Diagram missing = -0.5.
 
 6. RAW DATA (10 pts):
-- Criteria: Qualitative observations, clear tables, units, consistent significant figures.
-- FORMATTING: Do NOT deduct for table aesthetics. Focus on data clarity.
+- Criteria: Qualitative observations, tables, units, sig figs.
 
-7. DATA ANALYSIS (10 pts) [GRAPH & CALCULATION CRITICAL]:
-- Criteria: Sample calculation shown, graphs (axes/trendlines), R² value.
-- **UNCERTAINTY ANALYSIS:** NOT REQUIRED. Do NOT deduct for missing error bars/propagation.
-- **INTERMEDIATE PRECISION:** Excessive precision (extra digits) in intermediate steps is ALLOWED. Only penalize significant figures in the **FINAL RESULT**.
-- **MANDATORY GRAPH CHECKLIST:**
-  * **Format:** Must be a Scatterplot with a Trendline.
-  * **Labels:** Axis labels with Units MUST be present.
-  * **Stats:** R² value AND Trendline Equation MUST be listed on the graph.
-  * **Logic:** Trendline type must be appropriate (e.g., don't force linear fit on curved data).
-- DEDUCTION: -0.5 for partial effort, -1.0 for zero attention.
+7. DATA ANALYSIS (10 pts):
+- Criteria: Calculation shown, Graph (Scatterplot, Trendline, Equation, R^2).
+- NOTE: Intermediate precision allowed. Check final answer sig figs.
 
 8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
-- **IV/DV RELATIONSHIP:** Must explain the specific relationship (trend) shown by the graph.
-  * **ACCEPTED TERMINOLOGY:** "Proportional" is accepted for positive trends. "Inverse" is accepted for negative trends.
-  * **Penalty:** If not explained thoroughly, **-1.0 point**.
-- **THEORY CONNECTION:** Must connect results to Chemical Theory.
-  * **Penalty:** If missing, **-1.0 point**.
-- **QUANTITATIVE SUPPORT:** Must support conclusion with specific numbers.
-  * **Penalty:** If missing, **-2.0 points**.
-- **QUALITATIVE SUPPORT:** Must support conclusion with observations.
-  * **Penalty:** If missing, **-0.5 points**.
-- **STATISTICS (R vs R²):**
-  * **R (Correlation Coefficient):** Must explain strength and DIRECTION. **Penalty:** If missing, **-1.0 point**.
-  * **R² (Coefficient of Determination):** Must explain fit/variability. **Penalty:** If explained poorly, **-0.5 points**.
-  * **NOTE:** If R is missing but R² is explained well, DO NOT deduct for R². Total stats deduction should be -1.0.
+- IV/DV RELATIONSHIP: Must explain graph trend. (If poor: -1.0)
+- THEORY: Connect to chemical theory. (If missing: -1.0)
+- QUANTITATIVE SUPPORT: Must cite specific numbers. (If missing: -2.0)
+- QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5)
+- STATISTICS: Explain R (Correlation) and R^2 (Fit). (If R missing: -1.0. If R^2 weak: -0.5).
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
-- **BASE SCORE:** Start at 0. Add points ONLY if specific criteria are met.
-- **5 POINTS:** Lists at least 4 distinct sources of error.
-- **+1 POINT:** Correctly identifies Systematic vs. Random errors.
-- **+2 POINTS (IMPACT):**
-  * **2 Points:** Specific directional impact ("caused mass to increase") described for **100% of listed errors**.
-  * **1 Point (Partial Deduction):** Directional impact described for **SOME** errors, or if even ONE is missing/vague. (Deduct 1.0).
-  * **0 Points (Full Deduction):** No directional impact described for ANY error. (Deduct 2.0).
-- **+2 POINTS (IMPROVEMENT):** Must suggest **SPECIFIC** equipment or procedural changes.
-  * **2 Points:** Specific improvements for all errors.
-  * **1.5 Points (Deduct 0.5):** Improvements listed but slightly vague (e.g. "use more precise equipment" without naming it).
-  * **0 Points (Full Deduction):** No improvements or completely generic ("be more careful").
+- REQUIREMENT: List errors + Specific Directional Impact + Specific Improvement.
+- IMPACT SCORING:
+  * Impact defined for 100% of errors = 2 pts.
+  * Impact defined for SOME (not all) errors = 1 pt (Deduct 1.0).
+  * No impact defined = 0 pts (Deduct 2.0).
+- IMPROVEMENT SCORING:
+  * Specific equipment named = 2 pts.
+  * Vague ("use better scale") = 1.5 pts (Deduct 0.5).
+  * Generic ("be careful") = 0 pts (Deduct 2.0).
 
 10. REFERENCES (10 pts):
-- Criteria: Sources listed and cited.
-- **ABSOLUTE SCORING LOGIC (The "9-Point Floor"):**
-  * **If 3+ credible sources found:** Score **MUST** be 9.0, 9.5, or 10.0.
+- Criteria: 3+ credible sources = 9.0 min score.
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -123,32 +93,27 @@ Your goal is to grade student lab reports according to the specific rules below.
 2.  **VARIABLES (Section 4) - VAGUENESS CHECK:**
     * Check the **Dependent Variable (DV)** description.
     * If the method of measurement is **vague** (e.g., "we measured time" instead of "we used a stopwatch to measure time until color change"), **Deduct 0.5 points** (Score 9.5).
-    * Do NOT deduct 1.0 point unless multiple variables are undefined.
 
-3.  **CONCLUSION (Section 8) - STATISTICAL & TERMINOLOGY INTELLIGENCE:**
-    * **IV/DV Trend:** * **ALLOW SYNONYMS:** "Proportional" = Positive Relationship. "Inverse" = Negative Relationship. 
-      * **Do NOT deduct** if these terms are used.
-    * **R² Check:** Look for keywords: "fit," "variability," "scatter," "trendline." If present, give credit for R² explanation.
-    * **R Check:** Look for keywords: "correlation," "strength," "positive/negative."
-    * **Scoring:**
-      * Missing R only = -1.0 point.
-      * Missing R AND R² explanation = -1.5 points.
-      * **Do not penalize R² explanation if it is correct, even if R is missing.**
+3.  **CONCLUSION (Section 8) - STRICT DEDUCTIONS:**
+    * **Quantitative Data:** Did they quote specific numbers from their data? If NO, **Deduct 2.0 points**.
+    * **IV/DV Trend:** Did they explain the relationship? If NO, **Deduct 1.0 point**. (Accept "Proportional" or "Inverse").
+    * **Theory:** Did they connect to chemical theory? If NO, **Deduct 1.0 point**.
+    * **Statistics:** If R value explanation is missing, **Deduct 1.0 point**.
 
 4.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
-    * **IMPACT (2 pts):**
+    * **IMPACT (2 pts available):**
       * Impact explained for **100%** of errors? -> **+2 Points.**
       * Impact explained for **SOME** errors (even if only 1 is missing)? -> **+1 Point (Deduct 1.0).**
       * Impact explained for **NONE**? -> **+0 Points (Deduct 2.0).**
-    * **IMPROVEMENTS (2 pts):**
+    * **IMPROVEMENTS (2 pts available):**
       * Specific equipment/method named? -> **+2 Points.**
       * Vague suggestions ("use better tools")? -> **+1.5 Points (Deduct 0.5).**
       * No suggestions/Generic ("be careful")? -> **+0 Points (Deduct 2.0).**
 
-### 📝 FEEDBACK STYLE (EXPANDED & HUMAN-LIKE):
-* **AVOID ROBOTIC CHECKLISTS:** Do not use "[Yes/No]" in your final output. 
-* **USE NATURAL LANGUAGE:** Instead of "R² present: No", write "The conclusion discusses the data trends but fails to mention the R² value or its implications."
-* **EXPLAIN WHY:** Write 2-3 sentences for each section.
+### 📝 FEEDBACK STYLE INSTRUCTIONS:
+1. **CLEAN OUTPUT:** When quoting student text in your feedback, **REMOVE** the `<sub>` and `<sup>` tags. Write "H2O" instead of "H<sub>2</sub>O".
+2. **AVOID ROBOTIC CHECKLISTS:** Do not use "[Yes/No]".
+3. **EXPLAIN WHY:** Write 2-3 sentences for each section.
 
 ### OUTPUT FORMAT:
 Please strictly use the following format. Do not use horizontal rules (---) between sections.
@@ -288,7 +253,7 @@ def extract_text_from_docx(file):
 def extract_images_from_docx(file):
     images = []
     try:
-        file.seek(0) 
+        file.seek(0) # CRITICAL FIX: Reset pointer before reading
         with zipfile.ZipFile(file) as z:
             for filename in z.namelist():
                 if filename.startswith('word/media/') and filename.split('.')[-1].lower() in ['png', 'jpg', 'jpeg', 'gif']:
@@ -359,31 +324,44 @@ def recalculate_total_score(text):
                 total_score = int(total_score)
             else:
                 total_score = round(total_score, 1)
+            # UPDATED REGEX FOR HEADER SCORE
             text = re.sub(r"#\s*📝\s*SCORE:\s*[\d\.]+/100", f"# 📝 SCORE: {total_score}/100", text, count=1)
     except Exception as e:
         print(f"Error recalculating score: {e}")
     return text
 
-# --- CSV FEEDBACK PARSER ---
+# --- IMPROVED CSV FEEDBACK PARSER ---
 def parse_feedback_for_csv(text):
     data = {}
+    
+    # 1. Clean Textual Decorators
+    # Removes bold asterisks and headers to make regex cleaner
     clean_text = re.sub(r'[*#]', '', text) 
     
+    # 2. Extract Overall Summary
     try:
-        summary_match = re.search(r"OVERALL SUMMARY & VISUAL ANALYSIS:(.*?)(?=1\. FORMATTING|DETAILED RUBRIC BREAKDOWN)", clean_text, re.DOTALL | re.IGNORECASE)
+        # Looks for "OVERALL SUMMARY" followed by text until "1. " or "DETAILED"
+        summary_match = re.search(r"OVERALL SUMMARY.*?:\s*\n(.*?)(?=1\.|DETAILED)", clean_text, re.DOTALL | re.IGNORECASE)
         if summary_match:
-            data["Overall Summary"] = re.sub(r'\s+', ' ', summary_match.group(1).strip())
+            # AGGRESSIVE CLEANING: Collapse newlines to single space for CSV safety
+            raw_summary = summary_match.group(1).strip()
+            data["Overall Summary"] = re.sub(r'[\r\n]+', ' ', raw_summary)
         else:
             data["Overall Summary"] = "Summary not found"
     except Exception as e:
         data["Overall Summary"] = f"Parsing Error: {e}"
 
+    # 3. Extract Section Scores and Comments
+    # Regex looks for: "1. SECTION NAME: Score/10" followed by content
     sections = re.findall(r"(\d+)\.\s+([A-Za-z\s]+):\s+([\d\.]+)/10\s*\n(.*?)(?=\n\d+\.|\Z|💡)", clean_text, re.DOTALL)
     
     for _, name, score, content in sections:
-        col_name = name.strip().title() 
+        col_name = name.strip().title() # e.g. "Formatting"
         data[f"{col_name} Score"] = score
-        cleaned_feedback = re.sub(r'\s+', ' ', content.strip())
+        
+        # AGGRESSIVE CLEANING for CSV:
+        # Replaces all whitespace (newlines, tabs) with a single space to prevent broken CSVs
+        cleaned_feedback = re.sub(r'[\r\n]+', ' ', content.strip())
         data[f"{col_name} Feedback"] = cleaned_feedback
 
     return data
@@ -400,9 +378,11 @@ def grade_submission(file, model_id):
     if ext == 'docx':
         text_content = extract_text_from_docx(file)
         
+        # Check for empty text to warn user
         if len(text_content.strip()) < 50:
             text_content += "\n\n[SYSTEM NOTE: Very little text text extracted. Content may be in images or text boxes.]"
             
+        # Use String Concatenation instead of f-string to prevent brace errors
         prompt_text = (
             "Please grade this lab report based on the Pre-IB rubric below.\n"
             "Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
@@ -464,8 +444,9 @@ def grade_submission(file, model_id):
     
     for attempt in range(max_retries):
         try:
+            # Temperature=0 for Maximum Consistency
             response = client.messages.create(
-                model=model_id, 
+                model=model_id, # Uses the ID passed from Sidebar
                 max_tokens=3500,
                 temperature=0.0,
                 system=SYSTEM_PROMPT,
@@ -476,10 +457,11 @@ def grade_submission(file, model_id):
             return corrected_text
             
         except (anthropic.RateLimitError, anthropic.APIStatusError) as e:
+            # Check for Overloaded (529) or Rate Limit (429)
             if isinstance(e, anthropic.APIStatusError) and e.status_code == 529:
                 status_msg = f"⚠️ Server Overloaded (529). Retrying attempt {attempt+1}/{max_retries}..."
-                print(status_msg)
-                time.sleep(retry_delay * (attempt + 1))
+                print(status_msg) # Log to console
+                time.sleep(retry_delay * (attempt + 1)) # Exponential backoff
                 continue
             
             if isinstance(e, anthropic.RateLimitError):
@@ -493,7 +475,9 @@ def grade_submission(file, model_id):
         except Exception as e:
             return f"⚠️ Error: {str(e)}"
 
+# --- PARSE SCORE FUNCTION ---
 def parse_score(text):
+    """Extract the total score from Claude's feedback text."""
     try:
         match = re.search(r"#\s*📝\s*SCORE:\s*([\d\.]+)/100", text)
         if match:
@@ -505,31 +489,38 @@ def parse_score(text):
         print(f"Error parsing score: {e}")
     return "N/A"
 
+# --- WORD FORMATTER (Strict Symbol Cleaning) ---
 def write_markdown_to_docx(doc, text):
     lines = text.split('\n')
     for line in lines:
         line = line.strip()
         if not line:
-            continue
+            continue # SKIP EMPTY LINES FOR CONTINUOUS FLOW
         
+        # 1. Handle Score Header (Smaller - Level 4)
         if line.startswith('# '): 
             clean = line.replace('# ', '').replace('*', '').strip()
+            # Changed from Level 0 (Huge) to Level 4 (Small/Bold)
             doc.add_heading(clean, level=4) 
             continue
         
+        # 2. Handle H3 (### ) - CLEANED
         if line.startswith('### '):
             clean = line.replace('### ', '').replace('*', '').strip()
             doc.add_heading(clean, level=3)
             continue
         
+        # 3. Handle H2 (## ) - CLEANED
         if line.startswith('## '): 
             clean = line.replace('## ', '').replace('*', '').strip()
             doc.add_heading(clean, level=2)
             continue
         
+        # 4. REMOVE SEPARATORS
         if line.startswith('---') or line.startswith('___'):
             continue
 
+        # 5. Handle Bullets (* or -) - CLEANED
         if line.startswith('* ') or line.startswith('- '):
             p = doc.add_paragraph(style='List Bullet')
             content = line[2:] 
@@ -537,19 +528,22 @@ def write_markdown_to_docx(doc, text):
             p = doc.add_paragraph()
             content = line
 
+        # 6. Handle Bold (**text**) - CLEANED
         parts = re.split(r'(\*\*.*?\*\*)', content)
         for part in parts:
             if part.startswith('**') and part.endswith('**'):
-                clean_text = part[2:-2].replace('*', '') 
+                clean_text = part[2:-2].replace('*', '') # Strip any lingering asterisks
                 run = p.add_run(clean_text)
                 run.bold = True
             else:
-                p.add_run(part.replace('*', '')) 
+                p.add_run(part.replace('*', '')) # Strip lingering asterisks
 
 def create_master_doc(results, session_name):
     doc = Document()
+    # REMOVED SESSION HEADER
+    # doc.add_heading(f"Lab Report Grades: {session_name}", 0) 
     for item in results:
-        doc.add_heading(item['Filename'], level=1)
+        # REMOVED FILENAME HEADER (Starts with Score + Student Name)
         write_markdown_to_docx(doc, item['Feedback'])
         doc.add_page_break()
     bio = BytesIO()
@@ -561,6 +555,7 @@ def create_zip_bundle(results):
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as z:
         for item in results:
             doc = Document()
+            # REMOVED FEEDBACK HEADER
             write_markdown_to_docx(doc, item['Feedback'])
             doc_buffer = BytesIO()
             doc.save(doc_buffer)
@@ -575,6 +570,7 @@ def display_results_ui():
     st.divider()
     st.subheader(f"📊 Results: {st.session_state.current_session_name}")
     
+    # --- EXPANDED CSV LOGIC WITH SORTING ---
     results_list = []
     for item in st.session_state.current_results:
         row_data = {
@@ -587,9 +583,11 @@ def display_results_ui():
         
     csv_df = pd.DataFrame(results_list)
     
+    # Sort columns to put Filename/Score/Summary first
     cols = list(csv_df.columns)
     priority = ['Filename', 'Overall Score', 'Overall Summary']
     remaining = [c for c in cols if c not in priority]
+    # Simple logic to keep section score/feedback adjacent
     remaining.sort(key=lambda x: (x.split(' ')[0], 'Feedback' in x)) 
     
     final_cols = [c for c in priority if c in cols] + remaining
@@ -622,6 +620,7 @@ def display_results_ui():
 with st.sidebar:
     st.header("⚙️ Configuration")
     
+    # UPDATED DEFAULT MODEL ID
     user_model_id = st.text_input(
         "🤖 Model ID", 
         value="claude-sonnet-4-5-20250929", 
@@ -693,9 +692,10 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     for i, file in enumerate(processed_files):
         status.markdown(f"**Grading:** `{file.name}`...")
         
+        # POLITE DELAY to avoid 529s on loop
         time.sleep(2) 
 
-        feedback = grade_submission(file, user_model_id) 
+        feedback = grade_submission(file, user_model_id) # PASSING USER MODEL ID
         score = parse_score(feedback)
         
         new_results.append({
