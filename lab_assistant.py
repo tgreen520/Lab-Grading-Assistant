@@ -241,25 +241,45 @@ def get_media_type(filename):
     }
     return media_types.get(ext, 'image/jpeg')
 
-# --- UPDATED TEXT EXTRACTION (WITH POINTER RESET) ---
+# --- UPDATED TEXT EXTRACTION (WITH SUBSCRIPT DETECTION) ---
+def get_para_text_with_formatting(para):
+    """Iterate through runs to capture subscript/superscript formatting."""
+    text_parts = []
+    for run in para.runs:
+        text = run.text
+        # Check for subscript
+        if run.font.subscript:
+            text = f"<sub>{text}</sub>"
+        # Check for superscript
+        elif run.font.superscript:
+            text = f"<sup>{text}</sup>"
+        text_parts.append(text)
+    return "".join(text_parts)
+
 def extract_text_from_docx(file):
     try:
-        file.seek(0) # CRITICAL FIX: Reset pointer before reading
+        file.seek(0) 
         doc = Document(file)
         full_text = []
         
-        # 1. Extract Paragraphs
+        # 1. Extract Paragraphs with Formatting
         for para in doc.paragraphs:
-            full_text.append(para.text)
+            full_text.append(get_para_text_with_formatting(para))
             
-        # 2. Extract Tables (Crucial for Variables/Data sections)
+        # 2. Extract Tables with Formatting
         if doc.tables:
             full_text.append("\n--- DETECTED TABLES ---\n")
             for table in doc.tables:
                 for row in table.rows:
-                    row_text = [cell.text.strip() for cell in row.cells]
+                    row_text = []
+                    for cell in row.cells:
+                        # Extract paragraphs within cell
+                        cell_content = []
+                        for para in cell.paragraphs:
+                            cell_content.append(get_para_text_with_formatting(para))
+                        row_text.append(" ".join(cell_content).strip())
                     full_text.append(" | ".join(row_text))
-                full_text.append("\n") # Space between tables
+                full_text.append("\n") 
         
         return "\n".join(full_text)
     except Exception as e:
@@ -268,7 +288,7 @@ def extract_text_from_docx(file):
 def extract_images_from_docx(file):
     images = []
     try:
-        file.seek(0) # CRITICAL FIX: Reset pointer before reading
+        file.seek(0) 
         with zipfile.ZipFile(file) as z:
             for filename in z.namelist():
                 if filename.startswith('word/media/') and filename.split('.')[-1].lower() in ['png', 'jpg', 'jpeg', 'gif']:
@@ -339,38 +359,32 @@ def recalculate_total_score(text):
                 total_score = int(total_score)
             else:
                 total_score = round(total_score, 1)
-            # UPDATED REGEX FOR HEADER SCORE
             text = re.sub(r"#\s*📝\s*SCORE:\s*[\d\.]+/100", f"# 📝 SCORE: {total_score}/100", text, count=1)
     except Exception as e:
         print(f"Error recalculating score: {e}")
     return text
 
-# --- NEW: CSV FEEDBACK PARSER ---
+# --- CSV FEEDBACK PARSER ---
 def parse_feedback_for_csv(text):
     data = {}
+    clean_text = re.sub(r'[*#]', '', text) 
     
-    # Clean text first
-    text = re.sub(r'#+\s*', '', text) # Remove headers
-    text = re.sub(r'\*\*', '', text) # Remove bold
-    
-    # 1. Extract Overall Summary
     try:
-        summary_match = re.search(r"OVERALL SUMMARY & VISUAL ANALYSIS:(.*?)(?=1\. FORMATTING|DETAILED RUBRIC BREAKDOWN)", text, re.DOTALL)
+        summary_match = re.search(r"OVERALL SUMMARY & VISUAL ANALYSIS:(.*?)(?=1\. FORMATTING|DETAILED RUBRIC BREAKDOWN)", clean_text, re.DOTALL | re.IGNORECASE)
         if summary_match:
-            data["Overall Summary"] = summary_match.group(1).strip()
-    except:
-        data["Overall Summary"] = "Parsing Error"
+            data["Overall Summary"] = re.sub(r'\s+', ' ', summary_match.group(1).strip())
+        else:
+            data["Overall Summary"] = "Summary not found"
+    except Exception as e:
+        data["Overall Summary"] = f"Parsing Error: {e}"
 
-    # 2. Extract Section Scores and Comments
-    # Regex looks for "1. SECTION NAME: Score/10"
-    sections = re.findall(r"(\d+)\.\s+([A-Z\s]+):\s+([\d\.]+)/10\n(.*?)(?=\n\d+\.|\Z|💡)", text, re.DOTALL)
+    sections = re.findall(r"(\d+)\.\s+([A-Za-z\s]+):\s+([\d\.]+)/10\s*\n(.*?)(?=\n\d+\.|\Z|💡)", clean_text, re.DOTALL)
     
     for _, name, score, content in sections:
-        clean_name = name.strip().title() # e.g. "Formatting"
-        data[f"{clean_name} Score"] = score
-        # Clean up the bullets
-        clean_content = content.strip().replace('\n', ' ').replace('✅ Strengths:', 'Strengths:').replace('⚠️ Improvements:', 'Improvements:')
-        data[f"{clean_name} Feedback"] = clean_content
+        col_name = name.strip().title() 
+        data[f"{col_name} Score"] = score
+        cleaned_feedback = re.sub(r'\s+', ' ', content.strip())
+        data[f"{col_name} Feedback"] = cleaned_feedback
 
     return data
 
@@ -386,11 +400,9 @@ def grade_submission(file, model_id):
     if ext == 'docx':
         text_content = extract_text_from_docx(file)
         
-        # Check for empty text to warn user
         if len(text_content.strip()) < 50:
             text_content += "\n\n[SYSTEM NOTE: Very little text text extracted. Content may be in images or text boxes.]"
             
-        # Use String Concatenation instead of f-string to prevent brace errors
         prompt_text = (
             "Please grade this lab report based on the Pre-IB rubric below.\n"
             "Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
@@ -399,10 +411,11 @@ def grade_submission(file, model_id):
             "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
-            "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for IV/DV trend (-1), Theory (-1), Quant Data (-2), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
-            "7. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n"
-            "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n\n"
+            "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
+            "6. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
+            "7. **CONCLUSION:** Check for IV/DV trend (-1), Theory (-1), Quant Data (-2), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
+            "8. **DATA ANALYSIS:** Do NOT penalize for missing uncertainty analysis. Ignore excessive precision in intermediate steps.\n"
+            "9. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -446,15 +459,13 @@ def grade_submission(file, model_id):
             }
         ]
 
-    # --- UPDATED RETRY LOGIC FOR 529 OVERLOAD ERRORS ---
     max_retries = 5 
     retry_delay = 5 
     
     for attempt in range(max_retries):
         try:
-            # Temperature=0 for Maximum Consistency
             response = client.messages.create(
-                model=model_id, # Uses the ID passed from Sidebar
+                model=model_id, 
                 max_tokens=3500,
                 temperature=0.0,
                 system=SYSTEM_PROMPT,
@@ -465,11 +476,10 @@ def grade_submission(file, model_id):
             return corrected_text
             
         except (anthropic.RateLimitError, anthropic.APIStatusError) as e:
-            # Check for Overloaded (529) or Rate Limit (429)
             if isinstance(e, anthropic.APIStatusError) and e.status_code == 529:
                 status_msg = f"⚠️ Server Overloaded (529). Retrying attempt {attempt+1}/{max_retries}..."
-                print(status_msg) # Log to console
-                time.sleep(retry_delay * (attempt + 1)) # Exponential backoff
+                print(status_msg)
+                time.sleep(retry_delay * (attempt + 1))
                 continue
             
             if isinstance(e, anthropic.RateLimitError):
@@ -483,57 +493,43 @@ def grade_submission(file, model_id):
         except Exception as e:
             return f"⚠️ Error: {str(e)}"
 
-# --- PARSE SCORE FUNCTION (FIXED) ---
 def parse_score(text):
-    """Extract the total score from Claude's feedback text."""
     try:
-        # Look for the score in the header format: "# 📝 SCORE: XX/100"
         match = re.search(r"#\s*📝\s*SCORE:\s*([\d\.]+)/100", text)
         if match:
             return match.group(1).strip()
-        
-        # Fallback: Look for old format "SCORE: XX/100"
         match = re.search(r"SCORE:\s*([\d\.]+)/100", text)
         if match:
             return match.group(1).strip()
-            
     except Exception as e:
         print(f"Error parsing score: {e}")
-    
     return "N/A"
 
-# --- WORD FORMATTER (Strict Symbol Cleaning) ---
 def write_markdown_to_docx(doc, text):
     lines = text.split('\n')
     for line in lines:
         line = line.strip()
         if not line:
-            continue # SKIP EMPTY LINES FOR CONTINUOUS FLOW
+            continue
         
-        # 1. Handle Score Header (Smaller - Level 4)
         if line.startswith('# '): 
             clean = line.replace('# ', '').replace('*', '').strip()
-            # Changed from Level 0 (Huge) to Level 4 (Small/Bold)
             doc.add_heading(clean, level=4) 
             continue
         
-        # 2. Handle H3 (### ) - CLEANED
         if line.startswith('### '):
             clean = line.replace('### ', '').replace('*', '').strip()
             doc.add_heading(clean, level=3)
             continue
         
-        # 3. Handle H2 (## ) - CLEANED
         if line.startswith('## '): 
             clean = line.replace('## ', '').replace('*', '').strip()
             doc.add_heading(clean, level=2)
             continue
         
-        # 4. REMOVE SEPARATORS
         if line.startswith('---') or line.startswith('___'):
             continue
 
-        # 5. Handle Bullets (* or -) - CLEANED
         if line.startswith('* ') or line.startswith('- '):
             p = doc.add_paragraph(style='List Bullet')
             content = line[2:] 
@@ -541,22 +537,19 @@ def write_markdown_to_docx(doc, text):
             p = doc.add_paragraph()
             content = line
 
-        # 6. Handle Bold (**text**) - CLEANED
         parts = re.split(r'(\*\*.*?\*\*)', content)
         for part in parts:
             if part.startswith('**') and part.endswith('**'):
-                clean_text = part[2:-2].replace('*', '') # Strip any lingering asterisks
+                clean_text = part[2:-2].replace('*', '') 
                 run = p.add_run(clean_text)
                 run.bold = True
             else:
-                p.add_run(part.replace('*', '')) # Strip lingering asterisks
+                p.add_run(part.replace('*', '')) 
+
 def create_master_doc(results, session_name):
     doc = Document()
-    doc.add_heading(f"Lab Report Grades: {session_name}", 0)
     for item in results:
         doc.add_heading(item['Filename'], level=1)
-        # REMOVED REDUNDANT SCORE HEADER
-        # doc.add_heading(f"Score: {item['Score']}", level=2) 
         write_markdown_to_docx(doc, item['Feedback'])
         doc.add_page_break()
     bio = BytesIO()
@@ -568,9 +561,6 @@ def create_zip_bundle(results):
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as z:
         for item in results:
             doc = Document()
-            doc.add_heading(f"Feedback: {item['Filename']}", 0)
-            # REMOVED REDUNDANT SCORE HEADER
-            # doc.add_heading(f"Score: {item['Score']}", level=1)
             write_markdown_to_docx(doc, item['Feedback'])
             doc_buffer = BytesIO()
             doc.save(doc_buffer)
@@ -585,20 +575,26 @@ def display_results_ui():
     st.divider()
     st.subheader(f"📊 Results: {st.session_state.current_session_name}")
     
-    # --- EXPANDED CSV LOGIC ---
     results_list = []
     for item in st.session_state.current_results:
-        # Start with basic info
         row_data = {
             "Filename": item['Filename'],
             "Overall Score": item['Score']
         }
-        # Parse the structured feedback
         feedback_data = parse_feedback_for_csv(item['Feedback'])
         row_data.update(feedback_data)
         results_list.append(row_data)
         
     csv_df = pd.DataFrame(results_list)
+    
+    cols = list(csv_df.columns)
+    priority = ['Filename', 'Overall Score', 'Overall Summary']
+    remaining = [c for c in cols if c not in priority]
+    remaining.sort(key=lambda x: (x.split(' ')[0], 'Feedback' in x)) 
+    
+    final_cols = [c for c in priority if c in cols] + remaining
+    csv_df = csv_df[final_cols]
+    
     csv_data = csv_df.to_csv(index=False).encode('utf-8-sig') 
     
     master_doc_data = create_master_doc(st.session_state.current_results, st.session_state.current_session_name)
@@ -626,7 +622,6 @@ def display_results_ui():
 with st.sidebar:
     st.header("⚙️ Configuration")
     
-    # UPDATED DEFAULT MODEL ID
     user_model_id = st.text_input(
         "🤖 Model ID", 
         value="claude-sonnet-4-5-20250929", 
@@ -698,10 +693,9 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     for i, file in enumerate(processed_files):
         status.markdown(f"**Grading:** `{file.name}`...")
         
-        # POLITE DELAY to avoid 529s on loop
         time.sleep(2) 
 
-        feedback = grade_submission(file, user_model_id) # PASSING USER MODEL ID
+        feedback = grade_submission(file, user_model_id) 
         score = parse_score(feedback)
         
         new_results.append({
