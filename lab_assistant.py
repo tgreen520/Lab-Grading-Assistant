@@ -107,7 +107,7 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **DO NOT** round 9.5 down to 9.0.
 
 2.  **INTRODUCTION (Section 2):**
-    * **Objective:** If missing -> **Deduct 1.0 point**.
+    * **Objective:** If missing -> **Deduct 1.0 point**. Is the objective thorough? If NO -> **Deduct 0.5 points**.
     * **Chemical Equation:** If missing -> **Deduct 1.0 point**.
     * **Theory Relevance:** Does the theory thoroughly relate to the lab objective? If NO -> **Deduct 1.0 point**.
     * **Thoroughness:** Is the background information thorough? If brief/superficial -> **Deduct 1.0 point**.
@@ -453,7 +453,7 @@ def grade_submission(file, model_id):
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if superficial). DO NOT penalize for inconsistent units.\n\n"
+            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing. -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if superficial). DO NOT penalize for inconsistent units.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -485,7 +485,7 @@ def grade_submission(file, model_id):
             "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if superficial). DO NOT penalize for inconsistent units.\n"
+            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing. -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if superficial). DO NOT penalize for inconsistent units.\n"
         )
         
         user_message = [
