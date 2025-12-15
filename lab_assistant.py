@@ -60,7 +60,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 7. DATA ANALYSIS (10 pts):
 - Criteria: Calculation shown, Graph (Scatterplot, Trendline, Equation, R^2).
-- CALCULATIONS: Must be detailed and clear. (Unclear: -1.0).
+- CALCULATIONS: Steps must be explained OR labeled. (If not: -0.5).
 - NOTE: Intermediate precision allowed. Check final answer sig figs.
 
 8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
@@ -78,6 +78,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
 - REQUIREMENT: List errors + Specific Directional Impact + Specific Improvement.
+- ERROR TYPES: Must distinguish Systematic vs Random errors. (If missing: -0.5).
 - IMPACT SCORING:
   * Impact defined for 100% of errors = 2 pts.
   * Impact defined for SOME (not all) errors = 1 pt (Deduct 1.0).
@@ -131,9 +132,11 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Measurement Check:** Missing -> -1.0. Vague -> -0.5.
 
 4.  **DATA ANALYSIS (Section 7):**
-    * Example calculations unclear? -> -1.0.
+    * **Calculation Check:** Are steps clearly explained OR labeled? 
+      * If **No/Unclear** -> **Deduct 0.5 points**.
 
 5.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+    * **Error Distinction:** Did they distinguish Systematic vs Random errors? If No -> **Deduct 0.5**.
     * **IMPACT:** All errors have impact? +2. Some? +1 (-1.0 deduction). None? 0 (-2.0 deduction).
     * **IMPROVEMENTS:** Specific equipment? +2. Vague? +1.5 (-0.5 deduction). Generic? 0 (-2.0 deduction).
 
@@ -187,7 +190,7 @@ STUDENT: [Filename]
 
 **7. DATA ANALYSIS: [Score]/10**
 * **✅ Strengths:** [Summarize the calculation process. If Graph is perfect, mention that the scatterplot, equation, and labels are all correct here.]
-* **⚠️ Improvements:** [**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts).
+* **⚠️ Improvements:** [**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear/unlabeled, -0.5 pts).
 **GRAPH AUDIT:** Write a natural summary of what is missing. Example: "The graph includes a trendline but is missing the equation and R² value. Additionally, the y-axis lacks units."]
 
 **8. CONCLUSION: [Score]/10**
@@ -204,7 +207,7 @@ STUDENT: [Filename]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
-* **⚠️ Improvements:** [**IMPACT/IMPROVEMENT AUDIT:** * "You listed [X] errors but only provided specific directional impacts for [Y] of them. (-1 pt)"
+* **⚠️ Improvements:** [**IMPACT/IMPROVEMENT AUDIT:** * "Error Distinction (Systematic vs Random): [Present/Missing] (-0.5 if missing)." * "You listed [X] errors but only provided specific directional impacts for [Y] of them. (-1 pt)"
   * "Improvements were listed but were slightly vague (e.g., did not name specific equipment). (-0.5 pt)" ]
 
 **10. REFERENCES: [Score]/10**
@@ -215,6 +218,7 @@ STUDENT: [Filename]
 1. [Step 1 - Specific]
 2. [Step 2 - Specific]
 3. [Step 3 - Specific]
+**(MANDATORY: You MUST fill these 3 steps. Do not leave blank.)**
 """
 
 # Initialize Session State
@@ -441,7 +445,8 @@ def grade_submission(file, model_id):
             "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
             "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
             "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
-            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n\n"
+            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
+            "14. **ACTIONABLE STEPS:** You MUST provide the 'Top 3 Actionable Steps' at the very end. Do not run out of tokens before this.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -476,6 +481,7 @@ def grade_submission(file, model_id):
             "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
             "11. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
             "12. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
+            "13. **ACTIONABLE STEPS:** You MUST provide the 'Top 3 Actionable Steps' at the very end. Do not run out of tokens before this.\n"
         )
         
         user_message = [
