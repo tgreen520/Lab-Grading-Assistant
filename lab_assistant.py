@@ -70,6 +70,8 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - STATISTICS (R vs R²):
   * R (Correlation): Must explain Strength & Direction. (If missing: -1.0).
   * R² (Fit): Must explain Fit/Variability. (If poor/missing: -0.5).
+- FOCUS: If conclusion is overly repetitive or lacks focus, deduct -0.5 MAX.
+- NOTE: Do NOT deduct for citations here (checked in References). Do NOT deduct for "Data Reliability" separately if R^2 is already penalized.
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
 - REQUIREMENT: List errors + Specific Directional Impact + Specific Improvement.
@@ -121,6 +123,9 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Statistics (R vs R²):**
       * **R (Correlation):** Look for keywords: "strength", "direction", "strong/weak positive/negative". If missing -> **Deduct 1.0 point**.
       * **R² (Fit):** Look for keywords: "fit", "variability", "scatter", "reliability". If explained poorly or missing -> **Deduct 0.5 points**.
+    * **Focus/Clarity:** If the conclusion is excessively repetitive or unfocused -> **Deduct 0.5 points MAX**.
+    * **RESTRICTIONS:** * **DO NOT** deduct for Citations in this section.
+      * **DO NOT** deduct for "Data Reliability" as a separate category (this is covered by R/R² penalties).
 
 6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **COUNTING RULE:** Count the errors listed. If the student lists 3 errors, they MUST explain the impact for all 3.
@@ -425,11 +430,11 @@ def grade_submission(file, model_id):
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
             "6. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
+            "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5), Repetitiveness (-0.5).\n"
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing).\n\n"
+            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing).\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -457,11 +462,11 @@ def grade_submission(file, model_id):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5).\n"
+            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-0.5), Repetitiveness (-0.5).\n"
             "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing).\n"
+            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing).\n"
         )
         
         user_message = [
