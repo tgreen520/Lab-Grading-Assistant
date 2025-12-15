@@ -42,6 +42,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
+- JUSTIFICATION: Scientific reasoning required. (Missing: -2.0. Incomplete/Vague: -1.0).
 - UNITS: Must include units for BOTH IV and DV. (Missing: -1.0, Incomplete: -0.5).
 - MEASUREMENT: Specific description of how DV is measured. (Missing: -1.0, Vague: -0.5).
 
@@ -60,6 +61,8 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 7. DATA ANALYSIS (10 pts):
 - Criteria: Calculation shown, Graph (Scatterplot, Trendline, Equation, R^2).
+- GRAPH EQUATION: Linear equation must be displayed on graph. (Missing: -1.0).
+- GRAPH R²: R² value must be displayed on graph. (Missing: -1.0).
 - CALCULATIONS: Must be detailed and clear. (Unclear: -1.0).
 - CALCULATION STEPS: All steps must be clearly explained OR labeled for clarity. (Not done: -0.5).
 - NOTE: Intermediate precision allowed. Check final answer sig figs.
@@ -129,12 +132,15 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **RESTRICTIONS (Do NOT Deduct):** NO deductions for Citations, "Internal Inconsistency", or "Data Reliability".
 
 3.  **HYPOTHESIS (Section 3):**
+    * **Justification Check:** Missing? -> -2.0. Incomplete/Vague? -> -1.0.
     * **Units Check:** Missing -> -1.0. Incomplete -> -0.5.
     * **Measurement Check:** Missing -> -1.0. Vague -> -0.5.
 
 4.  **DATA ANALYSIS (Section 7):**
-    * Example calculations unclear? -> -1.0.
-    * Calculation steps not clearly explained OR labeled? -> -0.5.
+    * **Trendline Equation:** Not shown on graph? -> -1.0.
+    * **R² Value:** Not shown on graph? -> -1.0.
+    * **Calculations:** Example calculations unclear? -> -1.0.
+    * **Steps:** Calculation steps not clearly explained OR labeled? -> -0.5.
 
 5.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
@@ -175,7 +181,9 @@ STUDENT: [Filename]
 
 **3. HYPOTHESIS: [Score]/10**
 * **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Units for IV/DV: [Present/Missing]" (-1.0 if missing, -0.5 if partial).
+* **⚠️ Improvements:** [**CRITICAL CHECKS:**
+* "Justification: [Present/Missing/Vague]" (-2.0 if missing, -1.0 if vague/incomplete).
+* "Units for IV/DV: [Present/Missing]" (-1.0 if missing, -0.5 if partial).
 * "DV Measurement Description: [Specific/Vague/Missing]" (-1.0 if missing, -0.5 if vague).]
 
 **4. VARIABLES: [Score]/10**
@@ -192,8 +200,8 @@ STUDENT: [Filename]
 
 **7. DATA ANALYSIS: [Score]/10**
 * **✅ Strengths:** [Summarize the calculation process. If Graph is perfect, mention that the scatterplot, equation, and labels are all correct here.]
-* **⚠️ Improvements:** [**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts).
-**GRAPH AUDIT:** Write a natural summary of what is missing. Example: "The graph includes a trendline but is missing the equation and R² value. Additionally, the y-axis lacks units."]
+* **⚠️ Improvements:** [**GRAPH AUDIT:** "Trendline Equation: [Present/Missing]" (-1.0 if missing). "R² Value: [Present/Missing]" (-1.0 if missing).
+**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts).]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used to support the claim]
@@ -440,11 +448,11 @@ def grade_submission(file, model_id):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
-            "6. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
+            "6. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
             "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
-            "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
+            "10. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
             "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
             "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
             "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
@@ -475,11 +483,11 @@ def grade_submission(file, model_id):
             "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
-            "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
+            "5. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
             "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
             "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
-            "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
+            "9. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
             "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
             "11. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
             "12. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
