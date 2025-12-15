@@ -136,9 +136,13 @@ Your goal is to grade student lab reports according to the specific rules below.
         * If **Explained poorly** -> **Deduct 0.5 points**.
     * **Focus/Clarity:** If the conclusion is excessively repetitive or unfocused -> **Deduct 0.5 points MAX**.
     * **RESTRICTIONS:** * **DO NOT** deduct for Citations in this section.
-      * **DO NOT** deduct for "Internal Inconsistency" (e.g. typos between sections).
-      * **DO NOT** deduct for "Data Reliability" separately (this is covered by R/R² penalties).
-    * **MATH CHECK:** Start with 10.0 points. Subtract ONLY the specific deductions listed above. The Final Score MUST be exactly 10 minus the sum of deductions. Verify your subtraction.
+      * **DO NOT** deduct for "Internal Inconsistency".
+      * **DO NOT** deduct for "Data Reliability" (covered by R/R²).
+    * **MATH ENFORCEMENT PROTOCOL:**
+      1. Start with 10.0.
+      2. Sum ONLY the deductions listed above.
+      3. Final Score = 10.0 - Sum.
+      4. **VERIFY:** If you have deductions of -1.0 and -1.0, the score MUST be 8.0. Do not arbitrarily lower it further.
 
 6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **COUNTING RULE:** Count the errors listed. If the student lists 3 errors, they MUST explain the impact for all 3.
