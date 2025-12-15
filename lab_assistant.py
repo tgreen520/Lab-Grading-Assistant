@@ -31,7 +31,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 1. FORMATTING (10 pts):
 - Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly.
-- DEDUCTIONS: 1-2 subscript errors = -0.5 pts. 3+ errors = -1.0 pt.
+- DEDUCTIONS: 1-2 subscript errors = -0.5 pts. 3+ errors = -1.0 pt. First-person voice = -1.0.
 
 2. INTRODUCTION (10 pts):
 - Criteria: Clear objective, background theory, balanced equations.
@@ -52,6 +52,9 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
   * 10/10: All defined + explanations.
   * 9.5/10: DV measurement vague (-0.5).
   * 9.0/10: Explanations missing (-1.0).
+  * Control variables missing (-4.0)
+  * Control variables not justified (-1.0)
+  * Description of control variables vague (-1.0)
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, quantities, safety.
@@ -65,6 +68,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - GRAPH EQUATION: Linear equation must be displayed on graph. (Missing: -1.0).
 - GRAPH R²: R² value must be displayed on graph. (Missing: -1.0).
 - CALCULATIONS: Must be detailed and clear. (Missing:-1.0, unclear: 0.5).
+- CALCULATIONS: Must be correct. (Incorrect: -2.0, partially correct: -0.5)
 - CALCULATION STEPS: All steps must be clearly explained OR labeled for clarity. (Not done: -0.5).
 - NOTE: Intermediate precision allowed. Check final answer sig figs.
 
@@ -182,7 +186,7 @@ STUDENT: [Filename]
 
 **1. FORMATTING: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of tone/voice quality]
-* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (If X=1 or 2, Score **MUST** be 9.5. If X>=3, Score is 9.0 or lower).]
+* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (If X=1 or 2, Score **MUST** be 9.5. If X>=3, Score is 9.0 or lower). *"First person voice used?" (-1.0 if Yes).]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
@@ -210,7 +214,7 @@ STUDENT: [Filename]
 **7. DATA ANALYSIS: [Score]/10**
 * **✅ Strengths:** [Summarize the calculation process. If Graph is perfect, mention that the scatterplot, equation, and labels are all correct here.]
 * **⚠️ Improvements:** [**GRAPH AUDIT:** "Trendline Equation: [Present/Missing]" (-1.0 if missing). "R² Value: [Present/Missing]" (-1.0 if missing).
-**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts).]
+**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts). "Example calculations were [Correct/Incorrect]." (If incorrect, -2.0 pts). (If partially correct, -1.0 pts).]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used to support the claim]
