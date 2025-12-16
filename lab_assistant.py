@@ -843,6 +843,10 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     status_text = st.empty()
     live_results_table = st.empty()
     
+     # NEW: Placeholder for cumulative feedback display (cleared and rewritten each iteration)
+    st.subheader("📋 Live Grading Feedback")
+    feedback_placeholder = st.empty()
+    
     # Initialize Session State list if not present
     if 'current_results' not in st.session_state:
         st.session_state.current_results = []
