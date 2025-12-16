@@ -52,6 +52,10 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
   * 10/10: All defined + explanations.
   * 9.5/10: DV measurement vague (-0.5).
   * 9.0/10: Explanations missing (-1.0).
+  * 6.0/10: Control variables missing (-4.0)
+  * 8/10: Only 2 control variables given and described (-2.0)
+  * 9/10: All control varialbes not justified (-1.0)
+  * 9.5/10: Justification of control variables vague (-0.5)
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, quantities, safety.
@@ -109,6 +113,26 @@ Your goal is to grade student lab reports according to the specific rules below.
 2. **ISOLATED EVALUATION:** If a requirement is missing, deduct the points immediately. Do not "give credit" because the rest of the report was good.
 3. **RIGID ADHERENCE:** Use the exact deduction values listed below. Do not approximate.
 
+### ⚖️ CALIBRATION & TIE-BREAKER STANDARDS (MUST FOLLOW):
+
+1.  **THE "BENEFIT OF DOUBT" RULE:**
+    * If a student's phrasing is clumsy but technically accurate -> **NO DEDUCTION.**
+    * If a student uses the wrong vocabulary word but the concept is correct -> **-0.5 (Vague).**
+    * If the text is contradictory (says X, then says Not X) -> **-1.0 (Unclear).**
+
+2.  **THE "DOUBLE JEOPARDY" BAN:**
+    * Do NOT deduct points for the same error in two different sections.
+    * *Example:* If they miss the units in the *Raw Data* table, deduct there. Do NOT also deduct for "missing units" in the *Analysis* section unless they made a *new* error there.
+
+3.  **THE "STRICT BINARY" DECISION TREE:**
+    * **Is the Hypothesis Justification missing?** * YES -> -2.0.
+        * NO, but it relies on non-scientific reasoning (e.g., "I feel like...") -> -1.0.
+    * **Is the R² value on the graph?**
+        * YES (Explicitly written) -> 0 deduction.
+        * NO (Not visible) -> -1.0 deduction. (Do not assume it is "implied").
+
+4.  **IMAGE/TEXT CONFLICT:**
+    * If the text says one thing (e.g., "R² = 0.98") but the graph image shows another (e.g., "R² = 0.50") -> **Trust the Image** and deduct for the discrepancy.
 ### 🧠 SCORING ALGORITHMS (STRICT ENFORCEMENT):
 
 **CRITICAL INSTRUCTION:** 1. Perform ALL math calculations for ALL sections inside a single `<math_scratchpad>` block at the VERY START of your response. 
@@ -155,12 +179,14 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Steps:** Calculation steps not clearly explained OR labeled? -> -0.5.
 
 6.  **PROCEDURES (Section 5):**
-    * **Diagram Check:** Diagram of experimental setup missing? -> -0.5.
+    * **Diagram Check:** Diagram or photograph of experimental setup missing? -> -0.5.
 
 7.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
-    * **IMPACT:** All errors have impact? +2. Some? +1 (-1.0 deduction). None? 0 (-2.0 deduction).
-    * **IMPROVEMENTS:** Specific equipment? +2. Vague? +1.5 (-0.5 deduction). Generic? 0 (-2.0 deduction).
+    * **QUANTITATIVE IMPACT CHECK:** * Must explain the specific impact on **quantitative data** (e.g., "caused calculated value to increase") for **EACH** listed error.
+        * If explanation is generic (e.g., "it made results less accurate") or missing for any error -> -1.0.
+    * **IMPACT COVERAGE:** Impact defined for only *some* errors? -> -1.0 (Cumulative). Impact missing for *all* errors? -> -2.0.
+    * **IMPROVEMENTS:** Specific equipment named? -> No deduction. Vague? -> -0.5. Generic? -> -2.0.
 
 8.  **REFERENCES (Section 10) - QUANTITY CHECK:**
     * 1 Reference: Max Score 5.0.
