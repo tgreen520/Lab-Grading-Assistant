@@ -875,75 +875,43 @@ grade_clicked = st.button("🚀 Grade Reports", type="primary", disabled=not pro
 # 2. Logic: If Button Clicked -> Run Grading
 if grade_clicked:
     st.write("---")
-    
-    # --- A. INITIALIZE UI ELEMENTS (CRITICAL STEP) ---
     progress = st.progress(0)
-    status_text = st.empty()           # <--- Defines status_text
+    status_text = st.empty()
     live_results_table = st.empty()
-    feedback_placeholder = st.empty()  # <--- Defines feedback_placeholder
+    feedback_placeholder = st.empty()
     
-    # --- B. PREPARE DATA ---
+    # Initialize list if needed
     if 'current_results' not in st.session_state:
         st.session_state.current_results = []
-        
-    # Create a set of filenames we already have to enable skipping
-    existing_filenames = {item['Filename'] for item in st.session_state.current_results}
     
-    # --- C. GRADING LOOP ---
     for i, file in enumerate(processed_files):
-        
-        # 1. SMART RESUME CHECK: Skip if already graded
-        if file.name in existing_filenames:
-            status_text.info(f"⏩ Skipping **{file.name}** (Already Graded)")
-            time.sleep(0.5) 
-            progress.progress((i + 1) / len(processed_files))
-            continue
-
-        # 2. GRADING LOGIC
         status_text.markdown(f"**Grading:** `{file.name}`...")
         
-        try:
-            # Polite delay
-            time.sleep(1) 
-            
-            # Run Grading
-            feedback = grade_submission(file, user_model_id)
-            score = parse_score(feedback)
-            
-            # Save Result to State
-            entry = {"Filename": file.name, "Score": score, "Feedback": feedback}
-            st.session_state.current_results.append(entry)
-            
-            # Add to skip list so duplicates in the same batch are caught
-            existing_filenames.add(file.name)
-            
-            # Optional: Autosave if function exists
-            if 'autosave_report' in globals():
-                autosave_report(entry, "autosave_data")
-
-            # 3. LIVE UPDATES
-            # Update the Table
-            df_live = pd.DataFrame(st.session_state.current_results)
-            if not df_live.empty:
-                live_results_table.dataframe(df_live[["Filename", "Score"]], use_container_width=True)
-
-            # Update the Feedback Section
-            with feedback_placeholder.container():
-                 for item in st.session_state.current_results:
-                    # Expand only the most recent item
-                    is_new = (item['Filename'] == file.name)
-                    with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})", expanded=is_new):
-                        st.markdown(item['Feedback'])
+        # Run Grading
+        feedback = grade_submission(file, user_model_id)
+        score = parse_score(feedback)
         
-        except Exception as e:
-            st.error(f"❌ Error grading {file.name}: {e}")
-            
+        # Save Result to State
+        entry = {"Filename": file.name, "Score": score, "Feedback": feedback}
+        st.session_state.current_results.append(entry)
+        
+        # Optional: Autosave to disk if you added that function
+        if 'autosave_report' in globals():
+            autosave_report(entry, "autosave_data")
+
+        # Update Live Feedback
+        with feedback_placeholder.container():
+             for item in st.session_state.current_results:
+                with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
+                    st.markdown(item['Feedback'])
+        
         progress.progress((i + 1) / len(processed_files))
     
     status_text.success("✅ Grading Complete!")
     progress.empty()
 
 # 3. Logic: If Button NOT Clicked (but results exist) -> Show Previous Results
+#    This keeps the feedback visible when you upload a new file!
 elif st.session_state.current_results:
     st.divider()
     st.subheader(f"📊 Session Results ({len(st.session_state.current_results)} graded)")
