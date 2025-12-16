@@ -37,12 +37,11 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - Criteria: Clear objective, background theory, balanced equations.
 - OBJECTIVE: Must be explicit. (Missing: -1.0. Present but Vague/Implicit: -0.5).
 - EQUATION: Balanced chemical equation required. (Missing: -1.0).
-- THEORY/BACKGROUND: Must be thorough and connected to objective. (Irrelevant/Missing: -1.0. Brief/Not thoroughly connected: -0.5).
+- THEORY/BACKGROUND: Must be thorough. (Irrelevant/Missing: -1.0. Brief/Lacks Detail: -0.5).
 - NOTE: Do NOT deduct for inconsistent temperature units or citation context.
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
-- JUSTIFICATION: Scientific reasoning required. (Missing: -2.0. Incomplete/Vague: -1.0).
 - UNITS: Must include units for BOTH IV and DV. (Missing: -1.0, Incomplete: -0.5).
 - MEASUREMENT: Specific description of how DV is measured. (Missing: -1.0, Vague: -0.5).
 
@@ -54,16 +53,13 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
   * 9.0/10: Explanations missing (-1.0).
 
 5. PROCEDURES (10 pts):
-- Criteria: Numbered steps, quantities, safety.
-- DIAGRAM: Diagram of experimental setup required. (Missing: -0.5).
+- Criteria: Numbered steps, quantities, safety. Diagram missing = -0.5.
 
 6. RAW DATA (10 pts):
 - Criteria: Qualitative observations, tables, units, sig figs.
 
 7. DATA ANALYSIS (10 pts):
 - Criteria: Calculation shown, Graph (Scatterplot, Trendline, Equation, R^2).
-- GRAPH EQUATION: Linear equation must be displayed on graph. (Missing: -1.0).
-- GRAPH R²: R² value must be displayed on graph. (Missing: -1.0).
 - CALCULATIONS: Must be detailed and clear. (Unclear: -1.0).
 - CALCULATION STEPS: All steps must be clearly explained OR labeled for clarity. (Not done: -0.5).
 - NOTE: Intermediate precision allowed. Check final answer sig figs.
@@ -114,7 +110,7 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Start at 10.0 Points.**
     * **Objective:** If Missing -> -1.0. If Vague/Implicit -> -0.5.
     * **Chemical Equation:** If Missing -> -1.0.
-    * **Background Theory:** If Missing/Irrelevant -> -1.0. If Brief or Not thoroughly connected to objective -> -0.5.
+    * **Background Theory:** If Missing/Irrelevant -> -1.0. If Brief/Lacks Detail -> -0.5.
     * **RESTRICTIONS (Do NOT Deduct):** No deductions for citation context or inconsistent units.
 
 2.  **CONCLUSION (Section 8) - STRICT MATH PROTOCOL:**
@@ -133,25 +129,19 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **RESTRICTIONS (Do NOT Deduct):** NO deductions for Citations, "Internal Inconsistency", or "Data Reliability".
 
 3.  **HYPOTHESIS (Section 3):**
-    * **Justification Check:** Missing? -> -2.0. Incomplete/Vague? -> -1.0.
     * **Units Check:** Missing -> -1.0. Incomplete -> -0.5.
     * **Measurement Check:** Missing -> -1.0. Vague -> -0.5.
 
 4.  **DATA ANALYSIS (Section 7):**
-    * **Trendline Equation:** Not shown on graph? -> -1.0.
-    * **R² Value:** Not shown on graph? -> -1.0.
-    * **Calculations:** Example calculations unclear? -> -1.0.
-    * **Steps:** Calculation steps not clearly explained OR labeled? -> -0.5.
+    * Example calculations unclear? -> -1.0.
+    * Calculation steps not clearly explained OR labeled? -> -0.5.
 
-5.  **PROCEDURES (Section 5):**
-    * **Diagram Check:** Diagram of experimental setup missing? -> -0.5.
-
-6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+5.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
     * **IMPACT:** All errors have impact? +2. Some? +1 (-1.0 deduction). None? 0 (-2.0 deduction).
     * **IMPROVEMENTS:** Specific equipment? +2. Vague? +1.5 (-0.5 deduction). Generic? 0 (-2.0 deduction).
 
-7.  **REFERENCES (Section 10) - QUANTITY CHECK:**
+6.  **REFERENCES (Section 10) - QUANTITY CHECK:**
     * 1 Reference: Max Score 5.0.
     * 2 References: Max Score 7.0.
     * 3+ References: Max Score 10.0.
@@ -181,13 +171,11 @@ STUDENT: [Filename]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No, -0.5 if Vague). * "Chemical Equation present?" (-1.0 if No). * "Background thoroughly explained?" (-1.0 if No, -0.5 if Brief or not connected to objective). NOTE: Do not penalize citation context or unit consistency.]
+* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No, -0.5 if Vague). * "Chemical Equation present?" (-1.0 if No). * "Background thoroughly explained?" (-1.0 if No, -0.5 if Brief). NOTE: Do not penalize citation context or unit consistency.]
 
 **3. HYPOTHESIS: [Score]/10**
 * **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:**
-* "Justification: [Present/Missing/Vague]" (-2.0 if missing, -1.0 if vague/incomplete).
-* "Units for IV/DV: [Present/Missing]" (-1.0 if missing, -0.5 if partial).
+* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Units for IV/DV: [Present/Missing]" (-1.0 if missing, -0.5 if partial).
 * "DV Measurement Description: [Specific/Vague/Missing]" (-1.0 if missing, -0.5 if vague).]
 
 **4. VARIABLES: [Score]/10**
@@ -196,7 +184,7 @@ STUDENT: [Filename]
 
 **5. PROCEDURES: [Score]/10**
 * **✅ Strengths:** [Comment on reproducibility and safety details]
-* **⚠️ Improvements:** [**DIAGRAM CHECK:** "Diagram of experimental setup included?" (-0.5 if missing). Identify exactly which step is vague and how to fix it.]
+* **⚠️ Improvements:** [Identify exactly which step is vague and how to fix it]
 
 **6. RAW DATA: [Score]/10**
 * **✅ Strengths:** [Comment on data organization and unit clarity]
@@ -204,8 +192,8 @@ STUDENT: [Filename]
 
 **7. DATA ANALYSIS: [Score]/10**
 * **✅ Strengths:** [Summarize the calculation process. If Graph is perfect, mention that the scatterplot, equation, and labels are all correct here.]
-* **⚠️ Improvements:** [**GRAPH AUDIT:** "Trendline Equation: [Present/Missing]" (-1.0 if missing). "R² Value: [Present/Missing]" (-1.0 if missing).
-**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts).]
+* **⚠️ Improvements:** [**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts).
+**GRAPH AUDIT:** Write a natural summary of what is missing. Example: "The graph includes a trendline but is missing the equation and R² value. Additionally, the y-axis lacks units."]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used to support the claim]
@@ -452,16 +440,15 @@ def grade_submission(file, model_id):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
-            "6. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
+            "6. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
             "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
-            "10. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check if Theory connects to Objective (-0.5 if not thoroughly connected). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
-            "12. **PROCEDURES:** Check if a diagram of the experimental setup is included (-0.5 if missing).\n"
-            "13. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
-            "14. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
-            "15. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n\n"
+            "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
+            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
+            "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
+            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
+            "14. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -488,16 +475,16 @@ def grade_submission(file, model_id):
             "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
-            "5. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
+            "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
             "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
             "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
-            "9. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check if Theory connects to Objective (-0.5 if not thoroughly connected). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
-            "11. **PROCEDURES:** Check if a diagram of the experimental setup is included (-0.5 if missing).\n"
-            "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
-            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
-            "14. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
+            "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
+            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
+            "11. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
+            "12. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
+            "13. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete
+            , actionable recommendations at the end of your feedback.\n"
         )
         
         user_message = [
