@@ -483,8 +483,7 @@ def grade_submission(file, model_id):
             "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
             "11. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
             "12. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
-            "13. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete
-            , actionable recommendations at the end of your feedback.\n"
+            "13. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
         )
         
         user_message = [
