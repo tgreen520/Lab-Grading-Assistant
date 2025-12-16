@@ -12,7 +12,7 @@ from io import BytesIO
 # --- 1. PAGE SETUP (MUST BE FIRST) ---
 st.set_page_config(
     page_title="Pre-IB Lab Grader", 
-    page_icon="🧪", 
+    page_icon="ðŸ§ª", 
     layout="wide"
 )
 
@@ -22,7 +22,7 @@ if "ANTHROPIC_API_KEY" in st.secrets:
 elif "ANTHROPIC_API_KEY" in os.environ:
     API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 else:
-    st.error("🚨 API Key not found!")
+    st.error("ðŸš¨ API Key not found!")
     st.info("On Streamlit Cloud, add your key to the 'Secrets' settings.")
     st.stop()
 
@@ -37,11 +37,12 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - Criteria: Clear objective, background theory, balanced equations.
 - OBJECTIVE: Must be explicit. (Missing: -1.0. Present but Vague/Implicit: -0.5).
 - EQUATION: Balanced chemical equation required. (Missing: -1.0).
-- THEORY/BACKGROUND: Must be thorough. (Irrelevant/Missing: -1.0. Brief/Lacks Detail: -0.5).
+- THEORY/BACKGROUND: Must be thorough and connected to objective. (Irrelevant/Missing: -1.0. Brief/Not thoroughly connected: -0.5).
 - NOTE: Do NOT deduct for inconsistent temperature units or citation context.
 
 3. HYPOTHESIS (10 pts):
 - Criteria: Specific prediction with scientific justification.
+- JUSTIFICATION: Scientific reasoning required. (Missing: -2.0. Incomplete/Vague: -1.0).
 - UNITS: Must include units for BOTH IV and DV. (Missing: -1.0, Incomplete: -0.5).
 - MEASUREMENT: Specific description of how DV is measured. (Missing: -1.0, Vague: -0.5).
 
@@ -53,13 +54,16 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
   * 9.0/10: Explanations missing (-1.0).
 
 5. PROCEDURES (10 pts):
-- Criteria: Numbered steps, quantities, safety. Diagram missing = -0.5.
+- Criteria: Numbered steps, quantities, safety.
+- DIAGRAM: Diagram or photograph of experimental setup required. (Missing: -0.5).
 
 6. RAW DATA (10 pts):
 - Criteria: Qualitative observations, tables, units, sig figs.
 
 7. DATA ANALYSIS (10 pts):
 - Criteria: Calculation shown, Graph (Scatterplot, Trendline, Equation, R^2).
+- GRAPH EQUATION: Linear equation must be displayed on graph. (Missing: -1.0).
+- GRAPH RÂ²: RÂ² value must be displayed on graph. (Missing: -1.0).
 - CALCULATIONS: Must be detailed and clear. (Unclear: -1.0).
 - CALCULATION STEPS: All steps must be clearly explained OR labeled for clarity. (Not done: -0.5).
 - NOTE: Intermediate precision allowed. Check final answer sig figs.
@@ -72,9 +76,9 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - QUANTITATIVE SUPPORT: Must cite specific numbers. (If missing: -2.0).
 - QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5).
 - LITERATURE COMPARISON: If comparison to literature is vague (no specific values), -0.5 pt.
-- STATISTICS (R vs R²):
+- STATISTICS (R vs RÂ²):
   * R (Correlation): Must explain Strength & Direction. (If missing: -1.0).
-  * R² (Fit): Must explain Fit/Variability. (If missing entirely: -1.0. If mentioned but vague: -0.5).
+  * RÂ² (Fit): Must explain Fit/Variability. (If missing entirely: -1.0. If mentioned but vague: -0.5).
 - NOTE: Do NOT deduct for "Internal Inconsistency" or Citations here.
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
@@ -100,7 +104,12 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader. 
 Your goal is to grade student lab reports according to the specific rules below.
 
-### 🧠 SCORING ALGORITHMS (STRICT ENFORCEMENT):
+### âš–ï¸ CONSISTENCY PROTOCOL (MANDATORY):
+1. **NO CURVING:** Grade every student exactly against the rubric. Do not compare students to each other.
+2. **ISOLATED EVALUATION:** If a requirement is missing, deduct the points immediately. Do not "give credit" because the rest of the report was good.
+3. **RIGID ADHERENCE:** Use the exact deduction values listed below. Do not approximate.
+
+### ðŸ§  SCORING ALGORITHMS (STRICT ENFORCEMENT):
 
 **CRITICAL INSTRUCTION:** 1. Perform ALL math calculations for ALL sections inside a single `<math_scratchpad>` block at the VERY START of your response. 
 2. The user will NOT see this block (it is filtered out).
@@ -110,7 +119,7 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Start at 10.0 Points.**
     * **Objective:** If Missing -> -1.0. If Vague/Implicit -> -0.5.
     * **Chemical Equation:** If Missing -> -1.0.
-    * **Background Theory:** If Missing/Irrelevant -> -1.0. If Brief/Lacks Detail -> -0.5.
+    * **Background Theory:** If Missing/Irrelevant -> -1.0. If Brief or Not thoroughly connected to objective -> -0.5.
     * **RESTRICTIONS (Do NOT Deduct):** No deductions for citation context or inconsistent units.
 
 2.  **CONCLUSION (Section 8) - STRICT MATH PROTOCOL:**
@@ -123,31 +132,37 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Theory:** No connection? -> -1.0.
     * **Statistics:**
         * R (Correlation) missing? -> -1.0.
-        * R² (Fit) missing entirely? -> -1.0.
-        * R² (Fit) mentioned but vague? -> -0.5.
+        * RÂ² (Fit) missing entirely? -> -1.0.
+        * RÂ² (Fit) mentioned but vague? -> -0.5.
     * **Focus:** Repetitive/Unfocused? -> -0.5 (Max).
     * **RESTRICTIONS (Do NOT Deduct):** NO deductions for Citations, "Internal Inconsistency", or "Data Reliability".
 
 3.  **HYPOTHESIS (Section 3):**
+    * **Justification Check:** Missing? -> -2.0. Incomplete/Vague? -> -1.0.
     * **Units Check:** Missing -> -1.0. Incomplete -> -0.5.
     * **Measurement Check:** Missing -> -1.0. Vague -> -0.5.
 
 4.  **DATA ANALYSIS (Section 7):**
-    * Example calculations unclear? -> -1.0.
-    * Calculation steps not clearly explained OR labeled? -> -0.5.
+    * **Trendline Equation:** Not shown on graph? -> -1.0.
+    * **RÂ² Value:** Not shown on graph? -> -1.0.
+    * **Calculations:** Example calculations unclear? -> -1.0.
+    * **Steps:** Calculation steps not clearly explained OR labeled? -> -0.5.
 
-5.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+5.  **PROCEDURES (Section 5):**
+    * **Diagram Check:** Diagram or photograph of experimental setup missing? -> -0.5.
+
+6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
     * **IMPACT:** All errors have impact? +2. Some? +1 (-1.0 deduction). None? 0 (-2.0 deduction).
     * **IMPROVEMENTS:** Specific equipment? +2. Vague? +1.5 (-0.5 deduction). Generic? 0 (-2.0 deduction).
 
-6.  **REFERENCES (Section 10) - QUANTITY CHECK:**
+7.  **REFERENCES (Section 10) - QUANTITY CHECK:**
     * 1 Reference: Max Score 5.0.
     * 2 References: Max Score 7.0.
     * 3+ References: Max Score 10.0.
     * APA Errors: -0.5 from Max Score.
 
-### 📝 FEEDBACK STYLE INSTRUCTIONS:
+### ðŸ“ FEEDBACK STYLE INSTRUCTIONS:
 1. **CLEAN OUTPUT:** When quoting student text in your feedback, **REMOVE** the `<sub>` and `<sup>` tags. Write "H2O" instead of "H<sub>2</sub>O".
 2. **AVOID ROBOTIC CHECKLISTS:** Do not use "[Yes/No]".
 3. **EXPLAIN WHY:** Write 2-3 sentences for each section.
@@ -156,48 +171,50 @@ Your goal is to grade student lab reports according to the specific rules below.
 ### OUTPUT FORMAT:
 Please strictly use the following format. Do not use horizontal rules (---) between sections. Do NOT print the calculation steps here.
 
-# 📝 SCORE: [Total Points]/100
+# ðŸ“ SCORE: [Total Points]/100
 STUDENT: [Filename]
 
-**📊 OVERALL SUMMARY & VISUAL ANALYSIS:**
+**ðŸ“Š OVERALL SUMMARY & VISUAL ANALYSIS:**
 * [1-2 sentences on quality]
 * [Critique of graphs/images]
 
-**📝 DETAILED RUBRIC BREAKDOWN:**
+**ðŸ“ DETAILED RUBRIC BREAKDOWN:**
 
 **1. FORMATTING: [Score]/10**
-* **✅ Strengths:** [Detailed explanation of tone/voice quality]
-* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (If X=1 or 2, Score **MUST** be 9.5. If X>=3, Score is 9.0 or lower).]
+* **âœ… Strengths:** [Detailed explanation of tone/voice quality]
+* **âš ï¸ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (If X=1 or 2, Score **MUST** be 9.5. If X>=3, Score is 9.0 or lower).]
 
 **2. INTRODUCTION: [Score]/10**
-* **✅ Strengths:** [Detailed explanation of objective/theory coverage]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No, -0.5 if Vague). * "Chemical Equation present?" (-1.0 if No). * "Background thoroughly explained?" (-1.0 if No, -0.5 if Brief). NOTE: Do not penalize citation context or unit consistency.]
+* **âœ… Strengths:** [Detailed explanation of objective/theory coverage]
+* **âš ï¸ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No, -0.5 if Vague). * "Chemical Equation present?" (-1.0 if No). * "Background thoroughly explained?" (-1.0 if No, -0.5 if Brief or not connected to objective). NOTE: Do not penalize citation context or unit consistency.]
 
 **3. HYPOTHESIS: [Score]/10**
-* **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Units for IV/DV: [Present/Missing]" (-1.0 if missing, -0.5 if partial).
+* **âœ… Strengths:** [Quote prediction and praise the scientific reasoning]
+* **âš ï¸ Improvements:** [**CRITICAL CHECKS:**
+* "Justification: [Present/Missing/Vague]" (-2.0 if missing, -1.0 if vague/incomplete).
+* "Units for IV/DV: [Present/Missing]" (-1.0 if missing, -0.5 if partial).
 * "DV Measurement Description: [Specific/Vague/Missing]" (-1.0 if missing, -0.5 if vague).]
 
 **4. VARIABLES: [Score]/10**
-* **✅ Strengths:** [**LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]" and comment on clarity.]
-* **⚠️ Improvements:** [If DV measurement is vague, state: "The method for measuring the DV was vague (-0.5 pts)." Suggest specific improvement.]
+* **âœ… Strengths:** [**LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]" and comment on clarity.]
+* **âš ï¸ Improvements:** [If DV measurement is vague, state: "The method for measuring the DV was vague (-0.5 pts)." Suggest specific improvement.]
 
 **5. PROCEDURES: [Score]/10**
-* **✅ Strengths:** [Comment on reproducibility and safety details]
-* **⚠️ Improvements:** [Identify exactly which step is vague and how to fix it]
+* **âœ… Strengths:** [Comment on reproducibility and safety details]
+* **âš ï¸ Improvements:** [**DIAGRAM CHECK:** "Diagram or photograph of experimental setup included?" (-0.5 if missing). Identify exactly which step is vague and how to fix it.]
 
 **6. RAW DATA: [Score]/10**
-* **✅ Strengths:** [Comment on data organization and unit clarity]
-* **⚠️ Improvements:** [Quote values with wrong units/sig figs and explain the correct format]
+* **âœ… Strengths:** [Comment on data organization and unit clarity]
+* **âš ï¸ Improvements:** [Quote values with wrong units/sig figs and explain the correct format]
 
 **7. DATA ANALYSIS: [Score]/10**
-* **✅ Strengths:** [Summarize the calculation process. If Graph is perfect, mention that the scatterplot, equation, and labels are all correct here.]
-* **⚠️ Improvements:** [**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts).
-**GRAPH AUDIT:** Write a natural summary of what is missing. Example: "The graph includes a trendline but is missing the equation and R² value. Additionally, the y-axis lacks units."]
+* **âœ… Strengths:** [Summarize the calculation process. If Graph is perfect, mention that the scatterplot, equation, and labels are all correct here.]
+* **âš ï¸ Improvements:** [**GRAPH AUDIT:** "Trendline Equation: [Present/Missing]" (-1.0 if missing). "RÂ² Value: [Present/Missing]" (-1.0 if missing).
+**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts).]
 
 **8. CONCLUSION: [Score]/10**
-* **✅ Strengths:** [Quote data used to support the claim]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:** Summarize missing elements naturally. Ensure you comment on:
+* **âœ… Strengths:** [Quote data used to support the claim]
+* **âš ï¸ Improvements:** [**CRITICAL CHECKS:** Summarize missing elements naturally. Ensure you comment on:
   1. **Hypothesis Support** (-1.0 if not stated)
   2. **Outliers/Omissions** (-1.0 if not addressed, -0.5 if vague)
   3. IV/DV Relationship (-1.0)
@@ -205,19 +222,19 @@ STUDENT: [Filename]
   5. Quantitative Support (-2.0)
   6. Qualitative Support (-0.5)
   7. **Literature Comparison** (-0.5 if vague)
-  8. **R and R² Explanation** (-1.0 if R missing, -1.0 if R² missing, -0.5 if R² vague)]
+  8. **R and RÂ² Explanation** (-1.0 if R missing, -1.0 if RÂ² missing, -0.5 if RÂ² vague)]
 
 **9. EVALUATION: [Score]/10**
-* **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
-* **⚠️ Improvements:** [**ERROR CLASSIFICATION:** "You did not differentiate between systematic and random errors. (-0.5 pt)" OR "You successfully distinguished systematic from random errors."
+* **âœ… Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
+* **âš ï¸ Improvements:** [**ERROR CLASSIFICATION:** "You did not differentiate between systematic and random errors. (-0.5 pt)" OR "You successfully distinguished systematic from random errors."
 **IMPACT/IMPROVEMENT AUDIT:** * "You listed [X] errors but only provided specific directional impacts for [Y] of them. (-1 pt)"
   * "Improvements were listed but were slightly vague (e.g., did not name specific equipment). (-0.5 pt)" ]
 
 **10. REFERENCES: [Score]/10**
-* **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources."]
-* **⚠️ Improvements:** [**QUANTITY CHECK:** "Only found [X] sources." (If 1 source -> Score 5.0. If 2 sources -> Score 7.0). **FORMATTING:** "APA Formatting Check: [Correct/Incorrect]" (-0.5 if incorrect).]
+* **âœ… Strengths:** [**MANDATORY:** "Counted [X] credible sources."]
+* **âš ï¸ Improvements:** [**QUANTITY CHECK:** "Only found [X] sources." (If 1 source -> Score 5.0. If 2 sources -> Score 7.0). **FORMATTING:** "APA Formatting Check: [Correct/Incorrect]" (-0.5 if incorrect).]
 
-**💡 TOP 3 ACTIONABLE STEPS FOR NEXT TIME:**
+**ðŸ’¡ TOP 3 ACTIONABLE STEPS FOR NEXT TIME:**
 1. [Step 1 - Specific and concrete recommendation]
 2. [Step 2 - Specific and concrete recommendation]
 3. [Step 3 - Specific and concrete recommendation]
@@ -230,8 +247,6 @@ if 'current_results' not in st.session_state:
     st.session_state.current_results = []
 if 'current_session_name' not in st.session_state:
     st.session_state.current_session_name = "New Grading Session"
-if 'autosave_dir' not in st.session_state:
-    st.session_state.autosave_dir = "autosave_feedback_preib"
 
 client = anthropic.Anthropic(api_key=API_KEY)
 
@@ -371,7 +386,7 @@ def recalculate_total_score(text):
             else:
                 total_score = round(total_score, 1)
             # UPDATED REGEX FOR HEADER SCORE
-            text = re.sub(r"#\s*📝\s*SCORE:\s*[\d\.]+/100", f"# 📝 SCORE: {total_score}/100", text, count=1)
+            text = re.sub(r"#\s*ðŸ“\s*SCORE:\s*[\d\.]+/100", f"# ðŸ“ SCORE: {total_score}/100", text, count=1)
     except Exception as e:
         print(f"Error recalculating score: {e}")
     return text
@@ -398,7 +413,7 @@ def parse_feedback_for_csv(text):
 
     # 3. Extract Section Scores and Comments
     # Regex looks for: "1. SECTION NAME: Score/10" followed by content
-    sections = re.findall(r"(\d+)\.\s+([A-Za-z\s]+):\s+([\d\.]+)/10\s*\n(.*?)(?=\n\d+\.|\Z|💡)", clean_text, re.DOTALL)
+    sections = re.findall(r"(\d+)\.\s+([A-Za-z\s]+):\s+([\d\.]+)/10\s*\n(.*?)(?=\n\d+\.|\Z|ðŸ’¡)", clean_text, re.DOTALL)
     
     for _, name, score, content in sections:
         col_name = name.strip().title() # e.g. "Formatting"
@@ -436,21 +451,22 @@ def grade_submission(file, model_id):
         prompt_text = (
             "Please grade this lab report based on the Pre-IB rubric below.\n"
             "Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
-            "⚠️ CRITICAL INSTRUCTIONS:\n"
+            "âš ï¸ CRITICAL INSTRUCTIONS:\n"
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
             "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
-            "6. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
+            "6. **GRAPHS:** Check for RÂ² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
+            "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), RÂ² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
-            "10. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
-            "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
-            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
-            "14. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n\n"
+            "10. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
+            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check if Theory connects to Objective (-0.5 if not thoroughly connected). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
+            "12. **PROCEDURES:** Check if a diagram or photograph of the experimental setup is included (-0.5 if missing).\n"
+            "13. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
+            "14. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
+            "15. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -477,15 +493,16 @@ def grade_submission(file, model_id):
             "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
-            "5. **GRAPHS:** Check for R², Equation, Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
+            "5. **GRAPHS:** Check for RÂ² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
+            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), RÂ² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
             "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
             "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
-            "9. **HYPOTHESIS:** Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
-            "11. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
-            "12. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
-            "13. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
+            "9. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
+            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check if Theory connects to Objective (-0.5 if not thoroughly connected). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
+            "11. **PROCEDURES:** Check if a diagram or photograph of the experimental setup is included (-0.5 if missing).\n"
+            "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
+            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
+            "14. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
         )
         
         user_message = [
@@ -523,27 +540,27 @@ def grade_submission(file, model_id):
         except (anthropic.RateLimitError, anthropic.APIStatusError) as e:
             # Check for Overloaded (529) or Rate Limit (429)
             if isinstance(e, anthropic.APIStatusError) and e.status_code == 529:
-                status_msg = f"⚠️ Server Overloaded (529). Retrying attempt {attempt+1}/{max_retries}..."
+                status_msg = f"âš ï¸ Server Overloaded (529). Retrying attempt {attempt+1}/{max_retries}..."
                 print(status_msg) # Log to console
                 time.sleep(retry_delay * (attempt + 1)) # Exponential backoff
                 continue
             
             if isinstance(e, anthropic.RateLimitError):
-                status_msg = f"⚠️ Rate Limit Hit. Retrying attempt {attempt+1}/{max_retries}..."
+                status_msg = f"âš ï¸ Rate Limit Hit. Retrying attempt {attempt+1}/{max_retries}..."
                 print(status_msg)
                 time.sleep(retry_delay * (attempt + 1))
                 continue
                 
-            return f"⚠️ Error: {str(e)}"
+            return f"âš ï¸ Error: {str(e)}"
             
         except Exception as e:
-            return f"⚠️ Error: {str(e)}"
+            return f"âš ï¸ Error: {str(e)}"
 
 # --- PARSE SCORE FUNCTION ---
 def parse_score(text):
     """Extract the total score from Claude's feedback text."""
     try:
-        match = re.search(r"#\s*📝\s*SCORE:\s*([\d\.]+)/100", text)
+        match = re.search(r"#\s*ðŸ“\s*SCORE:\s*([\d\.]+)/100", text)
         if match:
             return match.group(1).strip()
         match = re.search(r"SCORE:\s*([\d\.]+)/100", text)
@@ -627,50 +644,12 @@ def create_zip_bundle(results):
             z.writestr(safe_name, doc_buffer.getvalue())
     return zip_buffer.getvalue()
 
-# --- NEW: AUTOSAVE INDIVIDUAL REPORT ---
-def autosave_report(item, autosave_dir):
-    """Save individual report as Word doc and append to CSV immediately after grading."""
-    try:
-        # 1. Save Word Document
-        doc = Document()
-        write_markdown_to_docx(doc, item['Feedback'])
-        safe_filename = os.path.splitext(item['Filename'])[0] + "_Feedback.docx"
-        doc_path = os.path.join(autosave_dir, safe_filename)
-        doc.save(doc_path)
-        
-        # 2. Append to CSV (or create if doesn't exist)
-        csv_path = os.path.join(autosave_dir, "gradebook.csv")
-        
-        # Parse feedback into row data
-        row_data = {
-            "Filename": item['Filename'],
-            "Overall Score": item['Score']
-        }
-        feedback_data = parse_feedback_for_csv(item['Feedback'])
-        row_data.update(feedback_data)
-        
-        # Check if CSV exists
-        if os.path.exists(csv_path):
-            existing_df = pd.read_csv(csv_path)
-            # Remove duplicate if re-grading same file
-            existing_df = existing_df[existing_df['Filename'] != item['Filename']]
-            new_df = pd.concat([existing_df, pd.DataFrame([row_data])], ignore_index=True)
-        else:
-            new_df = pd.DataFrame([row_data])
-        
-        new_df.to_csv(csv_path, index=False, encoding='utf-8-sig')
-        
-        return True
-    except Exception as e:
-        print(f"Autosave failed for {item['Filename']}: {e}")
-        return False
-
 def display_results_ui():
     if not st.session_state.current_results:
         return
 
     st.divider()
-    st.subheader(f"📊 Results: {st.session_state.current_session_name}")
+    st.subheader(f"ðŸ“Š Results: {st.session_state.current_session_name}")
     
     # --- EXPANDED CSV LOGIC WITH SORTING ---
     results_list = []
@@ -702,71 +681,37 @@ def display_results_ui():
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.download_button("📄 Google Docs Compatible (.docx)", master_doc_data, f'{st.session_state.current_session_name}_Docs.docx', "application/vnd.openxmlformats-officedocument.wordprocessingml.document", use_container_width=True)
+        st.download_button("ðŸ“„ Google Docs Compatible (.docx)", master_doc_data, f'{st.session_state.current_session_name}_Docs.docx', "application/vnd.openxmlformats-officedocument.wordprocessingml.document", use_container_width=True)
         st.caption("Upload to Drive -> Open as Google Doc")
     with col2:
-        st.download_button("📦 Student Bundle (.zip)", zip_data, f'{st.session_state.current_session_name}_Students.zip', "application/zip", use_container_width=True)
+        st.download_button("ðŸ“¦ Student Bundle (.zip)", zip_data, f'{st.session_state.current_session_name}_Students.zip', "application/zip", use_container_width=True)
     with col3:
-        st.download_button("📊 Detailed CSV Export", csv_data, f'{st.session_state.current_session_name}_Detailed.csv', "text/csv", use_container_width=True)
+        st.download_button("ðŸ“Š Detailed CSV Export", csv_data, f'{st.session_state.current_session_name}_Detailed.csv', "text/csv", use_container_width=True)
         st.caption("Includes separate columns for every section score and comment.")
- 
- # --- NEW: AUTOSAVE FOLDER ACCESS ---
-    st.divider()
-    st.info("💾 **Auto-saved files:** Individual feedback documents and gradebook are being saved to the `autosave_feedback` folder as grading progresses.")
-    
-    autosave_path = st.session_state.autosave_dir
-    if os.path.exists(autosave_path):
-        csv_autosave = os.path.join(autosave_path, "gradebook.csv")
-        if os.path.exists(csv_autosave):
-            with open(csv_autosave, 'rb') as f:
-                st.download_button(
-                    "📥 Download Auto-saved Gradebook (CSV)",
-                    f.read(),
-                    "autosaved_gradebook.csv",
-                    "text/csv",
-                    use_container_width=True
-                )
-        
-        # Create zip of all autosaved Word docs
-        autosave_files = [f for f in os.listdir(autosave_path) if f.endswith('.docx')]
-        if autosave_files:
-            zip_autosave = BytesIO()
-            with zipfile.ZipFile(zip_autosave, 'w', zipfile.ZIP_DEFLATED) as z:
-                for filename in autosave_files:
-                    file_path = os.path.join(autosave_path, filename)
-                    z.write(file_path, filename)
-            
-            st.download_button(
-                "📥 Download All Auto-saved Word Docs (.zip)",
-                zip_autosave.getvalue(),
-                "autosaved_feedback.zip",
-                "application/zip",
-                use_container_width=True
-            )
-    
-    tab1, tab2 = st.tabs(["📊 Gradebook View", "📝 Detailed Feedback"])
+
+    tab1, tab2 = st.tabs(["ðŸ“Š Gradebook View", "ðŸ“ Detailed Feedback"])
     with tab1:
         st.dataframe(csv_df, use_container_width=True)
     with tab2:
         for item in st.session_state.current_results:
-            with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
+            with st.expander(f"ðŸ“„ {item['Filename']} (Score: {item['Score']})"):
                 st.markdown(item['Feedback'])
 
 # --- 6. SIDEBAR ---
 with st.sidebar:
-    st.header("⚙️ Configuration")
+    st.header("âš™ï¸ Configuration")
     
     # UPDATED DEFAULT MODEL ID
     user_model_id = st.text_input(
-        "🤖 Model ID", 
+        "ðŸ¤– Model ID", 
         value="claude-sonnet-4-20250514", 
         help="Change this if you have a specific Beta model or newer ID"
     )
     
     st.divider()
-    st.header("💾 History Manager")
+    st.header("ðŸ’¾ History Manager")
     save_name = st.text_input("Session Name", placeholder="e.g. Period 3 - Kinetics")
-    if st.button("💾 Save Session"):
+    if st.button("ðŸ’¾ Save Session"):
         if st.session_state.current_results:
             st.session_state.saved_sessions[save_name] = st.session_state.current_results
             st.success(f"Saved '{save_name}'!")
@@ -775,7 +720,7 @@ with st.sidebar:
             
     if st.session_state.saved_sessions:
         st.divider()
-        st.subheader("📂 Load Session")
+        st.subheader("ðŸ“‚ Load Session")
         selected_session = st.selectbox("Select Batch", list(st.session_state.saved_sessions.keys()))
         col1, col2 = st.columns(2)
         with col1:
@@ -784,7 +729,7 @@ with st.sidebar:
                 st.session_state.current_session_name = selected_session
                 st.rerun()
         with col2:
-            if st.button("🗑️ Delete"):
+            if st.button("ðŸ—‘ï¸ Delete"):
                 del st.session_state.saved_sessions[selected_session]
                 st.rerun()
 
@@ -794,13 +739,13 @@ with st.sidebar:
         st.text(PRE_IB_RUBRIC)
 
 # --- 7. MAIN INTERFACE ---
-st.title("🧪 Pre-IB Lab Grader")
+st.title("ðŸ§ª Pre-IB Lab Grader")
 st.caption(f"Current Session: **{st.session_state.current_session_name}**")
 
-st.info("💡 **Tip:** To upload a folder, open it, press `Ctrl+A` (Select All), and drag everything here.")
+st.info("ðŸ’¡ **Tip:** To upload a folder, open it, press `Ctrl+A` (Select All), and drag everything here.")
 
 raw_files = st.file_uploader(
-    "📂 Upload Reports (PDF, Word, Images, ZIP)", 
+    "ðŸ“‚ Upload Reports (PDF, Word, Images, ZIP)", 
     type=['pdf', 'docx', 'png', 'jpg', 'jpeg', 'zip'], 
     accept_multiple_files=True
 )
@@ -809,24 +754,20 @@ processed_files = []
 if raw_files:
     processed_files, counts = process_uploaded_files(raw_files)
     if len(processed_files) > 0:
-        st.success(f"✅ Found **{len(processed_files)}** valid reports.")
-        st.caption(f"📄 PDFs: {counts['pdf']} | 📝 Word Docs: {counts['docx']} | 🖼️ Images: {counts['image']}")
+        st.success(f"âœ… Found **{len(processed_files)}** valid reports.")
+        st.caption(f"ðŸ“„ PDFs: {counts['pdf']} | ðŸ“ Word Docs: {counts['docx']} | ðŸ–¼ï¸ Images: {counts['image']}")
         if counts['ignored'] > 0:
-            st.warning(f"⚠️ {counts['ignored']} files were ignored (unsupported format).")
+            st.warning(f"âš ï¸ {counts['ignored']} files were ignored (unsupported format).")
     else:
         if raw_files:
             st.warning("No valid PDF, Word, or Image files found.")
 
-if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files):
+if st.button("ðŸš€ Grade Reports", type="primary", disabled=not processed_files):
     
     st.write("---")
     progress = st.progress(0)
     status_text = st.empty()
     live_results_table = st.empty()
-    
-    # NEW: Placeholder for cumulative feedback display (cleared and rewritten each iteration)
-    st.subheader("📋 Live Grading Feedback")
-    feedback_placeholder = st.empty()
     
     # Initialize Session State list if not present
     if 'current_results' not in st.session_state:
@@ -838,7 +779,7 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     for i, file in enumerate(processed_files):
         # 1. SMART RESUME CHECK: Skip if already graded
         if file.name in existing_filenames:
-            status_text.info(f"⏩ Skipping **{file.name}** (Already Graded)")
+            status_text.info(f"â© Skipping **{file.name}** (Already Graded)")
             time.sleep(0.5) # Brief pause for visual feedback
             progress.progress((i + 1) / len(processed_files))
             continue
@@ -862,40 +803,21 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             
             st.session_state.current_results.append(new_entry)
             
-            # 4. AUTOSAVE TO DISK (NEW - CRITICAL FOR RECOVERY)
-            autosave_success = autosave_report(new_entry, st.session_state.autosave_dir)
-            if autosave_success:
-                status_text.success(f"✅ **{file.name}** graded & auto-saved! (Score: {score}/100)")
-            else:
-                status_text.warning(f"⚠️ **{file.name}** graded but autosave failed (Score: {score}/100)")
-            
             # Update the existing set so duplicates within the same batch run are also caught (unlikely but safe)
             existing_filenames.add(file.name)
             
-            #5. LIVE TABLE UPDATE
+            # 4. LIVE TABLE UPDATE
             df_live = pd.DataFrame(st.session_state.current_results)
             live_results_table.dataframe(df_live[["Filename", "Score"]], use_container_width=True)
             
-            # 6. UPDATED: SINGLE COPY CUMULATIVE FEEDBACK DISPLAY
-            # Clear and rewrite the entire feedback section to avoid duplicates
-            with feedback_placeholder.container():
-                for idx, item in enumerate(st.session_state.current_results):
-                    # Start expanded for most recent, collapsed for older ones
-                    is_most_recent = (idx == len(st.session_state.current_results) - 1)
-                    with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=is_most_recent):
-                        st.markdown(item['Feedback'])
-              
         except Exception as e:
-            st.error(f"❌ Error grading {file.name}: {e}")
+            st.error(f"âŒ Error grading {file.name}: {e}")
             
         progress.progress((i + 1) / len(processed_files))
         
 
-    status_text.success("✅ Grading Complete! Scrolling down...")
+    status_text.success("âœ… Grading Complete! Scrolling down...")
     progress.empty()
-
-# Show message about autosave location
-    st.info(f"💾 **Backup Location:** All feedback has been saved to `{st.session_state.autosave_dir}/` folder. You can download individual files or the full gradebook below.")
 
 # --- 8. PERSISTENT DISPLAY ---
 if st.session_state.current_results:
