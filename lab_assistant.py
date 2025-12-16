@@ -261,7 +261,7 @@ STUDENT: [Filename]
 **6. RAW DATA: [Score]/10**
 * **✅ Strengths:** [Comment on data organization and unit clarity]
 * **⚠️ Improvements:** [**SIG FIG AUDIT:** "Check consistency of sig figs for each device." (If inconsistent, -1.0). 
-* "Check mass readings." (Must be 1 or 2 decimal places. If not, -1.0).
+* "Check mass readings." (Must be 1 or 2 decimal places. If incorrect, -1.0).
 * Quote values with wrong units/sig figs and explain the correct format.]
 
 **7. DATA ANALYSIS: [Score]/10**
@@ -330,20 +330,34 @@ def get_media_type(filename):
     }
     return media_types.get(ext, 'image/jpeg')
 
-# --- UPDATED TEXT EXTRACTION (WITH SUBSCRIPT DETECTION) ---
+# --- UPDATED TEXT EXTRACTION (WITH ROBUST FALLBACK) ---
 def get_para_text_with_formatting(para):
-    """Iterate through runs to capture subscript/superscript formatting."""
-    text_parts = []
-    for run in para.runs:
-        text = run.text
-        # Check for subscript
-        if run.font.subscript:
-            text = f"<sub>{text}</sub>"
-        # Check for superscript
-        elif run.font.superscript:
-            text = f"<sup>{text}</sup>"
-        text_parts.append(text)
-    return "".join(text_parts)
+    """Iterate through runs to capture subscript/superscript formatting. Safe fallback."""
+    try:
+        text_parts = []
+        for run in para.runs:
+            text = run.text
+            # Safe check for None
+            if not text:
+                continue
+            
+            # Check for subscript
+            if getattr(run.font, 'subscript', False):
+                text = f"<sub>{text}</sub>"
+            # Check for superscript
+            elif getattr(run.font, 'superscript', False):
+                text = f"<sup>{text}</sup>"
+            text_parts.append(text)
+        
+        result = "".join(text_parts)
+        # Fallback: if run iteration produced empty text but para.text exists (rare XML case)
+        if not result and para.text:
+            return para.text
+        return result
+        
+    except Exception:
+        # Fallback to plain text if run iteration crashes
+        return para.text
 
 def extract_text_from_docx(file):
     try:
@@ -353,7 +367,8 @@ def extract_text_from_docx(file):
         
         # 1. Extract Paragraphs with Formatting
         for para in doc.paragraphs:
-            full_text.append(get_para_text_with_formatting(para))
+            text = get_para_text_with_formatting(para)
+            full_text.append(text)
             
         # 2. Extract Tables with Formatting
         if doc.tables:
@@ -547,6 +562,8 @@ def grade_submission(file, model_id):
             "13. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
             "14. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
             "15. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
+            "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
+            "STUDENT TEXT:\n" + text_content
         )
         
         user_message = [
