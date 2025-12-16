@@ -870,10 +870,58 @@ if raw_files:
 
 if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files):
     
+   # --- MAIN EXECUTION BLOCK ---
+# 1. Define the Button
+grade_clicked = st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
+
+# 2. Logic: If Button Clicked -> Run Grading
+if grade_clicked:
     st.write("---")
     progress = st.progress(0)
     status_text = st.empty()
     live_results_table = st.empty()
+    feedback_placeholder = st.empty()
+    
+    # Initialize list if needed
+    if 'current_results' not in st.session_state:
+        st.session_state.current_results = []
+    
+    for i, file in enumerate(processed_files):
+        status_text.markdown(f"**Grading:** `{file.name}`...")
+        
+        # Run Grading
+        feedback = grade_submission(file, user_model_id)
+        score = parse_score(feedback)
+        
+        # Save Result to State
+        entry = {"Filename": file.name, "Score": score, "Feedback": feedback}
+        st.session_state.current_results.append(entry)
+        
+        # Optional: Autosave to disk if you added that function
+        if 'autosave_report' in globals():
+            autosave_report(entry, "autosave_data")
+
+        # Update Live Feedback
+        with feedback_placeholder.container():
+             for item in st.session_state.current_results:
+                with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
+                    st.markdown(item['Feedback'])
+        
+        progress.progress((i + 1) / len(processed_files))
+    
+    status_text.success("✅ Grading Complete!")
+    progress.empty()
+
+# 3. Logic: If Button NOT Clicked (but results exist) -> Show Previous Results
+#    This keeps the feedback visible when you upload a new file!
+elif st.session_state.current_results:
+    st.divider()
+    st.subheader(f"📊 Session Results ({len(st.session_state.current_results)} graded)")
+    
+    # Render the saved results
+    for item in st.session_state.current_results:
+        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
+            st.markdown(item['Feedback'])
     
      # NEW: Placeholder for cumulative feedback display (cleared and rewritten each iteration)
     st.subheader("📋 Live Grading Feedback")
