@@ -53,7 +53,8 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - Criteria: IV, DV, 3+ Controls with thorough explanations.
 - DEDUCTIONS:
   * Control variables missing (fewer than 3): -4.0
-  * Control variables not justified: -1.0
+  * Control variables not justified (why do they need to be controlled?): -1.0
+  * Control variable justification is partial/incomplete: -0.5
   * Description of control variables vague: -1.0
   * Independent variable not thoroughly explained: -1.0
   * Dependent variable not thoroughly explained: -1.0
@@ -65,6 +66,9 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 6. RAW DATA (10 pts):
 - Criteria: Qualitative observations, tables, units, sig figs.
+- CONSISTENCY: Significant figures must be consistent for the same measuring device.
+  * Inconsistent sig figs for same device (e.g., mass): -1.0.
+  * Mass Readings: Must be 1 or 2 decimal places (depending on balance). If incorrect/inconsistent: -1.0.
 
 7. DATA ANALYSIS (10 pts):
 - Criteria: Calculation shown, Graph (Scatterplot, Trendline, Equation, R^2).
@@ -73,7 +77,10 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - CALCULATIONS: Must be detailed and clear. (Missing:-1.0, unclear: 0.5).
 - CALCULATIONS: Must be correct. (Incorrect: -2.0, partially correct: -0.5)
 - CALCULATION STEPS: All steps must be clearly explained OR labeled for clarity. (Not done: -0.5).
-- NOTE: Intermediate precision allowed. Check final answer sig figs.
+- SIGNIFICANT FIGURES (ANALYSIS): Sig figs must be correct in final reported values.
+  * >3 errors in sig figs: -1.0
+  * 1-3 errors in sig figs: -0.5
+  * NOTE: Intermediate precision allowed. Only penalize final answer sig figs.
 
 8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
 - HYPOTHESIS SUPPORT: Must indicate if data supports hypothesis. (If missing: -1.0).
@@ -84,17 +91,17 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5).
 - LITERATURE COMPARISON: If comparison to literature is vague (no specific values), -0.5 pt.
 - STATISTICS (R vs R²):
-  * R (Correlation): Must explain Strength & Direction. (If missing: -1.0).
-  * R² (Fit): Must explain Fit/Variability. (If missing entirely: -1.0. If mentioned but vague: -0.5).
+  * R (Correlation): Must explain Strength & Direction. (If missing: -1.0. If vague: -0.5).
+  * R² (Fit): Must explain Fit/Variability. (If missing entirely: -2.0. If mentioned but vague: -1.0).
 - NOTE: Do NOT deduct for "Internal Inconsistency" or Citations here.
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
-- REQUIREMENT: List errors + Specific Directional Impact + Specific Improvement.
+- REQUIREMENT: List errors + Specific Directional Impact on Data + Specific Improvement.
 - ERROR CLASSIFICATION: Must differentiate between systematic and random errors. (Not done: -0.5).
-- IMPACT SCORING:
-  * Impact defined for 100% of errors = 2 pts.
-  * Impact defined for SOME (not all) errors = 1 pt (Deduct 1.0).
-  * No impact defined = 0 pts (Deduct 2.0).
+- IMPACT SCORING (Must discuss how EACH error affected SPECIFIC QUANTITATIVE DATA):
+  * Impact defined for 100% of errors with specific data link = 2 pts.
+  * Impact defined for SOME errors OR lacks specific quantitative link (Partial): -1.0 deduction.
+  * No impact defined for any errors: -2.0 deduction.
 - IMPROVEMENT SCORING:
   * Specific equipment named = 2 pts.
   * Vague ("use better scale") = 1.5 pts (Deduct 0.5).
@@ -143,8 +150,9 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Theory:** No connection? -> -1.0.
     * **Statistics:**
         * R (Correlation) missing? -> -1.0.
-        * R² (Fit) missing entirely? -> -1.0.
-        * R² (Fit) mentioned but vague? -> -0.5.
+        * R (Correlation) mentioned but vague? -> -0.5.
+        * R² (Fit) missing entirely? -> -2.0.
+        * R² (Fit) mentioned but vague? -> -1.0.
     * **Focus:** Repetitive/Unfocused? -> -0.5 (Max).
     * **RESTRICTIONS (Do NOT Deduct):** NO deductions for Citations, "Internal Inconsistency", or "Data Reliability".
 
@@ -156,10 +164,11 @@ Your goal is to grade student lab reports according to the specific rules below.
 4.  **VARIABLES (Section 4) - ENHANCED SCORING:**
     * **Start at 10.0 Points.**
     * **Control Variables Check:** Fewer than 3 controls listed? -> -4.0.
-    * **Control Justification:** Controls not justified (no explanation of why they need to be controlled)? -> -1.0.
+    * **Control Justification:** * Not justified at all (no explanation)? -> -1.0.
+      * Partially justified (some missing or reasoning weak)? -> -0.5.
     * **Control Description Quality:** Control variable descriptions vague or unclear? -> -1.0.
-    * **Independent Variable Explanation:** IV not thoroughly explained (lacks detail on what it is and how it's changed)? -> -1.0.
-    * **Dependent Variable Explanation:** DV not thoroughly explained (lacks detail on what it is and what it measures)? -> -1.0.
+    * **Independent Variable Explanation:** IV not thoroughly explained? -> -1.0.
+    * **Dependent Variable Explanation:** DV not thoroughly explained? -> -1.0.
     * **DV Measurement Specificity:** Method for measuring DV is vague? -> -0.5.
 
 5.  **DATA ANALYSIS (Section 7):**
@@ -167,16 +176,28 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **R² Value:** Not shown on graph? -> -1.0.
     * **Calculations:** Example calculations unclear? -> -1.0.
     * **Steps:** Calculation steps not clearly explained OR labeled? -> -0.5.
+    * **Significant Figures (Analysis):** * >3 errors in final reported values? -> -1.0.
+        * 1-3 errors in final reported values? -> -0.5.
+        * (Do not deduct for intermediate calculations).
 
-6.  **PROCEDURES (Section 5):**
+6.  **RAW DATA (Section 6) - CONSISTENCY CHECK:**
+    * **Consistency:** Are significant figures consistent for the same measuring device?
+        * If inconsistent? -> -1.0.
+    * **Mass Precision:** Do mass readings have 1 or 2 decimal places? 
+        * If incorrect precision used? -> -1.0 (Combine with consistency deduction if applicable, max -1.0 total for sig figs here).
+
+7.  **PROCEDURES (Section 5):**
     * **Diagram Check:** Diagram of experimental setup or photograph missing? -> -0.5.
 
-7.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+8.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
-    * **IMPACT:** All errors have impact? +2. Some? +1 (-1.0 deduction). None? 0 (-2.0 deduction).
+    * **IMPACT (Must discuss impact on SPECIFIC QUANTITATIVE DATA collected):** * Did they discuss how EACH error affected the data (e.g. "Values were higher than expected")?
+        * Impact defined for 100% of errors? -> No deduction.
+        * Impact defined for SOME (partial) or lacks quantitative specificity? -> -1.0 deduction.
+        * No impact defined for any error? -> -2.0 deduction.
     * **IMPROVEMENTS:** Specific equipment? +2. Vague? +1.5 (-0.5 deduction). Generic? 0 (-2.0 deduction).
 
-7.  **REFERENCES (Section 10) - QUANTITY CHECK:**
+9.  **REFERENCES (Section 10) - QUANTITY CHECK:**
     * 1 Reference: Max Score 5.0.
     * 2 References: Max Score 7.0.
     * 3+ References: Max Score 10.0.
@@ -206,8 +227,7 @@ STUDENT: [Filename]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:** 
-* "Objective explicit?" (-1.0 if No, -0.5 if Vague). 
+* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No, -0.5 if Vague). 
 * "Chemical Equation present?" (-1.0 if No). 
 * "Chemical Theory Quality Assessment:" 
   - Missing/Minimal (barely any chemical explanation): -3.0
@@ -227,10 +247,10 @@ STUDENT: [Filename]
 * **✅ Strengths:** [**DETAILED LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]" and comment on explanation quality.]
 * **⚠️ Improvements:** [**CRITICAL CHECKS:**
 * "Control Variables: [Number found]. If fewer than 3, deduct -4.0 pts."
-* "Control Justification: [Present/Missing]. If not justified (no explanation of why they need to be controlled), deduct -1.0 pt."
+* "Control Justification: [Present/Missing/Partial]. If not justified (no explanation of why they need to be controlled), deduct -1.0 pt. If partial, deduct -0.5 pt."
 * "Control Description Quality: [Clear/Vague]. If vague or unclear, deduct -1.0 pt."
-* "Independent Variable Explanation: [Thorough/Not Thorough]. If IV not thoroughly explained (lacks detail on what it is and how it's changed), deduct -1.0 pt."
-* "Dependent Variable Explanation: [Thorough/Not Thorough]. If DV not thoroughly explained (lacks detail on what it is and what it measures), deduct -1.0 pt."
+* "Independent Variable Explanation: [Thorough/Not Thorough]. If IV not thoroughly explained, deduct -1.0 pt."
+* "Dependent Variable Explanation: [Thorough/Not Thorough]. If DV not thoroughly explained, deduct -1.0 pt."
 * "DV Measurement Method: [Specific/Vague]. If vague, deduct -0.5 pt."
 * Suggest specific improvements for any deficiencies.]
 
@@ -240,12 +260,15 @@ STUDENT: [Filename]
 
 **6. RAW DATA: [Score]/10**
 * **✅ Strengths:** [Comment on data organization and unit clarity]
-* **⚠️ Improvements:** [Quote values with wrong units/sig figs and explain the correct format]
+* **⚠️ Improvements:** [**SIG FIG AUDIT:** "Check consistency of sig figs for each device." (If inconsistent, -1.0). 
+* "Check mass readings." (Must be 1 or 2 decimal places. If not, -1.0).
+* Quote values with wrong units/sig figs and explain the correct format.]
 
 **7. DATA ANALYSIS: [Score]/10**
 * **✅ Strengths:** [Summarize the calculation process. If Graph is perfect, mention that the scatterplot, equation, and labels are all correct here.]
 * **⚠️ Improvements:** [**GRAPH AUDIT:** "Trendline Equation: [Present/Missing]" (-1.0 if missing). "R² Value: [Present/Missing]" (-1.0 if missing).
-**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts). "Example calculations were [Correct/Incorrect]." (If incorrect, -2.0 pts). (If partially correct, -1.0 pts).]
+**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts). "Example calculations were [Correct/Incorrect]." (If incorrect, -2.0 pts). (If partially correct, -1.0 pts).
+**SIG FIGS:** "Check final reported values for sig fig errors." (>3 errors = -1.0, 1-3 errors = -0.5). Ignore intermediate steps.]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used to support the claim]
@@ -257,13 +280,13 @@ STUDENT: [Filename]
   5. Quantitative Support (-2.0)
   6. Qualitative Support (-0.5)
   7. **Literature Comparison** (-0.5 if vague)
-  8. **R and R² Explanation** (-1.0 if R missing, -1.0 if R² missing, -0.5 if R² vague)]
+  8. **R and R² Explanation** (-1.0 if R missing, -0.5 if R vague, -2.0 if R² missing, -1.0 if R² vague)]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
 * **⚠️ Improvements:** [**ERROR CLASSIFICATION:** "You did not differentiate between systematic and random errors. (-0.5 pt)" OR "You successfully distinguished systematic from random errors."
-**IMPACT/IMPROVEMENT AUDIT:** * "You listed [X] errors but only provided specific directional impacts for [Y] of them. (-1 pt)"
-  * "Improvements were listed but were slightly vague (e.g., did not name specific equipment). (-0.5 pt)" ]
+**IMPACT/IMPROVEMENT AUDIT:** * "Did you discuss how EACH error specifically affected the quantitative data collected? (No discussion = -2.0. Partial/Generic discussion = -1.0)."
+* "Improvements were listed but were slightly vague (e.g., did not name specific equipment). (-0.5 pt)" ]
 
 **10. REFERENCES: [Score]/10**
 * **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources."]
@@ -496,7 +519,7 @@ def grade_submission(file, model_id):
             "2. **VARIABLES - ENHANCED SCORING:** \n"
             "    * List the exact variables found (IV, DV, Controls).\n"
             "    * Check for at least 3 control variables (-4.0 if fewer than 3).\n"
-            "    * Check if controls are justified with explanation of why they need to be controlled (-1.0 if not justified).\n"
+            "    * Check if controls are justified with explanation of why they need to be controlled (-1.0 if not justified, -0.5 if partial).\n"
             "    * Check if control descriptions are clear and specific (-1.0 if vague).\n"
             "    * Check if IV is thoroughly explained with detail on what it is and how it's changed (-1.0 if not thorough).\n"
             "    * Check if DV is thoroughly explained with detail on what it is and what it measures (-1.0 if not thorough).\n"
@@ -504,11 +527,10 @@ def grade_submission(file, model_id):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
-            "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
-            "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
+            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0 missing, -0.5 vague), R² (-2.0 if missing, -1.0 if vague), Repetitiveness (-0.5).\n"
+            "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Check significant figures in FINAL reported values (>3 errors = -1.0, 1-3 errors = -0.5). Ignore intermediate rounding.\n"
+            "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Check for discussion of IMPACT of **EACH** error on **SPECIFIC QUANTITATIVE DATA** (missing = -2.0, partial/vague = -1.0). Penalize vague improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "10. **INTRODUCTION - ENHANCED CHEMICAL THEORY GRADING:** \n"
             "10. **INTRODUCTION - ENHANCED CHEMICAL THEORY GRADING:** \n"
             "    * Check for Chemical Equation (-1.0 if missing).\n"
             "    * Check for Objective (-1.0 if missing, -0.5 if vague).\n"
@@ -518,12 +540,13 @@ def grade_submission(file, model_id):
             "      - Present but vague/superficial (mentions concepts without explaining): -1.0 point\n"
             "    * Chemical theory must thoroughly explain relevant concepts (reaction mechanisms, bonding, thermodynamics, kinetics, etc.) and meaningfully connect to the lab objective.\n"
             "    * DO NOT penalize for inconsistent units or citation context.\n"
-            "11. **PROCEDURES:** Check if a diagram or photograph of the experimental setup is included (-0.5 if missing).\n"
-            "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
-            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
-            "14. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
-            "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
-            "STUDENT TEXT:\n" + text_content
+            "11. **RAW DATA (SIG FIGS & CONSISTENCY):** \n"
+            "    * Check that significant figures are consistent for the same measuring device. (If inconsistent, -1.0).\n"
+            "    * Check mass readings: Must be 1 or 2 decimal places. (If incorrect, -1.0).\n"
+            "12. **PROCEDURES:** Check if a diagram of the experimental setup is included (-0.5 if missing).\n"
+            "13. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
+            "14. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
+            "15. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
         )
         
         user_message = [
@@ -548,7 +571,7 @@ def grade_submission(file, model_id):
             "2. **VARIABLES - ENHANCED SCORING:** \n"
             "    * List the exact variables found (IV, DV, Controls).\n"
             "    * Check for at least 3 control variables (-4.0 if fewer than 3).\n"
-            "    * Check if controls are justified with explanation of why they need to be controlled (-1.0 if not justified).\n"
+            "    * Check if controls are justified with explanation of why they need to be controlled (-1.0 if not justified, -0.5 if partial).\n"
             "    * Check if control descriptions are clear and specific (-1.0 if vague).\n"
             "    * Check if IV is thoroughly explained with detail on what it is and how it's changed (-1.0 if not thorough).\n"
             "    * Check if DV is thoroughly explained with detail on what it is and what it measures (-1.0 if not thorough).\n"
@@ -556,9 +579,9 @@ def grade_submission(file, model_id):
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
-            "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
-            "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
+            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0 missing, -0.5 vague), R² (-2.0 if missing, -1.0 if vague), Repetitiveness (-0.5).\n"
+            "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Check significant figures in FINAL reported values (>3 errors = -1.0, 1-3 errors = -0.5). Ignore intermediate rounding.\n"
+            "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Check for discussion of IMPACT of **EACH** error on **SPECIFIC QUANTITATIVE DATA** (missing = -2.0, partial/vague = -1.0). Penalize vague improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
             "10. **INTRODUCTION - ENHANCED CHEMICAL THEORY GRADING:** \n"
             "    * Check for Chemical Equation (-1.0 if missing).\n"
@@ -569,10 +592,13 @@ def grade_submission(file, model_id):
             "      - Present but vague/superficial (mentions concepts without explaining): -1.0 point\n"
             "    * Chemical theory must thoroughly explain relevant concepts (reaction mechanisms, bonding, thermodynamics, kinetics, etc.) and meaningfully connect to the lab objective.\n"
             "    * DO NOT penalize for inconsistent units or citation context.\n"
-            "11. **PROCEDURES:** Check if a diagram of the experimental setup is included (-0.5 if missing).\n"
-            "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
-            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
-            "14. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
+            "11. **RAW DATA (SIG FIGS & CONSISTENCY):** \n"
+            "    * Check that significant figures are consistent for the same measuring device. (If inconsistent, -1.0).\n"
+            "    * Check mass readings: Must be 1 or 2 decimal places. (If incorrect, -1.0).\n"
+            "12. **PROCEDURES:** Check if a diagram of the experimental setup is included (-0.5 if missing).\n"
+            "13. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
+            "14. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
+            "15. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
         )
         
         user_message = [
