@@ -646,6 +646,44 @@ def create_zip_bundle(results):
             z.writestr(safe_name, doc_buffer.getvalue())
     return zip_buffer.getvalue()
 
+# --- NEW: AUTOSAVE INDIVIDUAL REPORT ---
+def autosave_report(item, autosave_dir):
+    """Save individual report as Word doc and append to CSV immediately after grading."""
+    try:
+        # 1. Save Word Document
+        doc = Document()
+        write_markdown_to_docx(doc, item['Feedback'])
+        safe_filename = os.path.splitext(item['Filename'])[0] + "_Feedback.docx"
+        doc_path = os.path.join(autosave_dir, safe_filename)
+        doc.save(doc_path)
+        
+        # 2. Append to CSV (or create if doesn't exist)
+        csv_path = os.path.join(autosave_dir, "gradebook.csv")
+        
+        # Parse feedback into row data
+        row_data = {
+            "Filename": item['Filename'],
+            "Overall Score": item['Score']
+        }
+        feedback_data = parse_feedback_for_csv(item['Feedback'])
+        row_data.update(feedback_data)
+        
+        # Check if CSV exists
+        if os.path.exists(csv_path):
+            existing_df = pd.read_csv(csv_path)
+            # Remove duplicate if re-grading same file
+            existing_df = existing_df[existing_df['Filename'] != item['Filename']]
+            new_df = pd.concat([existing_df, pd.DataFrame([row_data])], ignore_index=True)
+        else:
+            new_df = pd.DataFrame([row_data])
+        
+        new_df.to_csv(csv_path, index=False, encoding='utf-8-sig')
+        
+        return True
+    except Exception as e:
+        print(f"Autosave failed for {item['Filename']}: {e}")
+        return False
+    
 def display_results_ui():
     if not st.session_state.current_results:
         return
