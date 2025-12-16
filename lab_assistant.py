@@ -892,6 +892,9 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     status_text.success("✅ Grading Complete! Scrolling down...")
     progress.empty()
 
+# Show message about autosave location
+    st.info(f"💾 **Backup Location:** All feedback has been saved to `{st.session_state.autosave_dir}/` folder. You can download individual files or the full gradebook below.")
+
 # --- 8. PERSISTENT DISPLAY ---
 if st.session_state.current_results:
     display_results_ui()
