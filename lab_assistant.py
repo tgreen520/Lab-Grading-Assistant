@@ -31,16 +31,13 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 1. FORMATTING (10 pts):
 - Criteria: Third-person passive voice, professional tone, superscripts/subscripts used correctly.
-- DEDUCTIONS: 1-2 subscript errors = -0.5 pts. 3+ errors = -1.0 pt. First-person voice (including "I", "we", or "my") = -1.0.
+- DEDUCTIONS: 1-2 subscript errors = -0.5 pts. 3+ errors = -1.0 pt.
 
 2. INTRODUCTION (10 pts):
-- Criteria: Clear objective, background theory with thorough chemical explanation, balanced equations.
+- Criteria: Clear objective, background theory, balanced equations.
 - OBJECTIVE: Must be explicit. (Missing: -1.0. Present but Vague/Implicit: -0.5).
 - EQUATION: Balanced chemical equation required. (Missing: -1.0).
-- CHEMICAL THEORY/BACKGROUND: Must be thorough, chemically detailed, and connected to objective.
-  * Missing or minimal chemical theory: -3.0
-  * Present but not thoroughly discussed: -2.0
-  * Present but vague or superficial: -1.0
+- THEORY/BACKGROUND: Must be thorough and connected to objective. (Irrelevant/Missing: -1.0. Brief/Not thoroughly connected: -0.5).
 - NOTE: Do NOT deduct for inconsistent temperature units or citation context.
 
 3. HYPOTHESIS (10 pts):
@@ -50,15 +47,11 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - MEASUREMENT: Specific description of how DV is measured. (Missing: -1.0, Vague: -0.5).
 
 4. VARIABLES (10 pts):
-- Criteria: IV, DV, 3+ Controls with thorough explanations.
-- DEDUCTIONS:
-  * Control variables missing (fewer than 3): -4.0
-  * Control variables not justified (why do they need to be controlled?): -1.0
-  * Control variable justification is partial/incomplete: -0.5
-  * Description of control variables vague: -1.0
-  * Independent variable not thoroughly explained: -1.0
-  * Dependent variable not thoroughly explained: -1.0
-  * DV measurement vague: -0.5
+- Criteria: IV, DV, 3+ Controls.
+- SCORING: 
+  * 10/10: All defined + explanations.
+  * 9.5/10: DV measurement vague (-0.5).
+  * 9.0/10: Explanations missing (-1.0).
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, quantities, safety.
@@ -66,21 +59,14 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 6. RAW DATA (10 pts):
 - Criteria: Qualitative observations, tables, units, sig figs.
-- CONSISTENCY: Significant figures must be consistent for the same measuring device.
-  * Inconsistent sig figs for same device (e.g., mass): -1.0.
-  * Mass Readings: Must be 1 or 2 decimal places (depending on balance). If incorrect/inconsistent: -1.0.
 
 7. DATA ANALYSIS (10 pts):
 - Criteria: Calculation shown, Graph (Scatterplot, Trendline, Equation, R^2).
 - GRAPH EQUATION: Linear equation must be displayed on graph. (Missing: -1.0).
 - GRAPH R²: R² value must be displayed on graph. (Missing: -1.0).
-- CALCULATIONS: Must be detailed and clear. (Missing:-1.0, unclear: 0.5).
-- CALCULATIONS: Must be correct. (Incorrect: -2.0, partially correct: -0.5)
+- CALCULATIONS: Must be detailed and clear. (Unclear: -1.0).
 - CALCULATION STEPS: All steps must be clearly explained OR labeled for clarity. (Not done: -0.5).
-- SIGNIFICANT FIGURES (ANALYSIS): Sig figs must be correct in final reported values.
-  * >3 errors in sig figs: -1.0
-  * 1-3 errors in sig figs: -0.5
-  * NOTE: Intermediate precision allowed. Only penalize final answer sig figs.
+- NOTE: Intermediate precision allowed. Check final answer sig figs.
 
 8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
 - HYPOTHESIS SUPPORT: Must indicate if data supports hypothesis. (If missing: -1.0).
@@ -91,17 +77,17 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5).
 - LITERATURE COMPARISON: If comparison to literature is vague (no specific values), -0.5 pt.
 - STATISTICS (R vs R²):
-  * R (Correlation): Must explain Strength & Direction. (If missing: -1.0. If vague: -0.5).
-  * R² (Fit): Must explain Fit/Variability. (If missing entirely: -2.0. If mentioned but vague: -1.0).
+  * R (Correlation): Must explain Strength & Direction. (If missing: -1.0).
+  * R² (Fit): Must explain Fit/Variability. (If missing entirely: -1.0. If mentioned but vague: -0.5).
 - NOTE: Do NOT deduct for "Internal Inconsistency" or Citations here.
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
-- REQUIREMENT: List errors + Specific Directional Impact on Data + Specific Improvement.
+- REQUIREMENT: List errors + Specific Directional Impact + Specific Improvement.
 - ERROR CLASSIFICATION: Must differentiate between systematic and random errors. (Not done: -0.5).
-- IMPACT SCORING (Must discuss how EACH error affected SPECIFIC QUANTITATIVE DATA):
-  * Impact defined for 100% of errors with specific data link = 2 pts.
-  * Impact defined for SOME errors OR lacks specific quantitative link (Partial): -1.0 deduction.
-  * No impact defined for any errors: -2.0 deduction.
+- IMPACT SCORING:
+  * Impact defined for 100% of errors = 2 pts.
+  * Impact defined for SOME (not all) errors = 1 pt (Deduct 1.0).
+  * No impact defined = 0 pts (Deduct 2.0).
 - IMPROVEMENT SCORING:
   * Specific equipment named = 2 pts.
   * Vague ("use better scale") = 1.5 pts (Deduct 0.5).
@@ -129,15 +115,11 @@ Your goal is to grade student lab reports according to the specific rules below.
 2. The user will NOT see this block (it is filtered out).
 3. Do NOT include any math or deduction logic in the "OUTPUT FORMAT" sections. Only the final feedback text.
 
-1.  **INTRODUCTION (Section 2) - ENHANCED CHEMICAL THEORY PROTOCOL:**
+1.  **INTRODUCTION (Section 2) - DEDUCTION PROTOCOL:**
     * **Start at 10.0 Points.**
     * **Objective:** If Missing -> -1.0. If Vague/Implicit -> -0.5.
     * **Chemical Equation:** If Missing -> -1.0.
-    * **Chemical Theory/Background - TIERED DEDUCTIONS:**
-        * **Missing or Minimal (barely any chemical explanation):** -3.0 points
-        * **Present but Not Thoroughly Discussed (lacks depth or detail):** -2.0 points
-        * **Present but Vague/Superficial (mentions concepts but doesn't explain them well):** -1.0 point
-    * **Theory Connection to Objective:** The chemical theory must connect meaningfully to the lab's objective. If disconnected or irrelevant, apply the appropriate deduction above.
+    * **Background Theory:** If Missing/Irrelevant -> -1.0. If Brief or Not thoroughly connected to objective -> -0.5.
     * **RESTRICTIONS (Do NOT Deduct):** No deductions for citation context or inconsistent units.
 
 2.  **CONCLUSION (Section 8) - STRICT MATH PROTOCOL:**
@@ -150,9 +132,8 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Theory:** No connection? -> -1.0.
     * **Statistics:**
         * R (Correlation) missing? -> -1.0.
-        * R (Correlation) mentioned but vague? -> -0.5.
-        * R² (Fit) missing entirely? -> -2.0.
-        * R² (Fit) mentioned but vague? -> -1.0.
+        * R² (Fit) missing entirely? -> -1.0.
+        * R² (Fit) mentioned but vague? -> -0.5.
     * **Focus:** Repetitive/Unfocused? -> -0.5 (Max).
     * **RESTRICTIONS (Do NOT Deduct):** NO deductions for Citations, "Internal Inconsistency", or "Data Reliability".
 
@@ -161,43 +142,21 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Units Check:** Missing -> -1.0. Incomplete -> -0.5.
     * **Measurement Check:** Missing -> -1.0. Vague -> -0.5.
 
-4.  **VARIABLES (Section 4) - ENHANCED SCORING:**
-    * **Start at 10.0 Points.**
-    * **Control Variables Check:** Fewer than 3 controls listed? -> -4.0.
-    * **Control Justification:** * Not justified at all (no explanation)? -> -1.0.
-      * Partially justified (some missing or reasoning weak)? -> -0.5.
-    * **Control Description Quality:** Control variable descriptions vague or unclear? -> -1.0.
-    * **Independent Variable Explanation:** IV not thoroughly explained? -> -1.0.
-    * **Dependent Variable Explanation:** DV not thoroughly explained? -> -1.0.
-    * **DV Measurement Specificity:** Method for measuring DV is vague? -> -0.5.
-
-5.  **DATA ANALYSIS (Section 7):**
+4.  **DATA ANALYSIS (Section 7):**
     * **Trendline Equation:** Not shown on graph? -> -1.0.
     * **R² Value:** Not shown on graph? -> -1.0.
     * **Calculations:** Example calculations unclear? -> -1.0.
     * **Steps:** Calculation steps not clearly explained OR labeled? -> -0.5.
-    * **Significant Figures (Analysis):** * >3 errors in final reported values? -> -1.0.
-        * 1-3 errors in final reported values? -> -0.5.
-        * (Do not deduct for intermediate calculations).
 
-6.  **RAW DATA (Section 6) - CONSISTENCY CHECK:**
-    * **Consistency:** Are significant figures consistent for the same measuring device?
-        * If inconsistent? -> -1.0.
-    * **Mass Precision:** Do mass readings have 1 or 2 decimal places? 
-        * If incorrect precision used? -> -1.0 (Combine with consistency deduction if applicable, max -1.0 total for sig figs here).
+5.  **PROCEDURES (Section 5):**
+    * **Diagram Check:** Diagram of experimental setup missing? -> -0.5.
 
-7.  **PROCEDURES (Section 5):**
-    * **Diagram Check:** Diagram of experimental setup or photograph missing? -> -0.5.
-
-8.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
-    * **IMPACT (Must discuss impact on SPECIFIC QUANTITATIVE DATA collected):** * Did they discuss how EACH error affected the data (e.g. "Values were higher than expected")?
-        * Impact defined for 100% of errors? -> No deduction.
-        * Impact defined for SOME (partial) or lacks quantitative specificity? -> -1.0 deduction.
-        * No impact defined for any error? -> -2.0 deduction.
+    * **IMPACT:** All errors have impact? +2. Some? +1 (-1.0 deduction). None? 0 (-2.0 deduction).
     * **IMPROVEMENTS:** Specific equipment? +2. Vague? +1.5 (-0.5 deduction). Generic? 0 (-2.0 deduction).
 
-9.  **REFERENCES (Section 10) - QUANTITY CHECK:**
+7.  **REFERENCES (Section 10) - QUANTITY CHECK:**
     * 1 Reference: Max Score 5.0.
     * 2 References: Max Score 7.0.
     * 3+ References: Max Score 10.0.
@@ -219,22 +178,15 @@ STUDENT: [Filename]
 * [1-2 sentences on quality]
 * [Critique of graphs/images]
 
-**📋 DETAILED RUBRIC BREAKDOWN:**
+**📝 DETAILED RUBRIC BREAKDOWN:**
 
 **1. FORMATTING: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of tone/voice quality]
-* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (If X=1 or 2, Score **MUST** be 9.5. If X>=3, Score is 9.0 or lower). "First person voice used? This includes "I", "we" or "my"" (-1.0 if Yes).]
+* **⚠️ Improvements:** [**MANDATORY:** "Found [X] subscript errors." (If X=1 or 2, Score **MUST** be 9.5. If X>=3, Score is 9.0 or lower).]
 
 **2. INTRODUCTION: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of objective/theory coverage]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No, -0.5 if Vague). 
-* "Chemical Equation present?" (-1.0 if No). 
-* "Chemical Theory Quality Assessment:" 
-  - Missing/Minimal (barely any chemical explanation): -3.0
-  - Present but not thoroughly discussed (lacks depth): -2.0
-  - Present but vague/superficial: -1.0
-* Assess whether the chemical theory thoroughly explains relevant concepts (reaction mechanisms, bonding, energy changes, etc.) and connects meaningfully to the lab objective.
-* NOTE: Do not penalize citation context or unit consistency.]
+* **⚠️ Improvements:** [**CRITICAL CHECKS:** * "Objective explicit?" (-1.0 if No, -0.5 if Vague). * "Chemical Equation present?" (-1.0 if No). * "Background thoroughly explained?" (-1.0 if No, -0.5 if Brief or not connected to objective). NOTE: Do not penalize citation context or unit consistency.]
 
 **3. HYPOTHESIS: [Score]/10**
 * **✅ Strengths:** [Quote prediction and praise the scientific reasoning]
@@ -244,31 +196,21 @@ STUDENT: [Filename]
 * "DV Measurement Description: [Specific/Vague/Missing]" (-1.0 if missing, -0.5 if vague).]
 
 **4. VARIABLES: [Score]/10**
-* **✅ Strengths:** [**DETAILED LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]" and comment on explanation quality.]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:**
-* "Control Variables: [Number found]. If fewer than 3, deduct -4.0 pts."
-* "Control Justification: [Present/Missing/Partial]. If not justified (no explanation of why they need to be controlled), deduct -1.0 pt. If partial, deduct -0.5 pt."
-* "Control Description Quality: [Clear/Vague]. If vague or unclear, deduct -1.0 pt."
-* "Independent Variable Explanation: [Thorough/Not Thorough]. If IV not thoroughly explained, deduct -1.0 pt."
-* "Dependent Variable Explanation: [Thorough/Not Thorough]. If DV not thoroughly explained, deduct -1.0 pt."
-* "DV Measurement Method: [Specific/Vague]. If vague, deduct -0.5 pt."
-* Suggest specific improvements for any deficiencies.]
+* **✅ Strengths:** [**LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]" and comment on clarity.]
+* **⚠️ Improvements:** [If DV measurement is vague, state: "The method for measuring the DV was vague (-0.5 pts)." Suggest specific improvement.]
 
 **5. PROCEDURES: [Score]/10**
 * **✅ Strengths:** [Comment on reproducibility and safety details]
-* **⚠️ Improvements:** [**DIAGRAM CHECK:** "Diagram of experimental setup included? Allow photographs in place of diagrams. Diagrams or photographs can be included in other sections of the lab report" (-0.5 if missing). Identify exactly which step is vague and how to fix it.]
+* **⚠️ Improvements:** [**DIAGRAM CHECK:** "Diagram of experimental setup included?" (-0.5 if missing). Identify exactly which step is vague and how to fix it.]
 
 **6. RAW DATA: [Score]/10**
 * **✅ Strengths:** [Comment on data organization and unit clarity]
-* **⚠️ Improvements:** [**SIG FIG AUDIT:** "Check consistency of sig figs for each device." (If inconsistent, -1.0). 
-* "Check mass readings." (Must be 1 or 2 decimal places. If incorrect, -1.0).
-* Quote values with wrong units/sig figs and explain the correct format.]
+* **⚠️ Improvements:** [Quote values with wrong units/sig figs and explain the correct format]
 
 **7. DATA ANALYSIS: [Score]/10**
 * **✅ Strengths:** [Summarize the calculation process. If Graph is perfect, mention that the scatterplot, equation, and labels are all correct here.]
 * **⚠️ Improvements:** [**GRAPH AUDIT:** "Trendline Equation: [Present/Missing]" (-1.0 if missing). "R² Value: [Present/Missing]" (-1.0 if missing).
-**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts). "Example calculations were [Correct/Incorrect]." (If incorrect, -2.0 pts). (If partially correct, -1.0 pts).
-**SIG FIGS:** "Check final reported values for sig fig errors." (>3 errors = -1.0, 1-3 errors = -0.5). Ignore intermediate steps.]
+**CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts).]
 
 **8. CONCLUSION: [Score]/10**
 * **✅ Strengths:** [Quote data used to support the claim]
@@ -280,13 +222,13 @@ STUDENT: [Filename]
   5. Quantitative Support (-2.0)
   6. Qualitative Support (-0.5)
   7. **Literature Comparison** (-0.5 if vague)
-  8. **R and R² Explanation** (-1.0 if R missing, -0.5 if R vague, -2.0 if R² missing, -1.0 if R² vague)]
+  8. **R and R² Explanation** (-1.0 if R missing, -1.0 if R² missing, -0.5 if R² vague)]
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
 * **⚠️ Improvements:** [**ERROR CLASSIFICATION:** "You did not differentiate between systematic and random errors. (-0.5 pt)" OR "You successfully distinguished systematic from random errors."
-**IMPACT/IMPROVEMENT AUDIT:** * "Did you discuss how EACH error specifically affected the quantitative data collected? (No discussion = -2.0. Partial/Generic discussion = -1.0)."
-* "Improvements were listed but were slightly vague (e.g., did not name specific equipment). (-0.5 pt)" ]
+**IMPACT/IMPROVEMENT AUDIT:** * "You listed [X] errors but only provided specific directional impacts for [Y] of them. (-1 pt)"
+  * "Improvements were listed but were slightly vague (e.g., did not name specific equipment). (-0.5 pt)" ]
 
 **10. REFERENCES: [Score]/10**
 * **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources."]
@@ -305,13 +247,8 @@ if 'current_results' not in st.session_state:
     st.session_state.current_results = []
 if 'current_session_name' not in st.session_state:
     st.session_state.current_session_name = "New Grading Session"
-if 'autosave_dir' not in st.session_state:
-    st.session_state.autosave_dir = "autosave_feedback"
 
 client = anthropic.Anthropic(api_key=API_KEY)
-
-# --- CREATE AUTOSAVE DIRECTORY ---
-os.makedirs(st.session_state.autosave_dir, exist_ok=True)
 
 # --- 5. HELPER FUNCTIONS ---
 def encode_file(uploaded_file):
@@ -330,34 +267,20 @@ def get_media_type(filename):
     }
     return media_types.get(ext, 'image/jpeg')
 
-# --- UPDATED TEXT EXTRACTION (WITH ROBUST FALLBACK) ---
+# --- UPDATED TEXT EXTRACTION (WITH SUBSCRIPT DETECTION) ---
 def get_para_text_with_formatting(para):
-    """Iterate through runs to capture subscript/superscript formatting. Safe fallback."""
-    try:
-        text_parts = []
-        for run in para.runs:
-            text = run.text
-            # Safe check for None
-            if not text:
-                continue
-            
-            # Check for subscript
-            if getattr(run.font, 'subscript', False):
-                text = f"<sub>{text}</sub>"
-            # Check for superscript
-            elif getattr(run.font, 'superscript', False):
-                text = f"<sup>{text}</sup>"
-            text_parts.append(text)
-        
-        result = "".join(text_parts)
-        # Fallback: if run iteration produced empty text but para.text exists (rare XML case)
-        if not result and para.text:
-            return para.text
-        return result
-        
-    except Exception:
-        # Fallback to plain text if run iteration crashes
-        return para.text
+    """Iterate through runs to capture subscript/superscript formatting."""
+    text_parts = []
+    for run in para.runs:
+        text = run.text
+        # Check for subscript
+        if run.font.subscript:
+            text = f"<sub>{text}</sub>"
+        # Check for superscript
+        elif run.font.superscript:
+            text = f"<sup>{text}</sup>"
+        text_parts.append(text)
+    return "".join(text_parts)
 
 def extract_text_from_docx(file):
     try:
@@ -367,8 +290,7 @@ def extract_text_from_docx(file):
         
         # 1. Extract Paragraphs with Formatting
         for para in doc.paragraphs:
-            text = get_para_text_with_formatting(para)
-            full_text.append(text)
+            full_text.append(get_para_text_with_formatting(para))
             
         # 2. Extract Tables with Formatting
         if doc.tables:
@@ -531,37 +453,20 @@ def grade_submission(file, model_id):
             "Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
             "⚠️ CRITICAL INSTRUCTIONS:\n"
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
-            "2. **VARIABLES - ENHANCED SCORING:** \n"
-            "    * List the exact variables found (IV, DV, Controls).\n"
-            "    * Check for at least 3 control variables (-4.0 if fewer than 3).\n"
-            "    * Check if controls are justified with explanation of why they need to be controlled (-1.0 if not justified, -0.5 if partial).\n"
-            "    * Check if control descriptions are clear and specific (-1.0 if vague).\n"
-            "    * Check if IV is thoroughly explained with detail on what it is and how it's changed (-1.0 if not thorough).\n"
-            "    * Check if DV is thoroughly explained with detail on what it is and what it measures (-1.0 if not thorough).\n"
-            "    * Check if DV measurement method is specific (-0.5 if vague).\n"
+            "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
-            "5. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0 missing, -0.5 vague), R² (-2.0 if missing, -1.0 if vague), Repetitiveness (-0.5).\n"
-            "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Check significant figures in FINAL reported values (>3 errors = -1.0, 1-3 errors = -0.5). Ignore intermediate rounding.\n"
-            "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Check for discussion of IMPACT of **EACH** error on **SPECIFIC QUANTITATIVE DATA** (missing = -2.0, partial/vague = -1.0). Penalize vague improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
-            "9. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "10. **INTRODUCTION - ENHANCED CHEMICAL THEORY GRADING:** \n"
-            "    * Check for Chemical Equation (-1.0 if missing).\n"
-            "    * Check for Objective (-1.0 if missing, -0.5 if vague).\n"
-            "    * **CHEMICAL THEORY ASSESSMENT (TIERED):**\n"
-            "      - Missing/Minimal (barely any chemical explanation): -3.0 points\n"
-            "      - Present but not thoroughly discussed (lacks depth/detail): -2.0 points\n"
-            "      - Present but vague/superficial (mentions concepts without explaining): -1.0 point\n"
-            "    * Chemical theory must thoroughly explain relevant concepts (reaction mechanisms, bonding, thermodynamics, kinetics, etc.) and meaningfully connect to the lab objective.\n"
-            "    * DO NOT penalize for inconsistent units or citation context.\n"
-            "11. **RAW DATA (SIG FIGS & CONSISTENCY):** \n"
-            "    * Check that significant figures are consistent for the same measuring device. (If inconsistent, -1.0).\n"
-            "    * Check mass readings: Must be 1 or 2 decimal places. (If incorrect, -1.0).\n"
+            "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
+            "6. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
+            "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
+            "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
+            "9. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
+            "10. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
+            "11. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check if Theory connects to Objective (-0.5 if not thoroughly connected). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
             "12. **PROCEDURES:** Check if a diagram of the experimental setup is included (-0.5 if missing).\n"
             "13. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
             "14. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
-            "15. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
+            "15. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n\n"
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "STUDENT TEXT:\n" + text_content
         )
@@ -585,37 +490,19 @@ def grade_submission(file, model_id):
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "INSTRUCTIONS:\n"
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
-            "2. **VARIABLES - ENHANCED SCORING:** \n"
-            "    * List the exact variables found (IV, DV, Controls).\n"
-            "    * Check for at least 3 control variables (-4.0 if fewer than 3).\n"
-            "    * Check if controls are justified with explanation of why they need to be controlled (-1.0 if not justified, -0.5 if partial).\n"
-            "    * Check if control descriptions are clear and specific (-1.0 if vague).\n"
-            "    * Check if IV is thoroughly explained with detail on what it is and how it's changed (-1.0 if not thorough).\n"
-            "    * Check if DV is thoroughly explained with detail on what it is and what it measures (-1.0 if not thorough).\n"
-            "    * Check if DV measurement method is specific (-0.5 if vague).\n"
+            "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0 missing, -0.5 vague), R² (-2.0 if missing, -1.0 if vague), Repetitiveness (-0.5).\n"
-            "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Check significant figures in FINAL reported values (>3 errors = -1.0, 1-3 errors = -0.5). Ignore intermediate rounding.\n"
-            "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Check for discussion of IMPACT of **EACH** error on **SPECIFIC QUANTITATIVE DATA** (missing = -2.0, partial/vague = -1.0). Penalize vague improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
+            "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
+            "7. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
+            "8. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "9. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
-            "10. **INTRODUCTION - ENHANCED CHEMICAL THEORY GRADING:** \n"
-            "    * Check for Chemical Equation (-1.0 if missing).\n"
-            "    * Check for Objective (-1.0 if missing, -0.5 if vague).\n"
-            "    * **CHEMICAL THEORY ASSESSMENT (TIERED):**\n"
-            "      - Missing/Minimal (barely any chemical explanation): -3.0 points\n"
-            "      - Present but not thoroughly discussed (lacks depth/detail): -2.0 points\n"
-            "      - Present but vague/superficial (mentions concepts without explaining): -1.0 point\n"
-            "    * Chemical theory must thoroughly explain relevant concepts (reaction mechanisms, bonding, thermodynamics, kinetics, etc.) and meaningfully connect to the lab objective.\n"
-            "    * DO NOT penalize for inconsistent units or citation context.\n"
-            "11. **RAW DATA (SIG FIGS & CONSISTENCY):** \n"
-            "    * Check that significant figures are consistent for the same measuring device. (If inconsistent, -1.0).\n"
-            "    * Check mass readings: Must be 1 or 2 decimal places. (If incorrect, -1.0).\n"
-            "12. **PROCEDURES:** Check if a diagram of the experimental setup is included (-0.5 if missing).\n"
-            "13. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
-            "14. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
-            "15. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
+            "10. **INTRODUCTION:** Check for Chemical Equation (-1.0 if missing). Check for Objective (-1.0 if missing, -0.5 if vague). Check Theory Relevance (-1.0 if irrelevant). Check if Theory connects to Objective (-0.5 if not thoroughly connected). Check Thoroughness (-1.0 if missing, -0.5 if brief). DO NOT penalize for inconsistent units. DO NOT penalize for citation context.\n"
+            "11. **PROCEDURES:** Check if a diagram of the experimental setup is included (-0.5 if missing).\n"
+            "12. **HIDDEN MATH:** Use <math_scratchpad> tags for all calculations.\n"
+            "13. **COMPLETE RESPONSE:** Ensure all 10 sections are graded. Do not stop early.\n"
+            "14. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, concrete, actionable recommendations at the end of your feedback.\n"
         )
         
         user_message = [
@@ -757,44 +644,6 @@ def create_zip_bundle(results):
             z.writestr(safe_name, doc_buffer.getvalue())
     return zip_buffer.getvalue()
 
-# --- NEW: AUTOSAVE INDIVIDUAL REPORT ---
-def autosave_report(item, autosave_dir):
-    """Save individual report as Word doc and append to CSV immediately after grading."""
-    try:
-        # 1. Save Word Document
-        doc = Document()
-        write_markdown_to_docx(doc, item['Feedback'])
-        safe_filename = os.path.splitext(item['Filename'])[0] + "_Feedback.docx"
-        doc_path = os.path.join(autosave_dir, safe_filename)
-        doc.save(doc_path)
-        
-        # 2. Append to CSV (or create if doesn't exist)
-        csv_path = os.path.join(autosave_dir, "gradebook.csv")
-        
-        # Parse feedback into row data
-        row_data = {
-            "Filename": item['Filename'],
-            "Overall Score": item['Score']
-        }
-        feedback_data = parse_feedback_for_csv(item['Feedback'])
-        row_data.update(feedback_data)
-        
-        # Check if CSV exists
-        if os.path.exists(csv_path):
-            existing_df = pd.read_csv(csv_path)
-            # Remove duplicate if re-grading same file
-            existing_df = existing_df[existing_df['Filename'] != item['Filename']]
-            new_df = pd.concat([existing_df, pd.DataFrame([row_data])], ignore_index=True)
-        else:
-            new_df = pd.DataFrame([row_data])
-        
-        new_df.to_csv(csv_path, index=False, encoding='utf-8-sig')
-        
-        return True
-    except Exception as e:
-        print(f"Autosave failed for {item['Filename']}: {e}")
-        return False
-
 def display_results_ui():
     if not st.session_state.current_results:
         return
@@ -839,40 +688,6 @@ def display_results_ui():
     with col3:
         st.download_button("📊 Detailed CSV Export", csv_data, f'{st.session_state.current_session_name}_Detailed.csv', "text/csv", use_container_width=True)
         st.caption("Includes separate columns for every section score and comment.")
-
-    # --- NEW: AUTOSAVE FOLDER ACCESS ---
-    st.divider()
-    st.info("💾 **Auto-saved files:** Individual feedback documents and gradebook are being saved to the `autosave_feedback` folder as grading progresses.")
-    
-    autosave_path = st.session_state.autosave_dir
-    if os.path.exists(autosave_path):
-        csv_autosave = os.path.join(autosave_path, "gradebook.csv")
-        if os.path.exists(csv_autosave):
-            with open(csv_autosave, 'rb') as f:
-                st.download_button(
-                    "📥 Download Auto-saved Gradebook (CSV)",
-                    f.read(),
-                    "autosaved_gradebook.csv",
-                    "text/csv",
-                    use_container_width=True
-                )
-        
-        # Create zip of all autosaved Word docs
-        autosave_files = [f for f in os.listdir(autosave_path) if f.endswith('.docx')]
-        if autosave_files:
-            zip_autosave = BytesIO()
-            with zipfile.ZipFile(zip_autosave, 'w', zipfile.ZIP_DEFLATED) as z:
-                for filename in autosave_files:
-                    file_path = os.path.join(autosave_path, filename)
-                    z.write(file_path, filename)
-            
-            st.download_button(
-                "📥 Download All Auto-saved Word Docs (.zip)",
-                zip_autosave.getvalue(),
-                "autosaved_feedback.zip",
-                "application/zip",
-                use_container_width=True
-            )
 
     tab1, tab2 = st.tabs(["📊 Gradebook View", "📝 Detailed Feedback"])
     with tab1:
@@ -954,10 +769,6 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     status_text = st.empty()
     live_results_table = st.empty()
     
-    # NEW: Placeholder for cumulative feedback display (cleared and rewritten each iteration)
-    st.subheader("📋 Live Grading Feedback")
-    feedback_placeholder = st.empty()
-    
     # Initialize Session State list if not present
     if 'current_results' not in st.session_state:
         st.session_state.current_results = []
@@ -968,13 +779,13 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     for i, file in enumerate(processed_files):
         # 1. SMART RESUME CHECK: Skip if already graded
         if file.name in existing_filenames:
-            status_text.info(f"↩ Skipping **{file.name}** (Already Graded)")
+            status_text.info(f"⏩ Skipping **{file.name}** (Already Graded)")
             time.sleep(0.5) # Brief pause for visual feedback
             progress.progress((i + 1) / len(processed_files))
             continue
 
         # 2. GRADING LOGIC
-        status_text.markdown(f"**Grading:** `{file.name}` ({i+1}/{len(processed_files)})...")
+        status_text.markdown(f"**Grading:** `{file.name}`...")
         
         try:
             # Polite delay to prevent API overloading
@@ -983,7 +794,7 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             feedback = grade_submission(file, user_model_id) # PASSING USER MODEL ID
             score = parse_score(feedback)
             
-            # 3. IMMEDIATE SAVE TO SESSION STATE
+            # 3. IMMEDIATE SAVE
             new_entry = {
                 "Filename": file.name,
                 "Score": score,
@@ -992,28 +803,12 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             
             st.session_state.current_results.append(new_entry)
             
-            # 4. AUTOSAVE TO DISK (NEW - CRITICAL FOR RECOVERY)
-            autosave_success = autosave_report(new_entry, st.session_state.autosave_dir)
-            if autosave_success:
-                status_text.success(f"✅ **{file.name}** graded & auto-saved! (Score: {score}/100)")
-            else:
-                status_text.warning(f"⚠️ **{file.name}** graded but autosave failed (Score: {score}/100)")
-            
-            # Update the existing set so duplicates within the same batch run are also caught
+            # Update the existing set so duplicates within the same batch run are also caught (unlikely but safe)
             existing_filenames.add(file.name)
             
-            # 5. LIVE TABLE UPDATE
+            # 4. LIVE TABLE UPDATE
             df_live = pd.DataFrame(st.session_state.current_results)
             live_results_table.dataframe(df_live[["Filename", "Score"]], use_container_width=True)
-            
-            # 6. UPDATED: SINGLE COPY CUMULATIVE FEEDBACK DISPLAY
-            # Clear and rewrite the entire feedback section to avoid duplicates
-            with feedback_placeholder.container():
-                for idx, item in enumerate(st.session_state.current_results):
-                    # Start expanded for most recent, collapsed for older ones
-                    is_most_recent = (idx == len(st.session_state.current_results) - 1)
-                    with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=is_most_recent):
-                        st.markdown(item['Feedback'])
             
         except Exception as e:
             st.error(f"❌ Error grading {file.name}: {e}")
@@ -1021,11 +816,8 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
         progress.progress((i + 1) / len(processed_files))
         
 
-    status_text.success("✅ Grading Complete! All reports auto-saved.")
+    status_text.success("✅ Grading Complete! Scrolling down...")
     progress.empty()
-    
-    # Show message about autosave location
-    st.info(f"💾 **Backup Location:** All feedback has been saved to `{st.session_state.autosave_dir}/` folder. You can download individual files or the full gradebook below.")
 
 # --- 8. PERSISTENT DISPLAY ---
 if st.session_state.current_results:
