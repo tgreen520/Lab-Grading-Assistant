@@ -247,6 +247,8 @@ if 'current_results' not in st.session_state:
     st.session_state.current_results = []
 if 'current_session_name' not in st.session_state:
     st.session_state.current_session_name = "New Grading Session"
+if 'autosave_dir' not in st.session_state:
+    st.session_state.autosave_dir = "autosave_feedback_pre-ib"
 
 client = anthropic.Anthropic(api_key=API_KEY)
 
