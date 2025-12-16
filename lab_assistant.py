@@ -130,10 +130,10 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **IV/DV Trend:** Missing logic? -> -1.0.
     * **Quantitative Data:** No numbers quoted? -> -2.0.
     * **Theory:** No connection? -> -1.0.
-    * **Statistics:**
-        * R (Correlation) missing? -> -1.0.
-        * R² (Fit) missing entirely? -> -1.0.
-        * R² (Fit) mentioned but vague? -> -0.5.
+    * **Statistics (R vs R² CHECK):**
+        * **R (Correlation):** Must explain Strength AND Direction. (Missing/No explanation -> -1.0. Vague explanation -> -0.5).
+        * **R² (Determination):** Must explain % variation/fit. (Missing entirely -> -2.0. Vague explanation -> -1.0).
+        * **Differentiation:** Ensure student treats R and R² as separate concepts. If they mix them up, apply the "Vague" deduction for both.
     * **Focus:** Repetitive/Unfocused? -> -0.5 (Max).
     * **RESTRICTIONS (Do NOT Deduct):** NO deductions for Citations, "Internal Inconsistency", or "Data Reliability".
 
@@ -142,21 +142,27 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Units Check:** Missing -> -1.0. Incomplete -> -0.5.
     * **Measurement Check:** Missing -> -1.0. Vague -> -0.5.
 
-4.  **DATA ANALYSIS (Section 7):**
+4.  **VARIABLES (Section 4) - JUSTIFICATION PROTOCOL:**
+    * **Control Justification:** * No justification given for why controls were chosen? -> -1.0.
+        * Partial/Vague justification? -> -0.5.
+    * **DV Measurement:** Method for measuring DV is vague? -> -0.5.
+    * **Identification:** Any variable (IV, DV, Controls) missing? -> -1.0 per missing item.
+
+5.  **DATA ANALYSIS (Section 7):**
     * **Trendline Equation:** Not shown on graph? -> -1.0.
     * **R² Value:** Not shown on graph? -> -1.0.
     * **Calculations:** Example calculations unclear? -> -1.0.
     * **Steps:** Calculation steps not clearly explained OR labeled? -> -0.5.
 
-5.  **PROCEDURES (Section 5):**
+6.  **PROCEDURES (Section 5):**
     * **Diagram Check:** Diagram of experimental setup missing? -> -0.5.
 
-6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+7.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
     * **IMPACT:** All errors have impact? +2. Some? +1 (-1.0 deduction). None? 0 (-2.0 deduction).
     * **IMPROVEMENTS:** Specific equipment? +2. Vague? +1.5 (-0.5 deduction). Generic? 0 (-2.0 deduction).
 
-7.  **REFERENCES (Section 10) - QUANTITY CHECK:**
+8.  **REFERENCES (Section 10) - QUANTITY CHECK:**
     * 1 Reference: Max Score 5.0.
     * 2 References: Max Score 7.0.
     * 3+ References: Max Score 10.0.
