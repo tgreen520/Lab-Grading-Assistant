@@ -47,12 +47,11 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - MEASUREMENT: Specific description of how DV is measured. (Missing: -1.0, Vague: -0.5).
 
 4. VARIABLES (10 pts):
-- Criteria: IV, DV, 3+ Controls with justifications.
-- CONTROL JUSTIFICATION: Must explain WHY each control variable needs to be controlled. (Missing: -1.0).
+- Criteria: IV, DV, 3+ Controls.
 - SCORING: 
-  * 10/10: All defined + explanations + control justifications.
+  * 10/10: All defined + explanations.
   * 9.5/10: DV measurement vague (-0.5).
-  * 9.0/10: Explanations missing (-1.0) OR Control justifications missing (-1.0).
+  * 9.0/10: Explanations missing (-1.0).
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, quantities, safety.
@@ -100,14 +99,10 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - 3+ References: Base score 10.0.
 - FORMATTING: If APA attempted but incorrect, deduct 0.5 pts.
 """
-# --- 4. SYSTEM PROMPT (PART 1) ---
+
+# --- 4. SYSTEM PROMPT ---
 SYSTEM_PROMPT = """You are an expert Pre-IB Chemistry Lab Grader. 
 Your goal is to grade student lab reports according to the specific rules below.
-
-### ⚖️ CONSISTENCY PROTOCOL (MANDATORY):
-1. **NO CURVING:** Grade every student exactly against the rubric. Do not compare students to each other.
-2. **ISOLATED EVALUATION:** If a requirement is missing, deduct the points immediately. Do not "give credit" because the rest of the report was good.
-3. **RIGID ADHERENCE:** Use the exact deduction values listed below. Do not approximate.
 
 ### 🧠 SCORING ALGORITHMS (STRICT ENFORCEMENT):
 
@@ -142,26 +137,21 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Units Check:** Missing -> -1.0. Incomplete -> -0.5.
     * **Measurement Check:** Missing -> -1.0. Vague -> -0.5.
 
-4.  **VARIABLES (Section 4):**
-    * **Control Justification Check:** Do students explain WHY each control variable must be controlled? (Missing: -1.0).
-    * **DV Measurement Check:** Is the method for measuring the DV vague? (-0.5).
-    * **Explanations Check:** Are explanations for IV/DV missing? (-1.0).
-
-5.  **DATA ANALYSIS (Section 7):**
+4.  **DATA ANALYSIS (Section 7):**
     * **Trendline Equation:** Not shown on graph? -> -1.0.
     * **R² Value:** Not shown on graph? -> -1.0.
     * **Calculations:** Example calculations unclear? -> -1.0.
     * **Steps:** Calculation steps not clearly explained OR labeled? -> -0.5.
 
-6.  **PROCEDURES (Section 5):**
+5.  **PROCEDURES (Section 5):**
     * **Diagram Check:** Diagram of experimental setup missing? -> -0.5.
 
-7.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
+6.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
     * **IMPACT:** All errors have impact? +2. Some? +1 (-1.0 deduction). None? 0 (-2.0 deduction).
     * **IMPROVEMENTS:** Specific equipment? +2. Vague? +1.5 (-0.5 deduction). Generic? 0 (-2.0 deduction).
 
-8.  **REFERENCES (Section 10) - QUANTITY CHECK:**
+7.  **REFERENCES (Section 10) - QUANTITY CHECK:**
     * 1 Reference: Max Score 5.0.
     * 2 References: Max Score 7.0.
     * 3+ References: Max Score 10.0.
@@ -176,14 +166,14 @@ Your goal is to grade student lab reports according to the specific rules below.
 ### OUTPUT FORMAT:
 Please strictly use the following format. Do not use horizontal rules (---) between sections. Do NOT print the calculation steps here.
 
-# 📊 SCORE: [Total Points]/100
+# 📝 SCORE: [Total Points]/100
 STUDENT: [Filename]
 
 **📊 OVERALL SUMMARY & VISUAL ANALYSIS:**
 * [1-2 sentences on quality]
 * [Critique of graphs/images]
 
-**📋 DETAILED RUBRIC BREAKDOWN:**
+**📝 DETAILED RUBRIC BREAKDOWN:**
 
 **1. FORMATTING: [Score]/10**
 * **✅ Strengths:** [Detailed explanation of tone/voice quality]
@@ -202,19 +192,12 @@ STUDENT: [Filename]
 
 **4. VARIABLES: [Score]/10**
 * **✅ Strengths:** [**LIST:** "Identified IV: [X], DV: [Y], Controls: [A, B, C]" and comment on clarity.]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:**
-* "Control Variable Justifications: [Present/Missing]" (-1.0 if students did not explain WHY each control must be controlled).
-* "DV Measurement Description: [Specific/Vague]" (-0.5 if vague).
-* "IV/DV Explanations: [Present/Missing]" (-1.0 if missing).]
+* **⚠️ Improvements:** [If DV measurement is vague, state: "The method for measuring the DV was vague (-0.5 pts)." Suggest specific improvement.]
 
 **5. PROCEDURES: [Score]/10**
 * **✅ Strengths:** [Comment on reproducibility and safety details]
 * **⚠️ Improvements:** [**DIAGRAM CHECK:** "Diagram of experimental setup included?" (-0.5 if missing). Identify exactly which step is vague and how to fix it.]
-"""
-# --- 4. SYSTEM PROMPT (PART 2 - CONTINUATION) ---
-# Add this to the end of SYSTEM_PROMPT from Part 2
 
-SYSTEM_PROMPT_CONTINUATION = """
 **6. RAW DATA: [Score]/10**
 * **✅ Strengths:** [Comment on data organization and unit clarity]
 * **⚠️ Improvements:** [Quote values with wrong units/sig figs and explain the correct format]
@@ -252,9 +235,6 @@ SYSTEM_PROMPT_CONTINUATION = """
 3. [Step 3 - Specific and concrete recommendation]
 """
 
-# IMPORTANT: Concatenate the two parts when using:
-# SYSTEM_PROMPT = SYSTEM_PROMPT + SYSTEM_PROMPT_CONTINUATION
-
 # Initialize Session State
 if 'saved_sessions' not in st.session_state:
     st.session_state.saved_sessions = {}
@@ -264,6 +244,7 @@ if 'current_session_name' not in st.session_state:
     st.session_state.current_session_name = "New Grading Session"
 
 client = anthropic.Anthropic(api_key=API_KEY)
+
 # --- 5. HELPER FUNCTIONS ---
 def encode_file(uploaded_file):
     try:
@@ -328,7 +309,7 @@ def extract_text_from_docx(file):
 def extract_images_from_docx(file):
     images = []
     try:
-        file.seek(0)
+        file.seek(0) # CRITICAL FIX: Reset pointer before reading
         with zipfile.ZipFile(file) as z:
             for filename in z.namelist():
                 if filename.startswith('word/media/') and filename.split('.')[-1].lower() in ['png', 'jpg', 'jpeg', 'gif']:
@@ -399,19 +380,25 @@ def recalculate_total_score(text):
                 total_score = int(total_score)
             else:
                 total_score = round(total_score, 1)
-            text = re.sub(r"#\s*📊\s*SCORE:\s*[\d\.]+/100", f"# 📊 SCORE: {total_score}/100", text, count=1)
+            # UPDATED REGEX FOR HEADER SCORE
+            text = re.sub(r"#\s*📝\s*SCORE:\s*[\d\.]+/100", f"# 📝 SCORE: {total_score}/100", text, count=1)
     except Exception as e:
         print(f"Error recalculating score: {e}")
     return text
+
 # --- IMPROVED CSV FEEDBACK PARSER ---
 def parse_feedback_for_csv(text):
     data = {}
     
+    # 1. Clean Textual Decorators
     clean_text = re.sub(r'[*#]', '', text) 
     
+    # 2. Extract Overall Summary
     try:
+        # Looks for "OVERALL SUMMARY" followed by text until "1. " or "DETAILED"
         summary_match = re.search(r"OVERALL SUMMARY.*?:\s*\n(.*?)(?=1\.|DETAILED)", clean_text, re.DOTALL | re.IGNORECASE)
         if summary_match:
+            # AGGRESSIVE CLEANING: Collapse newlines to single space for CSV safety
             raw_summary = summary_match.group(1).strip()
             data["Overall Summary"] = re.sub(r'[\r\n]+', ' ', raw_summary)
         else:
@@ -419,11 +406,16 @@ def parse_feedback_for_csv(text):
     except Exception as e:
         data["Overall Summary"] = f"Parsing Error: {e}"
 
+    # 3. Extract Section Scores and Comments
+    # Regex looks for: "1. SECTION NAME: Score/10" followed by content
     sections = re.findall(r"(\d+)\.\s+([A-Za-z\s]+):\s+([\d\.]+)/10\s*\n(.*?)(?=\n\d+\.|\Z|💡)", clean_text, re.DOTALL)
     
     for _, name, score, content in sections:
-        col_name = name.strip().title()
+        col_name = name.strip().title() # e.g. "Formatting"
         data[f"{col_name} Score"] = score
+        
+        # AGGRESSIVE CLEANING for CSV:
+        # Replaces all whitespace (newlines, tabs) with a single space to prevent broken CSVs
         cleaned_feedback = re.sub(r'[\r\n]+', ' ', content.strip())
         data[f"{col_name} Feedback"] = cleaned_feedback
 
@@ -440,34 +432,23 @@ def clean_hidden_scratchpad(text):
     """Removes the internal <math_scratchpad> tags before displaying to the user."""
     return re.sub(r'<math_scratchpad>.*?</math_scratchpad>', '', text, flags=re.DOTALL | re.IGNORECASE).strip()
 
-# --- PARSE SCORE FUNCTION ---
-def parse_score(text):
-    """Extract the total score from Claude's feedback text."""
-    try:
-        match = re.search(r"#\s*📊\s*SCORE:\s*([\d\.]+)/100", text)
-        if match:
-            return match.group(1).strip()
-        match = re.search(r"SCORE:\s*([\d\.]+)/100", text)
-        if match:
-            return match.group(1).strip()
-    except Exception as e:
-        print(f"Error parsing score: {e}")
-    return "N/A"
 def grade_submission(file, model_id):
     ext = file.name.split('.')[-1].lower()
     
     if ext == 'docx':
         text_content = extract_text_from_docx(file)
         
+        # Check for empty text to warn user
         if len(text_content.strip()) < 50:
-            text_content += "\n\n[SYSTEM NOTE: Very little text extracted. Content may be in images or text boxes.]"
+            text_content += "\n\n[SYSTEM NOTE: Very little text text extracted. Content may be in images or text boxes.]"
             
+        # Use String Concatenation instead of f-string to prevent brace errors
         prompt_text = (
             "Please grade this lab report based on the Pre-IB rubric below.\n"
             "Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
             "⚠️ CRITICAL INSTRUCTIONS:\n"
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
-            "2. **VARIABLES:** List the exact variables found. Check if students explain WHY each control variable needs to be controlled (-1.0 if missing). Check if DV measurement is vague (-0.5). If all elements present with justifications, score 10.0.\n"
+            "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
@@ -485,7 +466,12 @@ def grade_submission(file, model_id):
             "STUDENT TEXT:\n" + text_content
         )
         
-        user_message = [{"type": "text", "text": prompt_text}]
+        user_message = [
+            {
+                "type": "text",
+                "text": prompt_text
+            }
+        ]
         images = extract_images_from_docx(file)
         if images:
             user_message.extend(images)
@@ -499,7 +485,7 @@ def grade_submission(file, model_id):
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "INSTRUCTIONS:\n"
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
-            "2. **VARIABLES:** List the exact variables found. Check if students explain WHY each control variable needs to be controlled (-1.0 if missing). Check if DV measurement is vague (-0.5). If all elements present with justifications, score 10.0.\n"
+            "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
             "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
@@ -526,15 +512,14 @@ def grade_submission(file, model_id):
         ]
 
     max_retries = 5 
-    retry_delay = 5
-    # Continuation of grade_submission function from Part 6
+    retry_delay = 5 
     
     for attempt in range(max_retries):
         try:
             # Temperature=0 for Maximum Consistency
             response = client.messages.create(
-                model=model_id,
-                max_tokens=4096,
+                model=model_id, # Uses the ID passed from Sidebar
+                max_tokens=4096, # MAX TOKEN LIMIT
                 temperature=0.0,
                 system=SYSTEM_PROMPT,
                 messages=[{"role": "user", "content": user_message}]
@@ -551,8 +536,8 @@ def grade_submission(file, model_id):
             # Check for Overloaded (529) or Rate Limit (429)
             if isinstance(e, anthropic.APIStatusError) and e.status_code == 529:
                 status_msg = f"⚠️ Server Overloaded (529). Retrying attempt {attempt+1}/{max_retries}..."
-                print(status_msg)
-                time.sleep(retry_delay * (attempt + 1))
+                print(status_msg) # Log to console
+                time.sleep(retry_delay * (attempt + 1)) # Exponential backoff
                 continue
             
             if isinstance(e, anthropic.RateLimitError):
@@ -565,17 +550,33 @@ def grade_submission(file, model_id):
             
         except Exception as e:
             return f"⚠️ Error: {str(e)}"
-        # --- WORD FORMATTER (Strict Symbol Cleaning) ---
+
+# --- PARSE SCORE FUNCTION ---
+def parse_score(text):
+    """Extract the total score from Claude's feedback text."""
+    try:
+        match = re.search(r"#\s*📝\s*SCORE:\s*([\d\.]+)/100", text)
+        if match:
+            return match.group(1).strip()
+        match = re.search(r"SCORE:\s*([\d\.]+)/100", text)
+        if match:
+            return match.group(1).strip()
+    except Exception as e:
+        print(f"Error parsing score: {e}")
+    return "N/A"
+
+# --- WORD FORMATTER (Strict Symbol Cleaning) ---
 def write_markdown_to_docx(doc, text):
     lines = text.split('\n')
     for line in lines:
         line = line.strip()
         if not line:
-            continue
+            continue # SKIP EMPTY LINES FOR CONTINUOUS FLOW
         
         # 1. Handle Score Header & Student Name (Larger - Level 2)
         if line.startswith('# ') or line.startswith('STUDENT:'): 
             clean = line.replace('# ', '').replace('*', '').strip()
+            # Changed from Level 4 (Small) to Level 2 (Large)
             doc.add_heading(clean, level=2) 
             continue
         
@@ -607,15 +608,18 @@ def write_markdown_to_docx(doc, text):
         parts = re.split(r'(\*\*.*?\*\*)', content)
         for part in parts:
             if part.startswith('**') and part.endswith('**'):
-                clean_text = part[2:-2].replace('*', '')
+                clean_text = part[2:-2].replace('*', '') # Strip any lingering asterisks
                 run = p.add_run(clean_text)
                 run.bold = True
             else:
-                p.add_run(part.replace('*', ''))
+                p.add_run(part.replace('*', '')) # Strip lingering asterisks
 
 def create_master_doc(results, session_name):
     doc = Document()
+    # REMOVED SESSION HEADER
+    # doc.add_heading(f"Lab Report Grades: {session_name}", 0) 
     for item in results:
+        # REMOVED FILENAME HEADER (Starts with Score + Student Name)
         write_markdown_to_docx(doc, item['Feedback'])
         doc.add_page_break()
     bio = BytesIO()
@@ -627,12 +631,14 @@ def create_zip_bundle(results):
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as z:
         for item in results:
             doc = Document()
+            # REMOVED FEEDBACK HEADER
             write_markdown_to_docx(doc, item['Feedback'])
             doc_buffer = BytesIO()
             doc.save(doc_buffer)
             safe_name = os.path.splitext(item['Filename'])[0] + "_Feedback.docx"
             z.writestr(safe_name, doc_buffer.getvalue())
     return zip_buffer.getvalue()
+
 def display_results_ui():
     if not st.session_state.current_results:
         return
@@ -685,10 +691,12 @@ def display_results_ui():
         for item in st.session_state.current_results:
             with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
                 st.markdown(item['Feedback'])
-                # --- 6. SIDEBAR ---
+
+# --- 6. SIDEBAR ---
 with st.sidebar:
     st.header("⚙️ Configuration")
     
+    # UPDATED DEFAULT MODEL ID
     user_model_id = st.text_input(
         "🤖 Model ID", 
         value="claude-sonnet-4-20250514", 
@@ -756,26 +764,32 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     status_text = st.empty()
     live_results_table = st.empty()
     
+    # Initialize Session State list if not present
     if 'current_results' not in st.session_state:
         st.session_state.current_results = []
     
+    # Create a set of already graded filenames for quick lookup
     existing_filenames = {item['Filename'] for item in st.session_state.current_results}
     
     for i, file in enumerate(processed_files):
+        # 1. SMART RESUME CHECK: Skip if already graded
         if file.name in existing_filenames:
             status_text.info(f"⏩ Skipping **{file.name}** (Already Graded)")
-            time.sleep(0.5)
+            time.sleep(0.5) # Brief pause for visual feedback
             progress.progress((i + 1) / len(processed_files))
             continue
 
+        # 2. GRADING LOGIC
         status_text.markdown(f"**Grading:** `{file.name}`...")
         
         try:
+            # Polite delay to prevent API overloading
             time.sleep(2) 
             
-            feedback = grade_submission(file, user_model_id)
+            feedback = grade_submission(file, user_model_id) # PASSING USER MODEL ID
             score = parse_score(feedback)
             
+            # 3. IMMEDIATE SAVE
             new_entry = {
                 "Filename": file.name,
                 "Score": score,
@@ -783,8 +797,11 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             }
             
             st.session_state.current_results.append(new_entry)
+            
+            # Update the existing set so duplicates within the same batch run are also caught (unlikely but safe)
             existing_filenames.add(file.name)
             
+            # 4. LIVE TABLE UPDATE
             df_live = pd.DataFrame(st.session_state.current_results)
             live_results_table.dataframe(df_live[["Filename", "Score"]], use_container_width=True)
             
@@ -792,6 +809,7 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             st.error(f"❌ Error grading {file.name}: {e}")
             
         progress.progress((i + 1) / len(processed_files))
+        
 
     status_text.success("✅ Grading Complete! Scrolling down...")
     progress.empty()
