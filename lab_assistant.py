@@ -721,6 +721,7 @@ def display_results_ui():
                 "autosaved_feedback.zip",
                 "application/zip",
                 use_container_width=True
+            )
 
     tab1, tab2 = st.tabs(["📊 Gradebook View", "📝 Detailed Feedback"])
     with tab1:
