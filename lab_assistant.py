@@ -868,7 +868,7 @@ if raw_files:
         if raw_files:
             st.warning("No valid PDF, Word, or Image files found.")
 
-if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files):
+    if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files):
     
    # --- MAIN EXECUTION BLOCK ---
 # 1. Define the Button
