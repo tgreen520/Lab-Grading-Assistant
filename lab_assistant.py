@@ -625,6 +625,44 @@ def create_zip_bundle(results):
             z.writestr(safe_name, doc_buffer.getvalue())
     return zip_buffer.getvalue()
 
+# --- NEW: AUTOSAVE INDIVIDUAL REPORT ---
+def autosave_report(item, autosave_dir):
+    """Save individual report as Word doc and append to CSV immediately after grading."""
+    try:
+        # 1. Save Word Document
+        doc = Document()
+        write_markdown_to_docx(doc, item['Feedback'])
+        safe_filename = os.path.splitext(item['Filename'])[0] + "_Feedback.docx"
+        doc_path = os.path.join(autosave_dir, safe_filename)
+        doc.save(doc_path)
+        
+        # 2. Append to CSV (or create if doesn't exist)
+        csv_path = os.path.join(autosave_dir, "gradebook.csv")
+        
+        # Parse feedback into row data
+        row_data = {
+            "Filename": item['Filename'],
+            "Overall Score": item['Score']
+        }
+        feedback_data = parse_feedback_for_csv(item['Feedback'])
+        row_data.update(feedback_data)
+        
+        # Check if CSV exists
+        if os.path.exists(csv_path):
+            existing_df = pd.read_csv(csv_path)
+            # Remove duplicate if re-grading same file
+            existing_df = existing_df[existing_df['Filename'] != item['Filename']]
+            new_df = pd.concat([existing_df, pd.DataFrame([row_data])], ignore_index=True)
+        else:
+            new_df = pd.DataFrame([row_data])
+        
+        new_df.to_csv(csv_path, index=False, encoding='utf-8-sig')
+        
+        return True
+    except Exception as e:
+        print(f"Autosave failed for {item['Filename']}: {e}")
+        return False
+
 def display_results_ui():
     if not st.session_state.current_results:
         return
@@ -669,7 +707,41 @@ def display_results_ui():
     with col3:
         st.download_button("📊 Detailed CSV Export", csv_data, f'{st.session_state.current_session_name}_Detailed.csv', "text/csv", use_container_width=True)
         st.caption("Includes separate columns for every section score and comment.")
-
+ 
+ # --- NEW: AUTOSAVE FOLDER ACCESS ---
+    st.divider()
+    st.info("💾 **Auto-saved files:** Individual feedback documents and gradebook are being saved to the `autosave_feedback` folder as grading progresses.")
+    
+    autosave_path = st.session_state.autosave_dir
+    if os.path.exists(autosave_path):
+        csv_autosave = os.path.join(autosave_path, "gradebook.csv")
+        if os.path.exists(csv_autosave):
+            with open(csv_autosave, 'rb') as f:
+                st.download_button(
+                    "📥 Download Auto-saved Gradebook (CSV)",
+                    f.read(),
+                    "autosaved_gradebook.csv",
+                    "text/csv",
+                    use_container_width=True
+                )
+        
+        # Create zip of all autosaved Word docs
+        autosave_files = [f for f in os.listdir(autosave_path) if f.endswith('.docx')]
+        if autosave_files:
+            zip_autosave = BytesIO()
+            with zipfile.ZipFile(zip_autosave, 'w', zipfile.ZIP_DEFLATED) as z:
+                for filename in autosave_files:
+                    file_path = os.path.join(autosave_path, filename)
+                    z.write(file_path, filename)
+            
+            st.download_button(
+                "📥 Download All Auto-saved Word Docs (.zip)",
+                zip_autosave.getvalue(),
+                "autosaved_feedback.zip",
+                "application/zip",
+                use_container_width=True
+            )
+    
     tab1, tab2 = st.tabs(["📊 Gradebook View", "📝 Detailed Feedback"])
     with tab1:
         st.dataframe(csv_df, use_container_width=True)
@@ -750,6 +822,10 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
     status_text = st.empty()
     live_results_table = st.empty()
     
+    # NEW: Placeholder for cumulative feedback display (cleared and rewritten each iteration)
+    st.subheader("📋 Live Grading Feedback")
+    feedback_placeholder = st.empty()
+    
     # Initialize Session State list if not present
     if 'current_results' not in st.session_state:
         st.session_state.current_results = []
@@ -784,13 +860,29 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             
             st.session_state.current_results.append(new_entry)
             
+            # 4. AUTOSAVE TO DISK (NEW - CRITICAL FOR RECOVERY)
+            autosave_success = autosave_report(new_entry, st.session_state.autosave_dir)
+            if autosave_success:
+                status_text.success(f"✅ **{file.name}** graded & auto-saved! (Score: {score}/100)")
+            else:
+                status_text.warning(f"⚠️ **{file.name}** graded but autosave failed (Score: {score}/100)")
+            
             # Update the existing set so duplicates within the same batch run are also caught (unlikely but safe)
             existing_filenames.add(file.name)
             
-            # 4. LIVE TABLE UPDATE
+            #5. LIVE TABLE UPDATE
             df_live = pd.DataFrame(st.session_state.current_results)
             live_results_table.dataframe(df_live[["Filename", "Score"]], use_container_width=True)
             
+            # 6. UPDATED: SINGLE COPY CUMULATIVE FEEDBACK DISPLAY
+            # Clear and rewrite the entire feedback section to avoid duplicates
+            with feedback_placeholder.container():
+                for idx, item in enumerate(st.session_state.current_results):
+                    # Start expanded for most recent, collapsed for older ones
+                    is_most_recent = (idx == len(st.session_state.current_results) - 1)
+                    with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=is_most_recent):
+                        st.markdown(item['Feedback'])
+              
         except Exception as e:
             st.error(f"❌ Error grading {file.name}: {e}")
             
