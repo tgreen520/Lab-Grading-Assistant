@@ -80,9 +80,10 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - QUANTITATIVE SUPPORT: Must cite specific numbers. (If missing: -2.0).
 - QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5).
 - LITERATURE COMPARISON: If comparison to literature is vague (no specific values), -0.5 pt.
-- STATISTICS (R vs R²):
-  * R (Correlation): Must explain Strength & Direction. (If missing: -1.0).
-  * R² (Fit): Must explain Fit/Variability. (If missing entirely: -1.0. If mentioned but vague: -0.5).
+* **Statistics (R vs R² CHECK):**
+        * **R (Correlation):** * **Is the R value listed?** -> If NO, deduct 1.0.
+            * **Is the explanation valid?** -> If the explanation is vague OR the student confuses R with R² (e.g., "The R² shows a positive correlation"), deduct 0.5.
+        * **R² (Determination):** Must explain % variation/fit. (Missing entirely -> -1.0. Vague explanation -> -0.5).
 - NOTE: Do NOT deduct for "Internal Inconsistency" or Citations here.
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
@@ -208,7 +209,7 @@ Your goal is to grade student lab reports according to the specific rules below.
     * APA Errors: -0.5 from Max Score.
 
 ### 📝 FEEDBACK STYLE INSTRUCTIONS:
-1. **CLEAN OUTPUT:** When quoting student text in your feedback, **REMOVE** the `<sub>` and `<sup>` tags. Write "H2O" instead of "H<sub>2</sub>O".
+1. **FORMATTING:** Use <sub> and <sup> tags for chemical formulas and exponents (e.g., write H<sub>2</sub>O, 10<sup>5</sup>).
 2. **AVOID ROBOTIC CHECKLISTS:** Do not use "[Yes/No]".
 3. **EXPLAIN WHY:** Write 2-3 sentences for each section.
 4. **TOP 3 ACTIONABLE STEPS:** You MUST provide exactly THREE specific, actionable steps at the end. These should be concrete recommendations the student can implement in their next lab report.
@@ -257,17 +258,21 @@ STUDENT: [Filename]
 * **⚠️ Improvements:** [**GRAPH AUDIT:** "Trendline Equation: [Present/Missing]" (-1.0 if missing). "R² Value: [Present/Missing]" (-1.0 if missing).
 **CALCULATION AUDIT:** "Example calculations were [Clear/Unclear]." (If unclear, -1.0 pts). "Calculation steps were [Clearly Explained/Not Labeled or Explained]." (If not labeled/explained, -0.5 pts).]
 
-**8. CONCLUSION: [Score]/10**
-* **✅ Strengths:** [Quote data used to support the claim]
-* **⚠️ Improvements:** [**CRITICAL CHECKS:** Summarize missing elements naturally. Ensure you comment on:
-  1. **Hypothesis Support** (-1.0 if not stated)
-  2. **Outliers/Omissions** (-1.0 if not addressed, -0.5 if vague)
-  3. IV/DV Relationship (-1.0)
-  4. Chemical Theory (-1.0)
-  5. Quantitative Support (-2.0)
-  6. Qualitative Support (-0.5)
-  7. **Literature Comparison** (-0.5 if vague)
-  8. **R and R² Explanation** (-1.0 if R missing, -1.0 if R² missing, -0.5 if R² vague)]
+**8. CONCLUSION (10 pts) [STRICT DEDUCTIONS]:
+- HYPOTHESIS SUPPORT: Must indicate if data supports hypothesis. (If missing: -1.0).
+- OUTLIERS/OMISSIONS: Must address data outliers or omissions. (No mention: -1.0. Mentioned but vague: -0.5).
+- IV/DV RELATIONSHIP: Must explain graph trend. (If poor: -1.0).
+- THEORY: Connect to chemical theory. (If missing: -1.0).
+- QUANTITATIVE SUPPORT: Must cite specific numbers. (If missing: -2.0).
+- QUALITATIVE SUPPORT: Must cite observations. (If missing: -0.5).
+- LITERATURE COMPARISON: If comparison to literature is vague (no specific values), -0.5 pt.
+- STATISTICS (CORRELATION COEFFICIENT - R):
+  * Requirement: Must explicitly list the R value. (Missing: -1.0).
+  * Explanation: Must explain Strength & Direction.
+  * DEDUCTION: If R is present but explanation is vague OR student confuses R with R² (e.g., uses R² to describe direction) = -0.5 pts.
+- STATISTICS (R² - DETERMINATION):
+  * Requirement: Must explain Fit/Variability. (Missing: -1.0. Vague: -0.5).
+- NOTE: Do NOT deduct for "Internal Inconsistency" or Citations here.
 
 **9. EVALUATION: [Score]/10**
 * **✅ Strengths:** [**LIST:** "You identified: [Error 1], [Error 2]..." and comment on depth.]
@@ -505,7 +510,7 @@ def grade_submission(file, model_id):
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
             "6. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
-            "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
+            "7. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5). **R-VALUE CHECK:** Missing R value -> -1.0. Confuses R with R² OR Vague explanation -> -0.5. R² (-1.0 if missing, -0.5 if vague). Repetitiveness (-0.5).\n"
             "8. **DATA ANALYSIS:** Check calculations for clarity (-1.0 if unclear). Check if calculation steps are clearly explained or labeled (-0.5 if not). Do NOT penalize for missing uncertainty analysis.\n"
             "9. **EVALUATION:** Check if systematic vs random errors are differentiated (-0.5 if not). Penalize vague impact/improvements. Must specify DIRECTION of error and SPECIFIC equipment for **ALL** errors. (0 pts if missing, 1 pt if partial).\n"
             "10. **HYPOTHESIS:** Check Justification (-2.0 if missing, -1.0 if vague). Check Units for IV/DV (-1.0 if missing, -0.5 if incomplete). Check DV Measurement (-1.0 if missing, -0.5 if vague).\n"
@@ -617,38 +622,28 @@ def parse_score(text):
         print(f"Error parsing score: {e}")
     return "N/A"
 
-# --- WORD FORMATTER (Strict Symbol Cleaning) ---
+# --- WORD FORMATTER (Upgraded for Sub/Superscripts) ---
 def write_markdown_to_docx(doc, text):
     lines = text.split('\n')
     for line in lines:
         line = line.strip()
         if not line:
-            continue # SKIP EMPTY LINES FOR CONTINUOUS FLOW
+            continue 
         
-        # 1. Handle Score Header & Student Name (Larger - Level 2)
-        if line.startswith('# ') or line.startswith('STUDENT:'): 
-            clean = line.replace('# ', '').replace('*', '').strip()
-            # Changed from Level 4 (Small) to Level 2 (Large)
-            doc.add_heading(clean, level=2) 
+        # 1. Handle Headers
+        if line.startswith('# '): 
+            doc.add_heading(line.replace('# ', '').replace('*', '').strip(), level=2) 
             continue
-        
-        # 2. Handle H3 (### ) - CLEANED
         if line.startswith('### '):
-            clean = line.replace('### ', '').replace('*', '').strip()
-            doc.add_heading(clean, level=3)
+            doc.add_heading(line.replace('### ', '').replace('*', '').strip(), level=3)
             continue
-        
-        # 3. Handle H2 (## ) - CLEANED
         if line.startswith('## '): 
-            clean = line.replace('## ', '').replace('*', '').strip()
-            doc.add_heading(clean, level=2)
+            doc.add_heading(line.replace('## ', '').replace('*', '').strip(), level=2)
             continue
-        
-        # 4. REMOVE SEPARATORS
         if line.startswith('---') or line.startswith('___'):
             continue
 
-        # 5. Handle Bullets (* or -) - CLEANED
+        # 2. Handle List Items
         if line.startswith('* ') or line.startswith('- '):
             p = doc.add_paragraph(style='List Bullet')
             content = line[2:] 
@@ -656,15 +651,34 @@ def write_markdown_to_docx(doc, text):
             p = doc.add_paragraph()
             content = line
 
-        # 6. Handle Bold (**text**) - CLEANED
-        parts = re.split(r'(\*\*.*?\*\*)', content)
+        # 3. Handle Formatting Tags (Bold, Sup, Sub)
+        # This regex splits the text by tags so we can process each chunk
+        parts = re.split(r'(\*\*.*?\*\*|<sup>.*?</sup>|<sub>.*?</sub>)', content)
+        
         for part in parts:
+            if not part: continue # Skip empty splits
+            
+            run = p.add_run()
+            
+            # Handle Bold
             if part.startswith('**') and part.endswith('**'):
-                clean_text = part[2:-2].replace('*', '') # Strip any lingering asterisks
-                run = p.add_run(clean_text)
+                run.text = part[2:-2].replace('<sub>', '').replace('</sub>', '').replace('<sup>', '').replace('</sup>', '')
                 run.bold = True
+            
+            # Handle Superscript (Exponents)
+            elif part.startswith('<sup>') and part.endswith('</sup>'):
+                run.text = part[5:-6]
+                run.font.superscript = True
+                
+            # Handle Subscript (Chemical Formulas)
+            elif part.startswith('<sub>') and part.endswith('</sub>'):
+                run.text = part[5:-6]
+                run.font.subscript = True
+                
+            # Regular Text
             else:
-                p.add_run(part.replace('*', '')) # Strip lingering asterisks
+                run.text = part
+
 
 def create_master_doc(results, session_name):
     doc = Document()
