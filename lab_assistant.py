@@ -813,11 +813,6 @@ def display_results_ui():
     with col3:
         st.download_button("📊 CSV Export", csv_data, f'{st.session_state.current_session_name}_Detailed.csv', "text/csv", use_container_width=True)
 
-    # --- AUTOSAVE INFO ---
-    autosave_path = st.session_state.autosave_dir
-    if os.path.exists(autosave_path):
-        st.caption(f"💾 Backup saved to: `{autosave_path}`")
-
     # --- PERMANENT DISPLAY ---
     # 1. Show Gradebook Table
     st.divider()
@@ -834,11 +829,12 @@ def display_results_ui():
         is_most_recent = (idx == 0)
         with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=is_most_recent):
             st.markdown(item['Feedback'], unsafe_allow_html=True)
-    
+
     # --- AUTOSAVE FOLDER ACCESS ---
     st.divider()
     st.info("💾 **Auto-saved files:** Individual feedback documents and gradebook are being saved to the `autosave_feedback_pre-ib` folder as grading progresses.")
     
+    autosave_path = st.session_state.autosave_dir
     if os.path.exists(autosave_path):
         csv_autosave = os.path.join(autosave_path, "gradebook.csv")
         if os.path.exists(csv_autosave):
