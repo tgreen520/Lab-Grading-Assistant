@@ -892,7 +892,7 @@ for item in reversed(st.session_state.current_results):
     # We use reversed() so the newest file is always at the top
     for item in reversed(st.session_state.current_results):
         with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=is_most_recent):
-        st.markdown(item['Feedback'], unsafe_allow_html=True)
+            st.markdown(item['Feedback'], unsafe_allow_html=True)
 # --- 6. SIDEBAR ---
 with st.sidebar:
     st.header("⚙️ Configuration")
