@@ -945,6 +945,8 @@ if raw_files:
         if raw_files:
             st.warning("No valid PDF, Word, or Image files found.")
 
+# Find the grading button section (around line 820-890) and replace with this:
+
 if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files):
     
     st.write("---")
@@ -978,7 +980,7 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             # Polite delay to prevent API overloading
             time.sleep(2) 
             
-            feedback = grade_submission(file, user_model_id) # PASSING USER MODEL ID
+            feedback = grade_submission(file, user_model_id)
             score = parse_score(feedback)
             
             # 3. IMMEDIATE SAVE TO SESSION STATE
@@ -990,7 +992,7 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             
             st.session_state.current_results.append(new_entry)
             
-            # 4. AUTOSAVE TO DISK (NEW - CRITICAL FOR RECOVERY)
+            # 4. AUTOSAVE TO DISK
             autosave_success = autosave_report(new_entry, st.session_state.autosave_dir)
             if autosave_success:
                 status_text.success(f"✅ **{file.name}** graded & auto-saved! (Score: {score}/100)")
@@ -1004,11 +1006,9 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             df_live = pd.DataFrame(st.session_state.current_results)
             live_results_table.dataframe(df_live[["Filename", "Score"]], use_container_width=True)
             
-            # 6. UPDATED: SINGLE COPY CUMULATIVE FEEDBACK DISPLAY
-            # Clear and rewrite the entire feedback section to avoid duplicates
+            # 6. LIVE FEEDBACK DISPLAY (During grading only)
             with feedback_placeholder.container():
                 for idx, item in enumerate(st.session_state.current_results):
-                    # Start expanded for most recent, collapsed for older ones
                     is_most_recent = (idx == len(st.session_state.current_results) - 1)
                     with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=is_most_recent):
                         st.markdown(item['Feedback'], unsafe_allow_html=True)
@@ -1018,13 +1018,15 @@ if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
             
         progress.progress((i + 1) / len(processed_files))
         
-
+    # 7. CLEAR LIVE GRADING DISPLAY AFTER COMPLETION
     status_text.success("✅ Grading Complete! All reports auto-saved.")
     progress.empty()
+    feedback_placeholder.empty()  # ← THIS IS THE KEY FIX - Clears the live feedback
+    live_results_table.empty()     # ← Also clear the live table
     
     # Show message about autosave location
     st.info(f"💾 **Backup Location:** All feedback has been saved to `{st.session_state.autosave_dir}/` folder. You can download individual files or the full gradebook below.")
 
-# --- 8. PERSISTENT DISPLAY ---
+# --- 8. PERSISTENT DISPLAY (This stays - it's called outside the grading loop) ---
 if st.session_state.current_results:
     display_results_ui()
