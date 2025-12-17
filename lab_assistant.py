@@ -88,10 +88,11 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
 - REQUIREMENT: List errors + Specific Directional Impact + Specific Improvement.
 - ERROR CLASSIFICATION: Must differentiate between systematic and random errors. (Not done: -0.5).
-- IMPACT SCORING:
-  * Impact defined for 100% of errors = 2 pts.
-  * Impact defined for SOME (not all) errors = 1 pt (Deduct 1.0).
-  * No impact defined = 0 pts (Deduct 2.0).
+- IMPACT SCORING (QUANTITATIVE DATA):
+  * Impact must be specific and directional on the *quantitative results* (e.g., "caused calculated mass to increase").
+  * Impact defined for 100% of listed errors = 2 pts (No deduction).
+  * Impact defined for SOME (but not all) listed errors = 1 pt (Deduct 1.0).
+  * Impact defined for NONE of the listed errors = 0 pts (Deduct 2.0).
 - IMPROVEMENT SCORING:
   * Specific equipment named = 2 pts.
   * Vague ("use better scale") = 1.5 pts (Deduct 0.5).
@@ -246,7 +247,7 @@ STUDENT: [Filename]
 
 **6. RAW DATA: [Score]/10**
 * **✅ Strengths:** [Comment on data organization and unit clarity]
-* **⚠️ Improvements:** [Quote values with wrong units/sig figs and explain the correct format]
+* **⚠️ Improvements:** [Quote values with wrong units/sig figs and explain the correct format. Comment on inconsistent sig fig reporting for measuring tools.]
 
 **7. DATA ANALYSIS: [Score]/10**
 * **✅ Strengths:** [Summarize the calculation process. If Graph is perfect, mention that the scatterplot, equation, and labels are all correct here.]
