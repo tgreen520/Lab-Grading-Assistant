@@ -1061,14 +1061,14 @@ if st.session_state.current_results:
 
     # --- PERMANENT DISPLAY (Tabs Removed) ---
     
-    # 1. Gradebook Table
+   # 1. Gradebook Table (Always Visible)
     st.write("### 🏆 Gradebook")
     st.dataframe(csv_df, use_container_width=True)
 
-    # 2. Detailed Feedback (Stacked below table)
+    # 2. Detailed Feedback (Stacked Below - Always Visible)
     st.write("### 📝 Detailed Feedback History")
     
-    # Use reversed() to show the newest files first
+    # We use reversed() so the newest file is always at the top
     for item in reversed(st.session_state.current_results):
         with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
             st.markdown(item['Feedback'])
