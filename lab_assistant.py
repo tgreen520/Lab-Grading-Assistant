@@ -54,6 +54,8 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
   * 9.5/10: DV measurement vague (-0.5).
   * 9.0/10: Explanations/Justifications missing (-1.0).
   * 6.0/10: Control variables missing (-4.0).
+  * 8.0/10: Independent variable missing (-2.0)
+  * 8.0/10: Dependent variable missing (-2.0)
   * 8/10: Only 2 control variables given and described (-2.0).
   * 9.5/10: Justification of control variables vague (-0.5).
 
@@ -184,7 +186,7 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Control Justification:** * No justification given for why controls were chosen? -> -1.0.
         * Partial/Vague justification? -> -0.5.
     * **DV Measurement:** Method for measuring DV is vague? -> -0.5.
-    * **Identification (Missing Items):** Any variable (IV, DV, Controls) missing entirely? -> -1.0 per missing item.
+    * **Identification (Missing Items):** Control variables missing? -> -1.0 per missing item. IV missing? -> -2.0. DV missing? -> -2.0.
 
 5.  **DATA ANALYSIS (Section 7):**
     * **Trendline Equation:** Not shown on graph? -> -1.0.
@@ -229,7 +231,7 @@ Your goal is to grade student lab reports according to the specific rules below.
         - If Y < X: "This results in a deduction of [1.0 or 2.0] points."
 
 8.  REFERENCES (Section 10) - QUANTITY CHECK:
-    * **EXISTENCE TRIGGER (CRITICAL):** - Look for a header like "References", "Bibliography", or "Works Cited".
+    * **EXISTENCE TRIGGER (CRITICAL):** - Look for a header like "References", "Acknowledgements", "Bibliography", or "Works Cited".
       - **IF THE HEADER EXISTS:** The score CANNOT be lower than 4.0. Even if the links are broken, fake, or just "google.com", you MUST award 4.0 points for the attempt.
       - **IF THE HEADER IS MISSING:** Score 0.
     
@@ -348,7 +350,6 @@ if 'current_session_name' not in st.session_state:
 
 if 'saved_sessions' not in st.session_state:
     st.session_state.saved_sessions = {}
-
 
 client = anthropic.Anthropic(api_key=API_KEY)
 
