@@ -813,19 +813,19 @@ def display_results_ui():
     with col3:
         st.download_button("📊 CSV Export", csv_data, f'{st.session_state.current_session_name}_Detailed.csv', "text/csv", use_container_width=True)
 
-    # --- PERMANENT DISPLAY ---
-    # 1. Show Gradebook Table
+    # --- AUTOSAVE INFO ---
+    if os.path.exists(st.session_state.autosave_dir):
+        st.caption(f"💾 Backup saved to: `{st.session_state.autosave_dir}`")
+
+    # --- MAIN DISPLAY (RENDERED ONCE) ---
     st.divider()
     st.write("### 🏆 Gradebook")
     st.dataframe(csv_df, use_container_width=True)
     
-    # 2. Show Detailed Feedback (Stacked, No Tabs)
     st.write("### 📝 Detailed Feedback History")
-    
     # We use reversed() so the newest file is always at the top
-    results_reversed = list(reversed(st.session_state.current_results))
-    for idx, item in enumerate(results_reversed):
-        # Most recent item is expanded by default (index 0 after reversing)
+    for idx, item in enumerate(reversed(st.session_state.current_results)):
+        # Expand the very first item (newest), collapse others
         is_most_recent = (idx == 0)
         with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=is_most_recent):
             st.markdown(item['Feedback'], unsafe_allow_html=True)
@@ -847,34 +847,6 @@ def display_results_ui():
                     use_container_width=True
                 )
         
-        # Create zip of all autosaved Word docs
-        autosave_files = [f for f in os.listdir(autosave_path) if f.endswith('.docx')]
-        if autosave_files:
-            zip_autosave = BytesIO()
-            with zipfile.ZipFile(zip_autosave, 'w', zipfile.ZIP_DEFLATED) as z:
-                for filename in autosave_files:
-                    file_path = os.path.join(autosave_path, filename)
-                    z.write(file_path, filename)
-            
-            st.download_button(
-                "📥 Download All Auto-saved Word Docs (.zip)",
-                zip_autosave.getvalue(),
-                "autosaved_feedback.zip",
-                "application/zip",
-                use_container_width=True
-            )
-
-    # 1. Show the Gradebook Table
-    st.write("### 🏆 Gradebook")
-    st.dataframe(csv_df, use_container_width=True)
-    
-    # 2. Show the Feedback (Stacked directly below, no hiding!)
-    st.write("### 📝 Detailed Feedback History")
-    
-    # We use reversed() so the newest file is always at the top
-    for item in reversed(st.session_state.current_results):
-        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=is_most_recent):
-            st.markdown(item['Feedback'], unsafe_allow_html=True)
 # --- 6. SIDEBAR ---
 with st.sidebar:
     st.header("⚙️ Configuration")
