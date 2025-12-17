@@ -805,10 +805,10 @@ def display_results_ui():
     # 2. Show Detailed Feedback (Stacked, No Tabs)
     st.write("### 📝 Detailed Feedback History")
     
-    # We use reversed() so the newest reports appear at the top
+    # We use reversed() so the newest file is always at the top
     for item in reversed(st.session_state.current_results):
-        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
-            st.markdown(item['Feedback'], unsafe_allow_html=True)
+    with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
+        st.markdown(item['Feedback'], unsafe_allow_html=True)
     
     # --- EXPANDED CSV LOGIC WITH SORTING ---
     results_list = []
@@ -891,9 +891,8 @@ def display_results_ui():
     
     # We use reversed() so the newest file is always at the top
     for item in reversed(st.session_state.current_results):
-        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
-            st.markdown(item['Feedback'])
-
+        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=is_most_recent):
+        st.markdown(item['Feedback'], unsafe_allow_html=True)
 # --- 6. SIDEBAR ---
 with st.sidebar:
     st.header("⚙️ Configuration")
