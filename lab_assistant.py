@@ -819,7 +819,7 @@ for item in reversed(st.session_state.current_results):
         }
         feedback_data = parse_feedback_for_csv(item['Feedback'])
         row_data.update(feedback_data)
-        results_list.append(row_data)
+    results_list.append(row_data)
         
     csv_df = pd.DataFrame(results_list)
     
