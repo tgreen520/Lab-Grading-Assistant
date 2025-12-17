@@ -229,11 +229,17 @@ Your goal is to grade student lab reports according to the specific rules below.
         - If Y < X: "This results in a deduction of [1.0 or 2.0] points."
 
 8.  REFERENCES (Section 10) - QUANTITY CHECK:
-    * 3+ Credible Sources: Score 10.0.
-    * 2 Credible Sources: Score 7.0.
-    * 1 Credible Source: Score 5.0.
-    * **SAFETY NET (MINIMUM 4.0):** If the student included a References section/header but the sources are not credible (e.g., Wikipedia, generic URLs) or they don't meet the count, award **4.0 points** for the attempt. Do NOT give 0 unless the section is completely missing.
-    * **Formatting:** Do NOT deduct for minor APA formatting errors. Only deduct for major errors.
+    * **EXISTENCE TRIGGER (CRITICAL):** - Look for a header like "References", "Bibliography", or "Works Cited".
+      - **IF THE HEADER EXISTS:** The score CANNOT be lower than 4.0. Even if the links are broken, fake, or just "google.com", you MUST award 4.0 points for the attempt.
+      - **IF THE HEADER IS MISSING:** Score 0.
+    
+    * **SCORING LADDER (If section exists):**
+      * 3+ Credible Sources: Score 10.0.
+      * 2 Credible Sources: Score 7.0.
+      * 1 Credible Source: Score 5.0.
+      * 0 Credible Sources (but section exists): Score 4.0.
+    
+    * **Formatting:** Do NOT deduct for minor APA formatting errors. Deduct 0.5 points for major APA formatting errors. 
 
 ### 📝 FEEDBACK STYLE INSTRUCTIONS:
 1. **FORMATTING:** Use <sub> and <sup> tags for chemical formulas and exponents (e.g., write H<sub>2</sub>O, 10<sup>5</sup>).
