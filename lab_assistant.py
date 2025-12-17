@@ -622,8 +622,13 @@ def parse_score(text):
         print(f"Error parsing score: {e}")
     return "N/A"
 
-# --- WORD FORMATTER (Upgraded for Sub/Superscripts) ---
+# # --- WORD FORMATTER (Upgraded for Sub/Superscripts) ---
 def write_markdown_to_docx(doc, text):
+    """
+    Parses Markdown text and writes it to a docx Document.
+    Handles headers, bullet points, bold (**text**), 
+    superscript (<sup>text</sup>), and subscript (<sub>text</sub>).
+    """
     lines = text.split('\n')
     for line in lines:
         line = line.strip()
@@ -641,6 +646,7 @@ def write_markdown_to_docx(doc, text):
             doc.add_heading(line.replace('## ', '').replace('*', '').strip(), level=2)
             continue
         if line.startswith('---') or line.startswith('___'):
+            doc.add_paragraph("_" * 50) # visual separator
             continue
 
         # 2. Handle List Items
@@ -653,6 +659,7 @@ def write_markdown_to_docx(doc, text):
 
         # 3. Handle Formatting Tags (Bold, Sup, Sub)
         # This regex splits the text by tags so we can process each chunk
+        # It looks for **bold**, <sup>sup</sup>, and <sub>sub</sub>
         parts = re.split(r'(\*\*.*?\*\*|<sup>.*?</sup>|<sub>.*?</sub>)', content)
         
         for part in parts:
@@ -801,7 +808,7 @@ def display_results_ui():
     # We use reversed() so the newest reports appear at the top
     for item in reversed(st.session_state.current_results):
         with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
-            st.markdown(item['Feedback'])
+            st.markdown(item['Feedback'], unsafe_allow_html=True)
     
     # --- EXPANDED CSV LOGIC WITH SORTING ---
     results_list = []
