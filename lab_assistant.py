@@ -912,7 +912,7 @@ with st.sidebar:
         st.text(PRE_IB_RUBRIC)
 
 # --- 7. MAIN INTERFACE ---
-st.title("🧪 IB Lab Grader")
+st.title("🧪 Pre-IB Lab Grader")
 st.caption(f"Current Session: **{st.session_state.current_session_name}**")
 
 st.info("💡 **Tip:** To upload a folder, open it, press `Ctrl+A` (Select All), and drag everything here.")
