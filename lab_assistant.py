@@ -88,7 +88,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
 - REQUIREMENT: List errors + Specific Directional Impact on Data + Specific Improvement.
-- ERROR CLASSIFICATION: Must differentiate between systematic and random errors. (Not done: -0.5).
+- ERROR CLASSIFICATION: Check if student uses terms "Systematic" or "Random". (If both terms are missing: -0.5. If present, NO deduction).
 - QUANTITATIVE IMPACT SCORING (CRITICAL):
   * Requirement: For EVERY listed error, the student must state exactly how it changed the final calculated value (e.g., "This caused the calculated molar mass to be too high").
   * 0 Impact Descriptions: Deduct 2.0 pts (Score 8.0 max).
@@ -103,7 +103,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - 1 Reference only: -5.0 pts (Score 5.0).
 - 2 References only: -3.0 pts (Score 7.0).
 - 3+ References: Base score 10.0.
-- FORMATTING: If APA attempted but incorrect, deduct 0.5 pts.
+- FORMATTING: If APA formatting attempted but contains major errors, deduct 0.5 pts.
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -192,8 +192,9 @@ Your goal is to grade student lab reports according to the specific rules below.
 6.  **PROCEDURES (Section 5):**
     * **Diagram Check:** Diagram or photograph of experimental setup missing? -> -0.5.
 
-7.  **EVALUATION (STRICT IMPACT AUDIT):** 
-   - Check if systematic vs random errors are differentiated (-0.5 if not). 
+7.  **EVALUATION (STRICT IMPACT AUDIT):** - **ERROR CLASSIFICATION (KEYWORD SEARCH):** Scan the text for the words "Systematic" or "Random". 
+     * **If present:** Assume the student has differentiated correctly. DO NOT DEDUCT.
+     * **If absent:** Deduct 0.5.
    - **MANDATORY IMPACT CHECK:** List every error the student mentions. For EACH error, verify if they explain 
      the DIRECTIONAL impact on the final calculated value (e.g., 'caused molar mass to be too high', 
      'made concentration lower than actual'). 
@@ -228,7 +229,7 @@ Your goal is to grade student lab reports according to the specific rules below.
     * 1 Reference: Max Score 5.0.
     * 2 References: Max Score 7.0.
     * 3+ References: Max Score 10.0.
-    * APA Errors: -0.5 from Max Score.
+    * **Formatting:** Do NOT deduct for minor APA formatting errors. Only deduct for major errors or if the source is broken or missing.
 
 ### 📝 FEEDBACK STYLE INSTRUCTIONS:
 1. **FORMATTING:** Use <sub> and <sup> tags for chemical formulas and exponents (e.g., write H<sub>2</sub>O, 10<sup>5</sup>).
@@ -738,6 +739,10 @@ def create_zip_bundle(results):
 def autosave_report(item, autosave_dir):
     """Save individual report as Word doc and append to CSV immediately after grading."""
     try:
+        # --- FIX: FORCE FOLDER CREATION ---
+        if not os.path.exists(autosave_dir):
+            os.makedirs(autosave_dir)
+        # ----------------------------------
         # 1. Save Word Document
         doc = Document()
         write_markdown_to_docx(doc, item['Feedback'])
