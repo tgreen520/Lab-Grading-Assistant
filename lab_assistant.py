@@ -349,8 +349,6 @@ if 'current_session_name' not in st.session_state:
 if 'saved_sessions' not in st.session_state:
     st.session_state.saved_sessions = {}
 
-# Debug Helper
-st.sidebar.success(f"📂 Autosave Folder: `{st.session_state.autosave_dir}`")
 
 client = anthropic.Anthropic(api_key=API_KEY)
 
