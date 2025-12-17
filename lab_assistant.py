@@ -193,9 +193,10 @@ Your goal is to grade student lab reports according to the specific rules below.
 
 7.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
-    * **QUANTITATIVE IMPACT CHECK:** * Must explain the specific impact on **quantitative data** (e.g., "caused calculated value to increase") for **EACH** listed error.
-        * If explanation is generic (e.g., "it made results less accurate") or missing for any error -> -1.0.
-    * **IMPACT COVERAGE:** Impact defined for only *some* errors? -> -1.0 (Cumulative). Impact missing for *all* errors? -> -2.0.
+    * **QUANTITATIVE IMPACT CHECK:** * For **EVERY** error listed, the student must explain the specific directional impact on the **quantitative data** (e.g., "This caused the calculated molar mass to be too high").
+        * **DEDUCTION LOGIC:**
+            * If impact is missing for **ALL** listed errors -> -2.0.
+            * If impact is missing for **ONE OR MORE** (but not all) errors -> -1.0.
     * **IMPROVEMENTS:** Specific equipment named? -> No deduction. Vague? -> -0.5. Generic? -> -2.0.
 
 8.  **REFERENCES (Section 10) - QUANTITY CHECK:**
