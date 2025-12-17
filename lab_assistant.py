@@ -883,7 +883,7 @@ with st.sidebar:
 
 # --- 8. PERSISTENT DISPLAY ---
 if st.session_state.current_results:
-  def display_results_ui():
+    display_results_ui():
    
 
    
