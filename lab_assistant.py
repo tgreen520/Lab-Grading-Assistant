@@ -50,14 +50,12 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - Criteria: IV, DV, 3+ Controls.
 - SCORING: 
   * 10/10: All defined + explanations.
+  * Incorrect Identification: IV/DV swapped or wrong variable listed (-1.0).
   * 9.5/10: DV measurement vague (-0.5).
-  * 9.0/10: Explanations missing (-1.0).
-  * 7.0/10: IV and DV variables missing (-3.0)
-  * 8.0/10: IV or DV variable missing (-2.0)
-  * 6.0/10: Control variables missing (-4.0)
-  * 8/10: Only 2 control variables given and described (-2.0)
-  * 9/10: All control varialbes not justified (-1.0)
-  * 9.5/10: Justification of control variables vague (-0.5)
+  * 9.0/10: Explanations/Justifications missing (-1.0).
+  * 6.0/10: Control variables missing (-4.0).
+  * 8/10: Only 2 control variables given and described (-2.0).
+  * 9.5/10: Justification of control variables vague (-0.5).
 
 5. PROCEDURES (10 pts):
 - Criteria: Numbered steps, quantities, safety.
@@ -181,11 +179,12 @@ Your goal is to grade student lab reports according to the specific rules below.
     * **Units Check:** Missing -> -1.0. Incomplete -> -0.5.
     * **Measurement Check:** Missing -> -1.0. Vague -> -0.5.
 
-4.  **VARIABLES (Section 4) - JUSTIFICATION PROTOCOL:**
+4.  VARIABLES (Section 4) - JUSTIFICATION PROTOCOL:
+    * **Accuracy Check (NEW):** * **Swapped/Wrong Variables:** Did they list the IV as the DV (or vice versa)? Or did they list a constant as a variable? -> **-1.0 point.**
     * **Control Justification:** * No justification given for why controls were chosen? -> -1.0.
         * Partial/Vague justification? -> -0.5.
     * **DV Measurement:** Method for measuring DV is vague? -> -0.5.
-    * **Identification:** Any variable (IV, DV, Controls) missing? -> -1.0 per missing item.
+    * **Identification (Missing Items):** Any variable (IV, DV, Controls) missing entirely? -> -1.0 per missing item.
 
 5.  **DATA ANALYSIS (Section 7):**
     * **Trendline Equation:** Not shown on graph? -> -1.0.
