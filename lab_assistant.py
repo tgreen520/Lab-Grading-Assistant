@@ -723,6 +723,59 @@ def display_results_ui():
     st.divider()
     st.subheader(f"📊 Results: {st.session_state.current_session_name}")
     
+    # --- PREPARE DATA ---
+    results_list = []
+    for item in st.session_state.current_results:
+        row_data = {
+            "Filename": item['Filename'],
+            "Overall Score": item['Score']
+        }
+        feedback_data = parse_feedback_for_csv(item['Feedback'])
+        row_data.update(feedback_data)
+        results_list.append(row_data)
+        
+    csv_df = pd.DataFrame(results_list)
+    
+    # Sort columns
+    cols = list(csv_df.columns)
+    priority = ['Filename', 'Overall Score', 'Overall Summary']
+    remaining = [c for c in cols if c not in priority]
+    remaining.sort(key=lambda x: (x.split(' ')[0], 'Feedback' in x)) 
+    final_cols = [c for c in priority if c in cols] + remaining
+    csv_df = csv_df[final_cols]
+    
+    # --- DOWNLOADS ---
+    csv_data = csv_df.to_csv(index=False).encode('utf-8-sig') 
+    master_doc_data = create_master_doc(st.session_state.current_results, st.session_state.current_session_name)
+    zip_data = create_zip_bundle(st.session_state.current_results)
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.download_button("📄 Docs (.docx)", master_doc_data, f'{st.session_state.current_session_name}_Docs.docx', "application/vnd.openxmlformats-officedocument.wordprocessingml.document", use_container_width=True)
+    with col2:
+        st.download_button("📦 Bundle (.zip)", zip_data, f'{st.session_state.current_session_name}_Students.zip', "application/zip", use_container_width=True)
+    with col3:
+        st.download_button("📊 CSV Export", csv_data, f'{st.session_state.current_session_name}_Detailed.csv', "text/csv", use_container_width=True)
+
+    # --- AUTOSAVE INFO ---
+    autosave_path = st.session_state.autosave_dir
+    if os.path.exists(autosave_path):
+        st.caption(f"💾 Backup saved to: `{autosave_path}`")
+
+    # --- PERMANENT DISPLAY (FIXED) ---
+    # 1. Show Gradebook Table
+    st.divider()
+    st.write("### 🏆 Gradebook")
+    st.dataframe(csv_df, use_container_width=True)
+    
+    # 2. Show Detailed Feedback (Stacked, No Tabs)
+    st.write("### 📝 Detailed Feedback History")
+    
+    # We use reversed() so the newest reports appear at the top
+    for item in reversed(st.session_state.current_results):
+        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
+            st.markdown(item['Feedback'])
+    
     # --- EXPANDED CSV LOGIC WITH SORTING ---
     results_list = []
     for item in st.session_state.current_results:
