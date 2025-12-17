@@ -235,7 +235,7 @@ Your goal is to grade student lab reports according to the specific rules below.
         - If Y < X: "This results in a deduction of [1.0 or 2.0] points."
 
 8.  REFERENCES (Section 10) - QUANTITY CHECK:
-    * **LOGIC GATE (MANDATORY):** * **Step 1:** Search the document for a header labeled "References", "Bibliography", "Works Cited", or "Sources".
+    * **LOGIC GATE (MANDATORY):** * **Step 1:** Search the document for a header labeled "References", "Bibliography", "Works Cited", "Sources", or "Acknowledgements".
         * **Step 2:** Is the header present?
             * **NO:** Score = 0 points.
             * **YES:** Score = **MINIMUM 4.0 POINTS.** (You are FORBIDDEN from giving 0, 1, 2, or 3 points if the section exists).
@@ -551,18 +551,17 @@ def grade_submission(file, model_id):
     if ext == 'docx':
         text_content = extract_text_from_docx(file)
         
-        # Check for empty text to warn user
+        # Check for empty text
         if len(text_content.strip()) < 50:
-            text_content += "\n\n[SYSTEM NOTE: Very little text text extracted. Content may be in images or text boxes.]"
+            text_content += "\n\n[SYSTEM NOTE: Very little text extracted. Content may be in images or text boxes.]"
             
-        # Use String Concatenation instead of f-string to prevent brace errors
         prompt_text = (
             "Please grade this lab report based on the Pre-IB rubric below.\n"
             "Note: This is a converted Word Document. The text content is provided below, followed by any embedded images.\n\n"
             "⚠️ CRITICAL INSTRUCTIONS:\n"
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
-            "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
-            "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
+            "2. **VARIABLES:** List the exact variables found. If found, score 9-10. **SAFETY NET:** If Control Variables are attempted but incorrect, deduct 2.0 pts (do not deduct 4.0).\n"
+            "3. **REFERENCES:** **SAFETY NET:** If a 'References' or 'Acknowledgements' section exists (even if empty or bad links), the MINIMUM score is 4.0. Do NOT give 0 if the header is present. If >= 3 credible sources, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **FORMATTING DETECTION:** The text has been pre-processed. Subscripts appear as <sub>text</sub>. Superscripts appear as <sup>text</sup>. If these tags are present, the student formatted it CORRECTLY. Do not penalize.\n"
             "6. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
@@ -579,12 +578,7 @@ def grade_submission(file, model_id):
             "STUDENT TEXT:\n" + text_content
         )
         
-        user_message = [
-            {
-                "type": "text",
-                "text": prompt_text
-            }
-        ]
+        user_message = [{"type": "text", "text": prompt_text}]
         images = extract_images_from_docx(file)
         if images:
             user_message.extend(images)
@@ -598,8 +592,8 @@ def grade_submission(file, model_id):
             "--- RUBRIC START ---\n" + PRE_IB_RUBRIC + "\n--- RUBRIC END ---\n\n"
             "INSTRUCTIONS:\n"
             "1. **BE SPECIFIC & EXPANDED:** Write 2-3 sentences per section explaining the score. Quote text/data. No generic feedback.\n"
-            "2. **VARIABLES:** List the exact variables found. If found, score 9-10.\n"
-            "3. **REFERENCES:** Count the sources. If >= 3, MINIMUM score is 9.0.\n"
+            "2. **VARIABLES:** List the exact variables found. If found, score 9-10. **SAFETY NET:** If Control Variables are attempted but incorrect, deduct 2.0 pts (do not deduct 4.0).\n"
+            "3. **REFERENCES:** **SAFETY NET:** If a 'References' or 'Acknowledgements' section exists (even if empty), the MINIMUM score is 4.0. Do NOT give 0 if the header is present. If >= 3 credible sources, MINIMUM score is 9.0.\n"
             "4. **FORMATTING MATH:** 1-2 errors = -0.5 pts (Score 9.5). 3+ errors = -1.0 pt (Score 9.0).\n"
             "5. **GRAPHS:** Check for R² (-1.0 if missing), Equation (-1.0 if missing), Scatterplot format, and Units. Place audit in Strengths if perfect.\n"
             "6. **CONCLUSION:** Check for Outliers/Omissions (-1.0 if not mentioned, -0.5 if vague), IV/DV trend (-1.0), Theory (-1.0), Quant Data (-2.0), Qual Data (-0.5), R Value (-1.0), R² (-1.0 if missing, -0.5 if vague), Repetitiveness (-0.5).\n"
@@ -614,10 +608,7 @@ def grade_submission(file, model_id):
         )
         
         user_message = [
-            {
-                "type": "text",
-                "text": prompt_text
-            },
+            {"type": "text", "text": prompt_text},
             {
                 "type": "document" if media_type == 'application/pdf' else "image",
                 "source": {"type": "base64", "media_type": media_type, "data": base64_data}
@@ -631,31 +622,25 @@ def grade_submission(file, model_id):
         try:
             # Temperature=0 for Maximum Consistency
             response = client.messages.create(
-                model=model_id, # Uses the ID passed from Sidebar
-                max_tokens=4096, # MAX TOKEN LIMIT
+                model=model_id, 
+                max_tokens=4096,
                 temperature=0.0,
                 system=SYSTEM_PROMPT,
                 messages=[{"role": "user", "content": user_message}]
             )
             raw_text = response.content[0].text
-            
-            # --- CLEAN THE SCRATCHPAD ---
             cleaned_text = clean_hidden_scratchpad(raw_text)
-            
             corrected_text = recalculate_total_score(cleaned_text)
             return corrected_text
             
         except (anthropic.RateLimitError, anthropic.APIStatusError) as e:
-            # Check for Overloaded (529) or Rate Limit (429)
             if isinstance(e, anthropic.APIStatusError) and e.status_code == 529:
-                status_msg = f"⚠️ Server Overloaded (529). Retrying attempt {attempt+1}/{max_retries}..."
-                print(status_msg) # Log to console
-                time.sleep(retry_delay * (attempt + 1)) # Exponential backoff
+                print(f"⚠️ Server Overloaded (529). Retrying attempt {attempt+1}/{max_retries}...")
+                time.sleep(retry_delay * (attempt + 1))
                 continue
             
             if isinstance(e, anthropic.RateLimitError):
-                status_msg = f"⚠️ Rate Limit Hit. Retrying attempt {attempt+1}/{max_retries}..."
-                print(status_msg)
+                print(f"⚠️ Rate Limit Hit. Retrying attempt {attempt+1}/{max_retries}...")
                 time.sleep(retry_delay * (attempt + 1))
                 continue
                 
