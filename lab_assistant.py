@@ -828,8 +828,11 @@ def display_results_ui():
     st.write("### 📝 Detailed Feedback History")
     
     # We use reversed() so the newest file is always at the top
-    for item in reversed(st.session_state.current_results):
-        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
+    results_reversed = list(reversed(st.session_state.current_results))
+    for idx, item in enumerate(results_reversed):
+        # Most recent item is expanded by default (index 0 after reversing)
+        is_most_recent = (idx == 0)
+        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=is_most_recent):
             st.markdown(item['Feedback'], unsafe_allow_html=True)
     
     # --- AUTOSAVE FOLDER ACCESS ---
