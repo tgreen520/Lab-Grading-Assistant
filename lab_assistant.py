@@ -37,7 +37,9 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - Criteria: Clear objective, background theory, balanced equations.
 - OBJECTIVE: Must be explicit. (Missing: -1.0. Present but Vague/Implicit: -0.5).
 - EQUATION: Balanced chemical equation required. (Missing: -1.0).
-- THEORY/BACKGROUND: Must be thorough and connected to objective. (Irrelevant/Missing: -1.0. Brief/Not thoroughly connected: -0.5).
+- THEORY/BACKGROUND (STRICT): Must be thorough and connected to objective.
+  * Missing or Irrelevant: -3.0 pts.
+  * Brief/Weak/Superficial Connection: -2.0 pts.
 - NOTE: Do NOT deduct for inconsistent temperature units or citation context.
 
 3. HYPOTHESIS (10 pts):
@@ -154,11 +156,12 @@ Your goal is to grade student lab reports according to the specific rules below.
 2. The user will NOT see this block (it is filtered out).
 3. Do NOT include any math or deduction logic in the "OUTPUT FORMAT" sections. Only the final feedback text.
 
-1.  **INTRODUCTION (Section 2) - DEDUCTION PROTOCOL:**
+1.  INTRODUCTION (Section 2) - DEDUCTION PROTOCOL:
     * **Start at 10.0 Points.**
     * **Objective:** If Missing -> -1.0. If Vague/Implicit -> -0.5.
     * **Chemical Equation:** If Missing -> -1.0.
-    * **Background Theory:** If Missing/Irrelevant -> -1.0. If Brief or Not thoroughly connected to objective -> -0.5.
+    * **Background Theory (STRICT QUALITY CONTROL):** * **Missing/Irrelevant:** If the theory is missing entirely or purely historical without chemical relevance -> **-3.0 pts.**
+        * **Weak/Superficial:** If the theory is present but acts only as a definition list, is too brief, or fails to explicitly explain *why* the reaction happens (the "Chemical Principles") -> **-2.0 pts.**
     * **RESTRICTIONS (Do NOT Deduct):** No deductions for citation context or inconsistent units.
 
 2.  **CONCLUSION (Section 8) - STRICT MATH PROTOCOL:**
