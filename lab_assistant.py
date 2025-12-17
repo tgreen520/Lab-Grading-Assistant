@@ -807,7 +807,7 @@ def display_results_ui():
     
     # We use reversed() so the newest file is always at the top
     for item in reversed(st.session_state.current_results):
-    with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
+        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
         st.markdown(item['Feedback'], unsafe_allow_html=True)
     
     # --- EXPANDED CSV LOGIC WITH SORTING ---
