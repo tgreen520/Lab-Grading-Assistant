@@ -86,17 +86,17 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - NOTE: Do NOT deduct for "Internal Inconsistency" or Citations here.
 
 9. EVALUATION (10 pts) [STRICT QUALITY GATES]:
-- REQUIREMENT: List errors + Specific Directional Impact + Specific Improvement.
+- REQUIREMENT: List errors + Specific Directional Impact on Data + Specific Improvement.
 - ERROR CLASSIFICATION: Must differentiate between systematic and random errors. (Not done: -0.5).
-- IMPACT SCORING (QUANTITATIVE DATA):
-  * Impact must be specific and directional on the *quantitative results* (e.g., "caused calculated mass to increase").
-  * Impact defined for 100% of listed errors = 2 pts (No deduction).
-  * Impact defined for SOME (but not all) listed errors = 1 pt (Deduct 1.0).
-  * Impact defined for NONE of the listed errors = 0 pts (Deduct 2.0).
+- QUANTITATIVE IMPACT SCORING (CRITICAL):
+  * Requirement: For EVERY listed error, the student must state exactly how it changed the final calculated value (e.g., "This caused the calculated molar mass to be too high").
+  * 0 Impact Descriptions: Deduct 2.0 pts (Score 8.0 max).
+  * Some (but not all) Impact Descriptions: Deduct 1.0 pt (Score 9.0 max).
+  * All Impact Descriptions Present: No deduction.
 - IMPROVEMENT SCORING:
-  * Specific equipment named = 2 pts.
-  * Vague ("use better scale") = 1.5 pts (Deduct 0.5).
-  * Generic ("be careful") = 0 pts (Deduct 2.0).
+  * Specific equipment named = No deduction.
+  * Vague ("use better scale") = Deduct 0.5.
+  * Generic ("be careful") = Deduct 2.0.
 
 10. REFERENCES (10 pts):
 - 1 Reference only: -5.0 pts (Score 5.0).
@@ -193,10 +193,12 @@ Your goal is to grade student lab reports according to the specific rules below.
 
 7.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
     * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
-    * **QUANTITATIVE IMPACT CHECK:** * For **EVERY** error listed, the student must explain the specific directional impact on the **quantitative data** (e.g., "This caused the calculated molar mass to be too high").
-        * **DEDUCTION LOGIC:**
-            * If impact is missing for **ALL** listed errors -> -2.0.
-            * If impact is missing for **ONE OR MORE** (but not all) errors -> -1.0.
+    * **IMPACT AUDIT (THE "DIRECTION" CHECK):** * **Step 1:** List every error the student mentions.
+        * **Step 2:** For EACH error, look for "Directional Keywords" regarding the data (e.g., "higher", "lower", "increased", "decreased", "too big", "too small").
+        * **Step 3:** Apply Scoring:
+            * If **ZERO** errors have directional impact explained -> **-2.0 deduction.**
+            * If **SOME** errors have directional impact, but **ONE OR MORE** are missing it -> **-1.0 deduction.**
+            * If **ALL** errors have specific directional impact -> **0 deduction.**
     * **IMPROVEMENTS:** Specific equipment named? -> No deduction. Vague? -> -0.5. Generic? -> -2.0.
 
 8.  **REFERENCES (Section 10) - QUANTITY CHECK:**
