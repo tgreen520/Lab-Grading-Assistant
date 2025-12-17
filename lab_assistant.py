@@ -796,7 +796,7 @@ def display_results_ui():
     if os.path.exists(autosave_path):
         st.caption(f"💾 Backup saved to: `{autosave_path}`")
 
-    # --- PERMANENT DISPLAY (FIXED) ---
+    # --- PERMANENT DISPLAY ---
     # 1. Show Gradebook Table
     st.divider()
     st.write("### 🏆 Gradebook")
@@ -805,54 +805,15 @@ def display_results_ui():
     # 2. Show Detailed Feedback (Stacked, No Tabs)
     st.write("### 📝 Detailed Feedback History")
     
-  # We use reversed() so the newest file is always at the top
-for item in reversed(st.session_state.current_results):
-        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=False):
-            st.markdown(item['Feedback'], unsafe_allow_html=True) 
+    # We use reversed() so the newest file is always at the top
+    for item in reversed(st.session_state.current_results):
+        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
+            st.markdown(item['Feedback'], unsafe_allow_html=True)
     
-    # --- EXPANDED CSV LOGIC WITH SORTING ---
-    results_list = []
-    for item in st.session_state.current_results:
-        row_data = {
-            "Filename": item['Filename'],
-            "Overall Score": item['Score']
-        }
-        feedback_data = parse_feedback_for_csv(item['Feedback'])
-        row_data.update(feedback_data)
-    results_list.append(row_data)
-        
-    csv_df = pd.DataFrame(results_list)
-    
-    # Sort columns to put Filename/Score/Summary first
-    cols = list(csv_df.columns)
-    priority = ['Filename', 'Overall Score', 'Overall Summary']
-    remaining = [c for c in cols if c not in priority]
-    # Simple logic to keep section score/feedback adjacent
-    remaining.sort(key=lambda x: (x.split(' ')[0], 'Feedback' in x)) 
-    
-    final_cols = [c for c in priority if c in cols] + remaining
-    csv_df = csv_df[final_cols]
-    
-    csv_data = csv_df.to_csv(index=False).encode('utf-8-sig') 
-    
-    master_doc_data = create_master_doc(st.session_state.current_results, st.session_state.current_session_name)
-    zip_data = create_zip_bundle(st.session_state.current_results)
-    
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.download_button("📄 Google Docs Compatible (.docx)", master_doc_data, f'{st.session_state.current_session_name}_Docs.docx', "application/vnd.openxmlformats-officedocument.wordprocessingml.document", use_container_width=True)
-        st.caption("Upload to Drive -> Open as Google Doc")
-    with col2:
-        st.download_button("📦 Student Bundle (.zip)", zip_data, f'{st.session_state.current_session_name}_Students.zip', "application/zip", use_container_width=True)
-    with col3:
-        st.download_button("📊 Detailed CSV Export", csv_data, f'{st.session_state.current_session_name}_Detailed.csv', "text/csv", use_container_width=True)
-        st.caption("Includes separate columns for every section score and comment.")
-  
-  # --- NEW: AUTOSAVE FOLDER ACCESS ---
+    # --- AUTOSAVE FOLDER ACCESS ---
     st.divider()
-    st.info("💾 **Auto-saved files:** Individual feedback documents and gradebook are being saved to the `autosave_feedback` folder as grading progresses.")
+    st.info("💾 **Auto-saved files:** Individual feedback documents and gradebook are being saved to the `autosave_feedback_pre-ib` folder as grading progresses.")
     
-    autosave_path = st.session_state.autosave_dir
     if os.path.exists(autosave_path):
         csv_autosave = os.path.join(autosave_path, "gradebook.csv")
         if os.path.exists(csv_autosave):
