@@ -56,6 +56,7 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
   * 9.5/10: DV measurement vague (-0.5).
   * 9.0/10: Explanations/Justifications missing (-1.0).
   * 6.0/10: Control variables missing (-4.0).
+  * 8.0/10: Control Variables Attempted but Incorrect. If controls are listed but invalid (e.g. "human error"), deduct 2.0 pts.
   * 8.0/10: Independent variable missing (-2.0)
   * 8.0/10: Dependent variable missing (-2.0)
   * 8/10: Only 2 control variables given and described (-2.0).
@@ -107,9 +108,9 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
 - 3+ Credible References: 10.0 pts.
 - 2 Credible References: 7.0 pts.
 - 1 Credible Reference: 5.0 pts.
-- Attempted (Section exists but sources not credible/Wikipedia): 4.0 pts.
+- Attempted (Section exists but sources not credible): 4.0 pts (MINIMUM if section is present).
 - Missing Section entirely: 0 pts.
-- FORMATTING: Do NOT deduct for formatting/APA errors.
+- FORMATTING: Do NOT deduct for minor formatting/APA errors.
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -234,15 +235,16 @@ Your goal is to grade student lab reports according to the specific rules below.
         - If Y < X: "This results in a deduction of [1.0 or 2.0] points."
 
 8.  REFERENCES (Section 10) - QUANTITY CHECK:
-    * **EXISTENCE TRIGGER (CRITICAL):** - Look for a header like "References", "Acknowledgements", "Bibliography", or "Works Cited".
-      - **IF THE HEADER EXISTS:** The score CANNOT be lower than 4.0. Even if the links are broken, fake, or just "google.com", you MUST award 4.0 points for the attempt.
-      - **IF THE HEADER IS MISSING:** Score 0.
+    * **LOGIC GATE (MANDATORY):** * **Step 1:** Search the document for a header labeled "References", "Bibliography", "Works Cited", or "Sources".
+        * **Step 2:** Is the header present?
+            * **NO:** Score = 0 points.
+            * **YES:** Score = **MINIMUM 4.0 POINTS.** (You are FORBIDDEN from giving 0, 1, 2, or 3 points if the section exists).
     
-    * **SCORING LADDER (If section exists):**
-      * 3+ Credible Sources: Score 10.0.
-      * 2 Credible Sources: Score 7.0.
-      * 1 Credible Source: Score 5.0.
-      * 0 Credible Sources (but section exists): Score 4.0.
+    * **SCORING LADDER (Only applies if header exists):**
+        * **3+ Credible Sources:** 10.0 pts.
+        * **2 Credible Sources:** 7.0 pts.
+        * **1 Credible Source:** 5.0 pts.
+        * **0 Credible Sources (e.g., all are Wikipedia, Google, or broken links):** 4.0 pts (The "Attempted" Score).
     
     * **Formatting:** Do NOT deduct for minor APA formatting errors. Deduct 0.5 points for major APA formatting errors. 
 
