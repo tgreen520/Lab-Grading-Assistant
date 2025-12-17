@@ -102,10 +102,12 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
   * Generic ("be careful") = Deduct 2.0.
 
 10. REFERENCES (10 pts):
-- 1 Reference only: -5.0 pts (Score 5.0).
-- 2 References only: -3.0 pts (Score 7.0).
-- 3+ References: Base score 10.0.
-- FORMATTING: If APA formatting attempted but contains major errors, deduct 0.5 pts.
+- 3+ Credible References: 10.0 pts.
+- 2 Credible References: 7.0 pts.
+- 1 Credible Reference: 5.0 pts.
+- Attempted (Section exists but sources not credible/Wikipedia): 4.0 pts.
+- Missing Section entirely: 0 pts.
+- FORMATTING: Do NOT deduct for formatting/APA errors.
 """
 
 # --- 4. SYSTEM PROMPT ---
@@ -227,10 +229,11 @@ Your goal is to grade student lab reports according to the specific rules below.
         - "Of these, [Y] had explicit directional impact on the calculated value."
         - If Y < X: "This results in a deduction of [1.0 or 2.0] points."
 
-8.  **REFERENCES (Section 10) - QUANTITY CHECK:**
-    * 1 Reference: Max Score 5.0.
-    * 2 References: Max Score 7.0.
-    * 3+ References: Max Score 10.0.
+8.  REFERENCES (Section 10) - QUANTITY CHECK:
+    * 3+ Credible Sources: Score 10.0.
+    * 2 Credible Sources: Score 7.0.
+    * 1 Credible Source: Score 5.0.
+    * **SAFETY NET (MINIMUM 4.0):** If the student included a References section/header but the sources are not credible (e.g., Wikipedia, generic URLs) or they don't meet the count, award **4.0 points** for the attempt. Do NOT give 0 unless the section is completely missing.
     * **Formatting:** Do NOT deduct for minor APA formatting errors. Only deduct for major errors.
 
 ### 📝 FEEDBACK STYLE INSTRUCTIONS:
