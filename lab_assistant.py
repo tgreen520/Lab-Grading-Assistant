@@ -1032,6 +1032,7 @@ if st.session_state.current_results:
     
     # --- DOWNLOADS ---
     csv_data = csv_df.to_csv(index=False).encode('utf-8-sig') 
+    
     master_doc_data = create_master_doc(st.session_state.current_results, st.session_state.current_session_name)
     zip_data = create_zip_bundle(st.session_state.current_results)
     
@@ -1042,19 +1043,28 @@ if st.session_state.current_results:
         st.download_button("📦 Bundle (.zip)", zip_data, f'{st.session_state.current_session_name}_Students.zip', "application/zip", use_container_width=True)
     with col3:
         st.download_button("📊 CSV Export", csv_data, f'{st.session_state.current_session_name}_Detailed.csv', "text/csv", use_container_width=True)
-
+  
     # --- AUTOSAVE INFO ---
+    st.divider()
+    st.info("💾 **Auto-saved files:** Individual feedback documents and gradebook are being saved to the `autosave_feedback` folder as grading progresses.")
+    
     autosave_path = st.session_state.autosave_dir
     if os.path.exists(autosave_path):
-        st.caption(f"💾 Backup saved to: `{autosave_path}`")
+        csv_autosave = os.path.join(autosave_path, "gradebook.csv")
+        if os.path.exists(csv_autosave):
+            with open(csv_autosave, 'rb') as f:
+                st.download_button("📥 Download Auto-saved Gradebook (CSV)", f.read(), "autosaved_gradebook.csv", "text/csv", use_container_width=True)
 
-    # --- PERMANENT DISPLAY (The Fix) ---
-    st.divider()
+    # --- PERMANENT DISPLAY (Tabs Removed) ---
+    
+    # 1. Gradebook Table
     st.write("### 🏆 Gradebook")
     st.dataframe(csv_df, use_container_width=True)
-    
+
+    # 2. Detailed Feedback (Stacked below table)
     st.write("### 📝 Detailed Feedback History")
-    # We use reversed() so the newest reports appear at the top
+    
+    # Use reversed() to show the newest files first
     for item in reversed(st.session_state.current_results):
         with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
             st.markdown(item['Feedback'])
