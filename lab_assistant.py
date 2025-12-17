@@ -860,65 +860,6 @@ def display_results_ui():
         with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
             st.markdown(item['Feedback'])
 
-# --- 7. MAIN INTERFACE ---
-st.title("⚗️ Pre-IB Lab Grader")
-st.markdown("""
-**Instructions:**
-1. Upload `.docx` (Word) or `.pdf` files.
-2. The AI will grade them against the **Pre-IB Rubric** defined below.
-3. Download the graded feedback as a Word Doc or CSV.
-""")
-
-uploaded_files = st.file_uploader("📂 Upload Lab Reports", type=['docx', 'pdf', 'png', 'jpg'], accept_multiple_files=True)
-
-if uploaded_files:
-    # 1. Process files
-    files, counts = process_uploaded_files(uploaded_files)
-    st.info(f"Ready to grade: {len(files)} files ({counts['docx']} Docs, {counts['pdf']} PDFs, {counts['image']} Images)")
-    
-    # 2. Grade Button
-    if st.button("🚀 Grade Reports", type="primary"):
-        # Create autosave directory
-        if not os.path.exists(st.session_state.autosave_dir):
-            os.makedirs(st.session_state.autosave_dir)
-            
-        progress_bar = st.progress(0)
-        status_text = st.empty()
-        
-        # UI Container for live updates
-        live_results_container = st.container()
-        
-        # Reset current results if starting fresh
-        # (Optional: comment this out if you want to Append to existing results instead of clearing)
-        # st.session_state.current_results = [] 
-        
-        for i, file in enumerate(files):
-            status_text.text(f"⏳ Grading {file.name}...")
-            
-            # Call the AI
-            feedback = grade_submission(file, user_model_id) # Uses model ID from sidebar
-            
-            # Parse Score
-            score = parse_score(feedback)
-            
-            # Store Result
-            result_item = {
-                "Filename": file.name,
-                "Feedback": feedback,
-                "Score": score
-            }
-            st.session_state.current_results.append(result_item)
-            
-            # Autosave immediately
-            autosave_report(result_item, st.session_state.autosave_dir)
-            
-            # Update Progress
-            progress_bar.progress((i + 1) / len(files))
-        
-        status_text.success("✅ Grading Complete!")
-        time.sleep(1) # Small pause to let user see success message
-        st.rerun() # Force reload to show the persistent view
-
 # --- 6. SIDEBAR ---
 with st.sidebar:
     st.header("⚙️ Configuration")
@@ -939,10 +880,132 @@ with st.sidebar:
             st.success(f"Saved '{save_name}'!")
         else:
             st.warning("No results to save yet.")
+            
+    if st.session_state.saved_sessions:
+        st.divider()
+        st.subheader("📂 Load Session")
+        selected_session = st.selectbox("Select Batch", list(st.session_state.saved_sessions.keys()))
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Load"):
+                st.session_state.current_results = st.session_state.saved_sessions[selected_session]
+                st.session_state.current_session_name = selected_session
+                st.rerun()
+        with col2:
+            if st.button("🗑️ Delete"):
+                del st.session_state.saved_sessions[selected_session]
+                st.rerun()
+
+    st.divider() 
+    
+    with st.expander("View Grading Criteria"):
+        # CHANGED FROM st.text(PRE_IB_RUBRIC) TO st.text(IB_RUBRIC)
+        st.text(IB_RUBRIC)
+
+# --- 7. MAIN INTERFACE ---
+st.title("🧪 IB Lab Grader")
+st.caption(f"Current Session: **{st.session_state.current_session_name}**")
+
+st.info("💡 **Tip:** To upload a folder, open it, press `Ctrl+A` (Select All), and drag everything here.")
+
+raw_files = st.file_uploader(
+    "📂 Upload Reports (PDF, Word, Images, ZIP)", 
+    type=['pdf', 'docx', 'png', 'jpg', 'jpeg', 'zip'], 
+    accept_multiple_files=True
+)
+
+processed_files = []
+if raw_files:
+    processed_files, counts = process_uploaded_files(raw_files)
+    if len(processed_files) > 0:
+        st.success(f"✅ Found **{len(processed_files)}** valid reports.")
+        st.caption(f"📄 PDFs: {counts['pdf']} | 📝 Word Docs: {counts['docx']} | 🖼️ Images: {counts['image']}")
+        if counts['ignored'] > 0:
+            st.warning(f"⚠️ {counts['ignored']} files were ignored (unsupported format).")
+    else:
+        if raw_files:
+            st.warning("No valid PDF, Word, or Image files found.")
+
+if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files):
+    
+    st.write("---")
+    progress = st.progress(0)
+    status_text = st.empty()
+    live_results_table = st.empty()
+    
+    # NEW: Placeholder for cumulative feedback display (cleared and rewritten each iteration)
+    st.subheader("📋 Live Grading Feedback")
+    feedback_placeholder = st.empty()
+    
+    # Initialize Session State list if not present
+    if 'current_results' not in st.session_state:
+        st.session_state.current_results = []
+    
+    # Create a set of already graded filenames for quick lookup
+    existing_filenames = {item['Filename'] for item in st.session_state.current_results}
+    
+    for i, file in enumerate(processed_files):
+        # 1. SMART RESUME CHECK: Skip if already graded
+        if file.name in existing_filenames:
+            status_text.info(f"↩ Skipping **{file.name}** (Already Graded)")
+            time.sleep(0.5) # Brief pause for visual feedback
+            progress.progress((i + 1) / len(processed_files))
+            continue
+
+        # 2. GRADING LOGIC
+        status_text.markdown(f"**Grading:** `{file.name}` ({i+1}/{len(processed_files)})...")
+        
+        try:
+            # Polite delay to prevent API overloading
+            time.sleep(2) 
+            
+            feedback = grade_submission(file, user_model_id) # PASSING USER MODEL ID
+            score = parse_score(feedback)
+            
+            # 3. IMMEDIATE SAVE TO SESSION STATE
+            new_entry = {
+                "Filename": file.name,
+                "Score": score,
+                "Feedback": feedback
+            }
+            
+            st.session_state.current_results.append(new_entry)
+            
+            # 4. AUTOSAVE TO DISK (NEW - CRITICAL FOR RECOVERY)
+            autosave_success = autosave_report(new_entry, st.session_state.autosave_dir)
+            if autosave_success:
+                status_text.success(f"✅ **{file.name}** graded & auto-saved! (Score: {score}/100)")
+            else:
+                status_text.warning(f"⚠️ **{file.name}** graded but autosave failed (Score: {score}/100)")
+            
+            # Update the existing set so duplicates within the same batch run are also caught
+            existing_filenames.add(file.name)
+            
+            # 5. LIVE TABLE UPDATE
+            df_live = pd.DataFrame(st.session_state.current_results)
+            live_results_table.dataframe(df_live[["Filename", "Score"]], use_container_width=True)
+            
+            # 6. UPDATED: SINGLE COPY CUMULATIVE FEEDBACK DISPLAY
+            # Clear and rewrite the entire feedback section to avoid duplicates
+            with feedback_placeholder.container():
+                for idx, item in enumerate(st.session_state.current_results):
+                    # Start expanded for most recent, collapsed for older ones
+                    is_most_recent = (idx == len(st.session_state.current_results) - 1)
+                    with st.expander(f"📄 {item['Filename']} (Score: {item['Score']}/100)", expanded=is_most_recent):
+                        st.markdown(item['Feedback'])
+            
+        except Exception as e:
+            st.error(f"❌ Error grading {file.name}: {e}")
+            
+        progress.progress((i + 1) / len(processed_files))
+        
+
+    status_text.success("✅ Grading Complete! All reports auto-saved.")
+    progress.empty()
+    
+    # Show message about autosave location
+    st.info(f"💾 **Backup Location:** All feedback has been saved to `{st.session_state.autosave_dir}/` folder. You can download individual files or the full gradebook below.")
 
 # --- 8. PERSISTENT DISPLAY ---
 if st.session_state.current_results:
     display_results_ui()
-   
-
-   
