@@ -900,7 +900,7 @@ with st.sidebar:
     
     with st.expander("View Grading Criteria"):
         # CHANGED FROM st.text(PRE_IB_RUBRIC) TO st.text(IB_RUBRIC)
-        st.text(IB_RUBRIC)
+        st.text(PRE_IB_RUBRIC)
 
 # --- 7. MAIN INTERFACE ---
 st.title("🧪 IB Lab Grader")
