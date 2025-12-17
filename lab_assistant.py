@@ -868,58 +868,12 @@ if raw_files:
         if raw_files:
             st.warning("No valid PDF, Word, or Image files found.")
 
-# --- MAIN EXECUTION BLOCK ---
-# 1. Define the Button
-grade_clicked = st.button("🚀 Grade Reports", type="primary", disabled=not processed_files)
-
-# 2. Logic: If Button Clicked -> Run Grading
-if grade_clicked:
+if st.button("🚀 Grade Reports", type="primary", disabled=not processed_files):
+    
     st.write("---")
     progress = st.progress(0)
     status_text = st.empty()
     live_results_table = st.empty()
-    feedback_placeholder = st.empty()
-    
-    # Initialize list if needed
-    if 'current_results' not in st.session_state:
-        st.session_state.current_results = []
-    
-    for i, file in enumerate(processed_files):
-        status_text.markdown(f"**Grading:** `{file.name}`...")
-        
-        # Run Grading
-        feedback = grade_submission(file, user_model_id)
-        score = parse_score(feedback)
-        
-        # Save Result to State
-        entry = {"Filename": file.name, "Score": score, "Feedback": feedback}
-        st.session_state.current_results.append(entry)
-        
-        # Optional: Autosave to disk if you added that function
-        if 'autosave_report' in globals():
-            autosave_report(entry, "autosave_data")
-
-        # Update Live Feedback
-        with feedback_placeholder.container():
-             for item in st.session_state.current_results:
-                with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
-                    st.markdown(item['Feedback'])
-        
-        progress.progress((i + 1) / len(processed_files))
-    
-    status_text.success("✅ Grading Complete!")
-    progress.empty()
-
-# 3. Logic: If Button NOT Clicked (but results exist) -> Show Previous Results
-#    This keeps the feedback visible when you upload a new file!
-elif st.session_state.current_results:
-    st.divider()
-    st.subheader(f"📊 Session Results ({len(st.session_state.current_results)} graded)")
-    
-    # Render the saved results
-    for item in st.session_state.current_results:
-        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
-            st.markdown(item['Feedback'])
     
      # NEW: Placeholder for cumulative feedback display (cleared and rewritten each iteration)
     st.subheader("📋 Live Grading Feedback")
@@ -995,4 +949,59 @@ elif st.session_state.current_results:
 
 # --- 8. PERSISTENT DISPLAY ---
 if st.session_state.current_results:
-    display_results_ui()
+  def display_results_ui():
+    if not st.session_state.current_results:
+        return
+
+    st.divider()
+    st.subheader(f"📊 Results: {st.session_state.current_session_name}")
+    
+    # --- PREPARE DATA ---
+    results_list = []
+    for item in st.session_state.current_results:
+        row_data = {
+            "Filename": item['Filename'],
+            "Overall Score": item['Score']
+        }
+        feedback_data = parse_feedback_for_csv(item['Feedback'])
+        row_data.update(feedback_data)
+        results_list.append(row_data)
+        
+    csv_df = pd.DataFrame(results_list)
+    
+    # Sort columns
+    cols = list(csv_df.columns)
+    priority = ['Filename', 'Overall Score', 'Overall Summary']
+    remaining = [c for c in cols if c not in priority]
+    remaining.sort(key=lambda x: (x.split(' ')[0], 'Feedback' in x)) 
+    final_cols = [c for c in priority if c in cols] + remaining
+    csv_df = csv_df[final_cols]
+    
+    # --- DOWNLOADS ---
+    csv_data = csv_df.to_csv(index=False).encode('utf-8-sig') 
+    master_doc_data = create_master_doc(st.session_state.current_results, st.session_state.current_session_name)
+    zip_data = create_zip_bundle(st.session_state.current_results)
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.download_button("📄 Docs (.docx)", master_doc_data, f'{st.session_state.current_session_name}_Docs.docx', "application/vnd.openxmlformats-officedocument.wordprocessingml.document", use_container_width=True)
+    with col2:
+        st.download_button("📦 Bundle (.zip)", zip_data, f'{st.session_state.current_session_name}_Students.zip', "application/zip", use_container_width=True)
+    with col3:
+        st.download_button("📊 CSV Export", csv_data, f'{st.session_state.current_session_name}_Detailed.csv', "text/csv", use_container_width=True)
+
+    # --- AUTOSAVE INFO ---
+    autosave_path = st.session_state.autosave_dir
+    if os.path.exists(autosave_path):
+        st.caption(f"💾 Backup saved to: `{autosave_path}`")
+
+    # --- PERMANENT DISPLAY (The Fix) ---
+    st.divider()
+    st.write("### 🏆 Gradebook")
+    st.dataframe(csv_df, use_container_width=True)
+    
+    st.write("### 📝 Detailed Feedback History")
+    # We use reversed() so the newest reports appear at the top
+    for item in reversed(st.session_state.current_results):
+        with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
+            st.markdown(item['Feedback'])
