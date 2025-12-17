@@ -880,7 +880,10 @@ with st.sidebar:
             st.success(f"Saved '{save_name}'!")
         else:
             st.warning("No results to save yet.")
-            
+
 # --- 8. PERSISTENT DISPLAY ---
-        if st.session_state.current_results:
-        display_results_ui()
+if st.session_state.current_results:
+  def display_results_ui():
+   
+
+   
