@@ -860,6 +860,65 @@ def display_results_ui():
         with st.expander(f"📄 {item['Filename']} (Score: {item['Score']})"):
             st.markdown(item['Feedback'])
 
+# --- 7. MAIN INTERFACE ---
+st.title("⚗️ Pre-IB Lab Grader")
+st.markdown("""
+**Instructions:**
+1. Upload `.docx` (Word) or `.pdf` files.
+2. The AI will grade them against the **Pre-IB Rubric** defined below.
+3. Download the graded feedback as a Word Doc or CSV.
+""")
+
+uploaded_files = st.file_uploader("📂 Upload Lab Reports", type=['docx', 'pdf', 'png', 'jpg'], accept_multiple_files=True)
+
+if uploaded_files:
+    # 1. Process files
+    files, counts = process_uploaded_files(uploaded_files)
+    st.info(f"Ready to grade: {len(files)} files ({counts['docx']} Docs, {counts['pdf']} PDFs, {counts['image']} Images)")
+    
+    # 2. Grade Button
+    if st.button("🚀 Grade Reports", type="primary"):
+        # Create autosave directory
+        if not os.path.exists(st.session_state.autosave_dir):
+            os.makedirs(st.session_state.autosave_dir)
+            
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+        
+        # UI Container for live updates
+        live_results_container = st.container()
+        
+        # Reset current results if starting fresh
+        # (Optional: comment this out if you want to Append to existing results instead of clearing)
+        # st.session_state.current_results = [] 
+        
+        for i, file in enumerate(files):
+            status_text.text(f"⏳ Grading {file.name}...")
+            
+            # Call the AI
+            feedback = grade_submission(file, user_model_id) # Uses model ID from sidebar
+            
+            # Parse Score
+            score = parse_score(feedback)
+            
+            # Store Result
+            result_item = {
+                "Filename": file.name,
+                "Feedback": feedback,
+                "Score": score
+            }
+            st.session_state.current_results.append(result_item)
+            
+            # Autosave immediately
+            autosave_report(result_item, st.session_state.autosave_dir)
+            
+            # Update Progress
+            progress_bar.progress((i + 1) / len(files))
+        
+        status_text.success("✅ Grading Complete!")
+        time.sleep(1) # Small pause to let user see success message
+        st.rerun() # Force reload to show the persistent view
+
 # --- 6. SIDEBAR ---
 with st.sidebar:
     st.header("⚙️ Configuration")
