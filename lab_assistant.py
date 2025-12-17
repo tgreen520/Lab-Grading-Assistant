@@ -192,15 +192,37 @@ Your goal is to grade student lab reports according to the specific rules below.
 6.  **PROCEDURES (Section 5):**
     * **Diagram Check:** Diagram or photograph of experimental setup missing? -> -0.5.
 
-7.  **EVALUATION (Section 9) - STRICT IMPACT & IMPROVEMENT AUDIT:**
-    * **ERROR CLASSIFICATION:** Systematic vs random errors not differentiated? -> -0.5.
-    * **IMPACT AUDIT (THE "DIRECTION" CHECK):** * **Step 1:** List every error the student mentions.
-        * **Step 2:** For EACH error, look for "Directional Keywords" regarding the data (e.g., "higher", "lower", "increased", "decreased", "too big", "too small").
-        * **Step 3:** Apply Scoring:
-            * If **ZERO** errors have directional impact explained -> **-2.0 deduction.**
-            * If **SOME** errors have directional impact, but **ONE OR MORE** are missing it -> **-1.0 deduction.**
-            * If **ALL** errors have specific directional impact -> **0 deduction.**
+7.  **EVALUATION (STRICT IMPACT AUDIT):** 
+   - Check if systematic vs random errors are differentiated (-0.5 if not). 
+   - **MANDATORY IMPACT CHECK:** List every error the student mentions. For EACH error, verify if they explain 
+     the DIRECTIONAL impact on the final calculated value (e.g., 'caused molar mass to be too high', 
+     'made concentration lower than actual'). 
+   - **SCORING:** If 0 errors have directional impact -> -2.0 pts. If some but not all -> -1.0 pt. 
+     If all errors have direction -> No deduction.
+   - In your feedback, you MUST write: 'You listed [X] errors. [Y] had explicit directional impact.' 
+   - Penalize vague improvements (-0.5) or generic improvements like 'be more careful' (-2.0)."
+    * **CRITICAL IMPACT AUDIT (THE "DIRECTION" CHECK - STRICTLY ENFORCE):**
+        * **Step 1:** Count the TOTAL number of errors the student lists (e.g., "spilling water", "heat loss", "scale precision").
+        * **Step 2:** For EACH error, search for EXPLICIT directional language about the calculated result:
+            - ACCEPTABLE phrases: "made the result too high", "caused an overestimation", "led to a lower value", "increased the calculated mass", "decreased the final answer"
+            - NOT ACCEPTABLE: "affected accuracy", "caused error", "impacted results", "reduced precision" (these are vague - no direction specified)
+        * **Step 3:** Count how many errors have explicit directional impact.
+        * **Step 4:** Apply Scoring (NO EXCEPTIONS):
+            - If **ZERO** errors have directional impact explained -> **DEDUCT 2.0 points** (Max score 8.0)
+            - If **SOME BUT NOT ALL** errors have directional impact -> **DEDUCT 1.0 point** (Max score 9.0)
+            - If **ALL** errors have specific directional impact -> **NO DEDUCTION** (Score 10.0 possible)
+        
+        * **EXAMPLE GRADING:**
+            - Student lists 3 errors but only explains direction for 2 of them -> DEDUCT 1.0 pt
+            - Student lists 4 errors but explains direction for 0 of them -> DEDUCT 2.0 pts
+            - Student lists 2 errors and explains direction for both -> NO DEDUCTION (assuming other criteria met)
+    
     * **IMPROVEMENTS:** Specific equipment named? -> No deduction. Vague? -> -0.5. Generic? -> -2.0.
+    
+    * **MANDATORY FEEDBACK FORMAT:** In your response, you MUST explicitly state:
+        - "You listed [X] total errors."
+        - "Of these, [Y] had explicit directional impact on the calculated value."
+        - If Y < X: "This results in a deduction of [1.0 or 2.0] points."
 
 8.  **REFERENCES (Section 10) - QUANTITY CHECK:**
     * 1 Reference: Max Score 5.0.
