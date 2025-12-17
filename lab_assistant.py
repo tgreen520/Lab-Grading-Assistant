@@ -317,23 +317,31 @@ STUDENT: [Filename]
 
 # --- 5. SESSION STATE INITIALIZATION ---
 if 'autosave_dir' not in st.session_state:
-    # Use a FIXED folder name so it doesn't change every time you restart
+    # 1. Initialize Autosave Folder (The Fix from before)
     base_folder = "autosave_feedback_pre-ib"
-    
-    # Create the full path based on where the script is running
     current_dir = os.getcwd()
     full_path = os.path.join(current_dir, base_folder)
     
-    # Force creation of the folder IMMEDIATELY
     if not os.path.exists(full_path):
         os.makedirs(full_path)
         print(f"📁 Created autosave folder at: {full_path}")
     
     st.session_state.autosave_dir = full_path
-    st.session_state.current_session_name = f"Session_{time.strftime('%H%M')}"
+
+# 2. Initialize other required variables (Restoring these fixes the error)
+if 'current_results' not in st.session_state:
+    st.session_state.current_results = []
+
+if 'processing_complete' not in st.session_state:
     st.session_state.processing_complete = False
 
-# Display the location to you (Debug Helper)
+if 'current_session_name' not in st.session_state:
+    st.session_state.current_session_name = f"Session_{time.strftime('%H%M')}"
+
+if 'saved_sessions' not in st.session_state:
+    st.session_state.saved_sessions = {}
+
+# Debug Helper
 st.sidebar.success(f"📂 Autosave Folder: `{st.session_state.autosave_dir}`")
 
 client = anthropic.Anthropic(api_key=API_KEY)
