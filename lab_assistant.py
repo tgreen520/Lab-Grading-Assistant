@@ -307,7 +307,7 @@ STUDENT: [Filename]
 
 **10. REFERENCES: [Score]/10**
 * **✅ Strengths:** [**MANDATORY:** "Counted [X] credible sources."]
-* **⚠️ Improvements:** [**QUANTITY CHECK:** "Only found [X] sources." (If 1 source -> Score 5.0. If 2 sources -> Score 7.0). **FORMATTING:** "APA Formatting Check: [Correct/Incorrect]" (-0.5 if incorrect).]
+* **⚠️ Improvements:** [**QUANTITY CHECK:** "Only found [X] sources." (If 1 source -> Score 5.0. If 2 sources -> Score 7.0. If References are attempted -> Score 4.0). **FORMATTING:** "APA Formatting Check: [Correct/Incorrect]" (-0.5 if incorrect).]
 
 **💡 TOP 3 ACTIONABLE STEPS FOR NEXT TIME:**
 1. [Step 1 - Specific and concrete recommendation]
