@@ -52,6 +52,8 @@ PRE_IB_RUBRIC = """TOTAL: 100 POINTS (10 pts per section)
   * 10/10: All defined + explanations.
   * 9.5/10: DV measurement vague (-0.5).
   * 9.0/10: Explanations missing (-1.0).
+  * 7.0/10: IV and DV variables missing (-3.0)
+  * 8.0/10: IV or DV variable missing (-2.0)
   * 6.0/10: Control variables missing (-4.0)
   * 8/10: Only 2 control variables given and described (-2.0)
   * 9/10: All control varialbes not justified (-1.0)
@@ -229,7 +231,7 @@ Your goal is to grade student lab reports according to the specific rules below.
     * 1 Reference: Max Score 5.0.
     * 2 References: Max Score 7.0.
     * 3+ References: Max Score 10.0.
-    * **Formatting:** Do NOT deduct for minor APA formatting errors. Only deduct for major errors or if the source is broken or missing.
+    * **Formatting:** Do NOT deduct for minor APA formatting errors. Only deduct for major errors.
 
 ### 📝 FEEDBACK STYLE INSTRUCTIONS:
 1. **FORMATTING:** Use <sub> and <sup> tags for chemical formulas and exponents (e.g., write H<sub>2</sub>O, 10<sup>5</sup>).
@@ -313,19 +315,30 @@ STUDENT: [Filename]
 3. [Step 3 - Specific and concrete recommendation]
 """
 
-# Initialize Session State
-if 'saved_sessions' not in st.session_state:
-    st.session_state.saved_sessions = {}
-if 'current_results' not in st.session_state:
-    st.session_state.current_results = []
-if 'current_session_name' not in st.session_state:
-    st.session_state.current_session_name = "New Grading Session"
+# --- 5. SESSION STATE INITIALIZATION ---
 if 'autosave_dir' not in st.session_state:
-    st.session_state.autosave_dir = "autosave_feedback_pre-ib"
+    # Use a FIXED folder name so it doesn't change every time you restart
+    base_folder = "autosave_feedback_pre-ib"
+    
+    # Create the full path based on where the script is running
+    current_dir = os.getcwd()
+    full_path = os.path.join(current_dir, base_folder)
+    
+    # Force creation of the folder IMMEDIATELY
+    if not os.path.exists(full_path):
+        os.makedirs(full_path)
+        print(f"📁 Created autosave folder at: {full_path}")
+    
+    st.session_state.autosave_dir = full_path
+    st.session_state.current_session_name = f"Session_{time.strftime('%H%M')}"
+    st.session_state.processing_complete = False
+
+# Display the location to you (Debug Helper)
+st.sidebar.success(f"📂 Autosave Folder: `{st.session_state.autosave_dir}`")
 
 client = anthropic.Anthropic(api_key=API_KEY)
 
-# --- 5. HELPER FUNCTIONS ---
+# --- 6. HELPER FUNCTIONS ---
 def encode_file(uploaded_file):
     try:
         uploaded_file.seek(0)
